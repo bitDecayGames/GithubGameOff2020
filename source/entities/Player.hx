@@ -1,5 +1,6 @@
 package entities;
 
+import states.PlayState;
 import flixel.text.FlxText;
 import flixel.FlxState;
 import flixel.tweens.FlxTween;
@@ -12,30 +13,23 @@ import flixel.math.FlxPoint;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 
-class Player extends FlxSprite {
+class Player extends Entity {
 
-    var parentState:FlxState;
-
-    var playerSize:FlxPoint = new FlxPoint(40, 40);
-    
-    var playerFacingDirection:FlxText;
-
-    var speed = 160;
-    var direction = 0;
-
-    var attacking = false;
-
-	public function new(_parentState:FlxState) {
+	public function new(_parentState:PlayState) {
         super();
+        size = new FlxPoint(40, 40);
+        speed = 160;
+        direction = 0;
+        attacking = false;
         parentState = _parentState;
-        makeGraphic(Std.int(playerSize.x), Std.int(playerSize.y), FlxColor.WHITE);
+        makeGraphic(Std.int(size.x), Std.int(size.y), FlxColor.WHITE);
         setPosition(0, 0);
 
-        playerFacingDirection = new FlxText();
-        playerFacingDirection.color = FlxColor.RED;
+        facingDirection = new FlxText();
+        facingDirection.color = FlxColor.RED;
 
         Timer.delay(() -> {
-            parentState.insert(parentState.length, playerFacingDirection);
+            parentState.insert(parentState.length, facingDirection);
         }, 1000);
 	}
 
@@ -46,31 +40,55 @@ class Player extends FlxSprite {
         facing = determineFacing(potentialDirection);
 
 		if (FlxG.keys.justPressed.Z && !attacking) {
+
             attacking = true;
+            attack(facing);
 			trace('Attacking');
             Timer.delay(() -> {
                 attacking = false;
-            }, 1000);
+            }, 200);
         }
 
-        updateFacingText(facing);
-        playerFacingDirection.setPosition(this.x, this.y);
-
         var directionVector = MathHelpers.NormalizeVector(potentialDirection);
-        // y needs to be flipped to move character in the right direction
-        setPosition(x + directionVector.x*delta*speed, y + directionVector.y*delta*speed*-1);
+        if (!attacking){
+            updateFacingText(facing);
+            facingDirection.setPosition(this.x, this.y);
+            // y needs to be flipped to move character in the right direction
+            setPosition(x + directionVector.x*delta*speed, y + directionVector.y*delta*speed*-1);
+        }
+    }
+
+    function attack(facing:Int) {
+
+        var attackLocation:FlxPoint;
+        var hitboxSize = new FlxPoint(20, 20);
+
+        switch facing {
+            case FlxObject.RIGHT:
+                attackLocation = new FlxPoint(x+size.x, y+(size.y/2)-(hitboxSize.y/2));
+            case FlxObject.DOWN:
+                attackLocation = new FlxPoint(x+(size.x/2)-hitboxSize.x/2, y+size.y);
+            case FlxObject.LEFT:
+                attackLocation = new FlxPoint(x-hitboxSize.x, y+(size.y/2)-(hitboxSize.y/2));
+            case FlxObject.UP:
+                attackLocation = new FlxPoint(x+(size.x/2)-(hitboxSize.x/2), y-hitboxSize.y);
+            default:
+                attackLocation = new FlxPoint(x, y);
+        }
+        var hitbox = new Hitbox(.2, attackLocation, hitboxSize);
+        parentState.addHitbox(hitbox);
     }
 
     function updateFacingText(facing:Int) {
         switch facing {
             case FlxObject.RIGHT:
-                playerFacingDirection.text = "Right";
+                facingDirection.text = "Right";
             case FlxObject.DOWN:
-                playerFacingDirection.text = "Down";
+                facingDirection.text = "Down";
             case FlxObject.LEFT:
-                playerFacingDirection.text = "Left";
+                facingDirection.text = "Left";
             case FlxObject.UP:
-                playerFacingDirection.text = "Up";
+                facingDirection.text = "Up";
         }
     }
 

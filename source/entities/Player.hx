@@ -70,6 +70,7 @@ class Player extends Entity {
         }
         playAnimation(facing, directionVector);
     }
+    
 
     function playAnimation(_facing:Int, _directionVector:FlxPoint){
         if (_directionVector == null || _directionVector.x == 0 && _directionVector.y == 0){

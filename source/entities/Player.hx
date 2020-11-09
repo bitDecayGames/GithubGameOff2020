@@ -13,7 +13,6 @@ import flixel.FlxSprite;
 class Player extends Entity {
 
 	public function new(_parentState:PlayState) {
-        trace("Creating a new player");
         super();
         size = new FlxPoint(16, 32);
         speed = 75;

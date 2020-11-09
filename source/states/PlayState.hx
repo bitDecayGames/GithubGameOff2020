@@ -1,5 +1,10 @@
 package states;
 
+import helpers.MathHelpers;
+import flixel.math.FlxMath;
+import flixel.util.FlxColor;
+import flixel.util.FlxPath;
+import flixel.FlxSprite;
 import haxe.display.Display.Package;
 import entities.Hitbox;
 import flixel.FlxG;

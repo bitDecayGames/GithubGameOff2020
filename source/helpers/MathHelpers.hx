@@ -22,4 +22,9 @@ class MathHelpers {
 
         return new FlxPoint(normalizedX, normalizedY);
     }
+
+    public static function GetMidpoint(point1:FlxPoint, point2:FlxPoint):FlxPoint {
+        var pointsAdded = new FlxPoint(point1.x+point2.x, point1.y+point2.y);
+        return new FlxPoint(pointsAdded.x/2, pointsAdded.y/2);
+    }
 }

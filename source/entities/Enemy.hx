@@ -1,5 +1,7 @@
 package entities;
 
+import flixel.math.FlxMath;
+import flixel.util.FlxPath;
 import flixel.effects.FlxFlicker;
 import states.PlayState;
 import flixel.text.FlxText;
@@ -41,6 +43,7 @@ class Enemy extends Entity {
             if (knockbackDuration <= 0) {
                 inKnockback = false;
                 if (healthPoints <= 0) {
+                    dropLoot();
                     destroy();
                 }
             }
@@ -77,6 +80,13 @@ class Enemy extends Entity {
         var direction = new FlxPoint(player.x-x, player.y-y);
         var directionNormalized = MathHelpers.NormalizeVector(direction);
         return directionNormalized;
+    }
+
+    function dropLoot() {
+        for (i in 0...2){
+            var loot = new Loot(getMidpoint().x, getMidpoint().y);
+            parentState.add(loot);
+        }
     }
 
     function determineFacing(vector:FlxPoint):Int {

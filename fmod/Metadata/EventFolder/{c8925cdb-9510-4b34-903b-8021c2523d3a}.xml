@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.00.00">
+	<object class="EventFolder" id="{c8925cdb-9510-4b34-903b-8021c2523d3a}">
+		<property name="name">
+			<value>Shovel</value>
+		</property>
+		<relationship name="folder">
+			<destination>{a75abaf6-500e-468a-a75e-7d8ae22d2e4c}</destination>
+		</relationship>
+	</object>
+</objects>

@@ -9,7 +9,6 @@ class Entity extends FlxSprite{
 
     var parentState:PlayState;
     var size:FlxPoint;
-    var facingDirection:FlxText;
     var speed:Int;
     var direction:Int;
     var attacking:Bool;

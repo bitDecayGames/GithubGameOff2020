@@ -1,9 +1,6 @@
 package entities;
 
 import states.PlayState;
-import flixel.text.FlxText;
-import flixel.FlxState;
-import flixel.tweens.FlxTween;
 import haxe.Timer;
 import flixel.util.FlxColor;
 import haxefmod.FmodManager;
@@ -17,20 +14,36 @@ class Player extends Entity {
 
 	public function new(_parentState:PlayState) {
         super();
-        size = new FlxPoint(40, 40);
-        speed = 160;
+        size = new FlxPoint(16, 32);
+        speed = 75;
         direction = 0;
         attacking = false;
         parentState = _parentState;
-        makeGraphic(Std.int(size.x), Std.int(size.y), FlxColor.WHITE);
         setPosition(0, 0);
 
-        facingDirection = new FlxText();
-        facingDirection.color = FlxColor.RED;
+        super.loadGraphic(AssetPaths.player__png, true, 16, 32);
 
-        Timer.delay(() -> {
-            parentState.insert(parentState.length, facingDirection);
-        }, 1000);
+        var animationSpeed:Int = 8;
+
+        animation.add("walk_up", [19,20,21,22,23,24,25,26], animationSpeed);
+        animation.add("walk_right", [10,11,12,13,14,15,16,17], animationSpeed);
+        animation.add("walk_down", [1,2,3,4,5,6,7,8], animationSpeed);
+        animation.add("walk_left", [10,11,12,13,14,15,16,17], animationSpeed);
+        animation.add("stand_up", [18], animationSpeed);
+        animation.add("stand_right", [9], animationSpeed);
+        animation.add("stand_down", [0], animationSpeed);
+        animation.add("stand_left", [9], animationSpeed);
+
+        animation.callback = animCallback;
+
+        setFacingFlip(FlxObject.LEFT, true, false);
+        setFacingFlip(FlxObject.RIGHT, false, false);
+    }
+    
+    public function animCallback(name:String, frameNumber:Int, frameIndex:Int):Void {
+		if (StringTools.contains(name, "walk_") && frameNumber == 3 || frameNumber == 7) {
+			FmodManager.PlaySoundOneShot(FmodSFX.FootstepRock);
+		}
 	}
 
 	override public function update(delta:Float):Void {
@@ -49,16 +62,44 @@ class Player extends Entity {
             }, 200);
         }
 
-        var directionVector = MathHelpers.NormalizeVector(potentialDirection);
+        var directionVector:FlxPoint = null;
         if (!attacking){
-            updateFacingText(facing);
-            facingDirection.setPosition(this.x, this.y);
+            directionVector = MathHelpers.NormalizeVector(potentialDirection);
             // y needs to be flipped to move character in the right direction
             setPosition(x + directionVector.x*delta*speed, y + directionVector.y*delta*speed*-1);
+        }
+        playAnimation(facing, directionVector);
+    }
+
+    function playAnimation(_facing:Int, _directionVector:FlxPoint){
+        if (_directionVector == null || _directionVector.x == 0 && _directionVector.y == 0){
+            switch _facing {
+                case FlxObject.RIGHT:
+                    animation.play("stand_right");
+                case FlxObject.DOWN:
+                    animation.play("stand_down");
+                case FlxObject.LEFT:
+                    animation.play("stand_left");
+                case FlxObject.UP:
+                    animation.play("stand_up");
+            }
+        } else {
+            switch _facing {
+                case FlxObject.RIGHT:
+                    animation.play("walk_right");
+                case FlxObject.DOWN:
+                    animation.play("walk_down");
+                case FlxObject.LEFT:
+                    animation.play("walk_left");
+                case FlxObject.UP:
+                    animation.play("walk_up");
+            }
         }
     }
 
     function attack(facing:Int) {
+
+        FmodManager.PlaySoundOneShot(FmodSFX.ShovelSwing);
 
         var attackLocation:FlxPoint;
         var hitboxSize = new FlxPoint(20, 20);
@@ -77,19 +118,6 @@ class Player extends Entity {
         }
         var hitbox = new Hitbox(.2, attackLocation, hitboxSize);
         parentState.addHitbox(hitbox);
-    }
-
-    function updateFacingText(facing:Int) {
-        switch facing {
-            case FlxObject.RIGHT:
-                facingDirection.text = "Right";
-            case FlxObject.DOWN:
-                facingDirection.text = "Down";
-            case FlxObject.LEFT:
-                facingDirection.text = "Left";
-            case FlxObject.UP:
-                facingDirection.text = "Up";
-        }
     }
 
     function readDirectionInput():FlxPoint {

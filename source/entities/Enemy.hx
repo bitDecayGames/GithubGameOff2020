@@ -21,10 +21,10 @@ class Enemy extends Entity {
 
 	public function new(_parentState:PlayState, _player:FlxSprite, position:FlxPoint) {
         super();
-        healthPoints = 2;
+        healthPoints = 5;
         player = _player;
-        size = new FlxPoint(40, 40);
-        speed = 80;
+        size = new FlxPoint(10, 10);
+        speed = 10;
         direction = 0;
         parentState = _parentState;
         attacking = false;

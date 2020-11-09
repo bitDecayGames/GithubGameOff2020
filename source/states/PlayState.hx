@@ -27,12 +27,12 @@ class PlayState extends FlxState
 		var enemy1 = new Enemy(this, player, new FlxPoint(30, 30));
 		enemies.push(enemy1);
 		add(enemy1);
-		var enemy2 = new Enemy(this, player, new FlxPoint(FlxG.width, 30));
-		enemies.push(enemy2);
-		add(enemy2);
-		var enemy3 = new Enemy(this, player, new FlxPoint(FlxG.width, FlxG.height));
-		enemies.push(enemy3);
-		add(enemy3);
+		// var enemy2 = new Enemy(this, player, new FlxPoint(FlxG.width, 30));
+		// enemies.push(enemy2);
+		// add(enemy2);
+		// var enemy3 = new Enemy(this, player, new FlxPoint(FlxG.width, FlxG.height));
+		// enemies.push(enemy3);
+		// add(enemy3);
 	}
 
 	public function addHitbox(hitbox:Hitbox) {
@@ -48,6 +48,7 @@ class PlayState extends FlxState
 			for (hitbox in hitboxes) {
 				if (FlxG.overlap(enemy, hitbox)) {
 					if (!enemy.hasBeenHitByThisHitbox(hitbox)){
+						FmodManager.PlaySoundOneShot(FmodSFX.ShovelEnemyImpact);
 						enemy.applyDamage(1);
 						enemy.setKnockback(determineKnockbackDirection(player.facing), 100, .5);
 						enemy.trackHitbox(hitbox);

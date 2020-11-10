@@ -172,6 +172,5 @@ class Player extends Entity {
         }
 
         return facing;
-
     }
 }

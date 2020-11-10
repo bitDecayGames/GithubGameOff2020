@@ -31,7 +31,7 @@ class PlayState extends FlxState
 		player = new Player(this);
 		add(player);
 
-		var enemy1 = new Enemy(this, player, new FlxPoint(30, 30));
+		var enemy1 = new entities.Rat(this, player, new FlxPoint(30, 30));
 		enemies.push(enemy1);
 		add(enemy1);
 		var enemy2 = new Enemy(this, player, new FlxPoint(FlxG.width-30, 30));

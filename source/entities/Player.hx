@@ -76,9 +76,6 @@ class Player extends Entity {
         if (!attacking){
             directionVector = MathHelpers.NormalizeVector(potentialDirection);
             directionVector.scale(delta*speed);
-
-            // in Flixel, positive y is down
-            directionVector.y *= -1;
             // y needs to be flipped to move character in the right direction
             setPosition(x + directionVector.x, y + directionVector.y);
         }
@@ -139,11 +136,11 @@ class Player extends Entity {
         var _potentialDirection = new FlxPoint(0, 0);
 
         if (controls.up.check()) {
-            _potentialDirection.add(0, 1);
+            _potentialDirection.add(0, -1);
         }
 
 		if (controls.down.check()) {
-            _potentialDirection.add(0, -1);
+            _potentialDirection.add(0, 1);
         }
 
 		if (controls.left.check()) {
@@ -181,9 +178,9 @@ class Player extends Entity {
         } else if (vector.x < 0) {
             return FlxObject.LEFT;
         } else if (vector.y < 0) {
-            return FlxObject.DOWN;
-        } else if (vector.y > 0) {
             return FlxObject.UP;
+        } else if (vector.y > 0) {
+            return FlxObject.DOWN;
         }
 
         return facing;

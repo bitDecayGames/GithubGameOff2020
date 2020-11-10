@@ -68,8 +68,12 @@ class Player extends Entity {
         var directionVector:FlxPoint = null;
         if (!attacking){
             directionVector = MathHelpers.NormalizeVector(potentialDirection);
+            directionVector.scale(delta*speed);
+
+            // in Flixel, positive y is down
+            directionVector.y *= -1;
             // y needs to be flipped to move character in the right direction
-            setPosition(x + directionVector.x*delta*speed, y + directionVector.y*delta*speed*-1);
+            setPosition(x + directionVector.x, y + directionVector.y);
         }
         playAnimation(facing, directionVector);
     }

@@ -67,14 +67,14 @@ class PlayState extends FlxState
 					}
 				}
 			}
-		} 
+		}
 
 		for (loot in loots) {
 			if (FlxG.overlap(player, loot)) {
 				loot.destroy();
 				FmodManager.PlaySoundOneShot(FmodSFX.CollectCoin);
 			}
-		} 
+		}
 	}
 
 	public function determineKnockbackDirection(playerFacing:Int):FlxPoint {
@@ -92,5 +92,15 @@ class PlayState extends FlxState
 				knockbackDirection =  new FlxPoint(1, 1);
 		}
 		return knockbackDirection;
-    }
+	}
+
+	override public function onFocus() {
+		super.onFocus();
+		FmodManager.UnpauseSong();
+	}
+
+	override public function onFocusLost() {
+		super.onFocusLost();
+		FmodManager.PauseSong();
+	}
 }

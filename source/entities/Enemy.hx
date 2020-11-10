@@ -1,5 +1,6 @@
 package entities;
 
+import flixel.math.FlxVector;
 import flixel.math.FlxMath;
 import flixel.util.FlxPath;
 import flixel.effects.FlxFlicker;
@@ -20,6 +21,7 @@ class Enemy extends Entity {
 
     var player:FlxSprite;
     var collidedHitboxes:Map<Hitbox, Bool> = new Map<Hitbox, Bool>();
+    var directionVector:FlxVector;
 
 	public function new(_parentState:PlayState, _player:FlxSprite, position:FlxPoint) {
         super();
@@ -33,15 +35,15 @@ class Enemy extends Entity {
         makeGraphic(Std.int(size.x), Std.int(size.y), FlxColor.BLUE);
         setPosition(position.x, position.y);
     }
-    
+
     override public function destroy() {
         FmodManager.PlaySoundOneShot(FmodSFX.EnemyDeath);
-        super.destroy();
+        kill();
     }
 
 	override public function update(delta:Float):Void {
         super.update(delta);
-        
+
         if (inKnockback){
             setPosition(x + knockbackDirection.x*delta*knockbackSpeed, y + knockbackDirection.y*delta*knockbackSpeed*-1);
             knockbackDuration -= delta;
@@ -55,7 +57,7 @@ class Enemy extends Entity {
         } else {
             var direction:FlxPoint = determineDirection(player);
             facing = determineFacing(direction);
-            var directionVector = MathHelpers.NormalizeVector(direction);
+            directionVector = MathHelpers.NormalizeVector(direction);
             setPosition(x + directionVector.x*delta*speed, y + directionVector.y*delta*speed);
         }
     }
@@ -94,35 +96,23 @@ class Enemy extends Entity {
         }
     }
 
-    function determineFacing(vector:FlxPoint):Int {
-        if (vector.x > 0 && vector.y > 0) {
-            if (facing == FlxObject.UP || facing == FlxObject.RIGHT){
-                return facing;
-            }
-        } else if (vector.x > 0 && vector.y < 0) {
-            if (facing == FlxObject.DOWN || facing == FlxObject.RIGHT){
-                return facing;
-            }
-        } else if (vector.x < 0 && vector.y < 0) {
-            if (facing == FlxObject.DOWN || facing == FlxObject.LEFT){
-                return facing;
-            }
-        } else if (vector.x < 0 && vector.y > 0) {
-            if (facing == FlxObject.UP || facing == FlxObject.LEFT){
-                return facing;
-            }
+    function determineFacing(vector:FlxVector):Int {
+        // degrees here is CLOCKWISE, with straight-right being 0
+        var angle = vector.degrees;
+        while (angle < 0) {
+            angle += 360;
         }
-
-        if (vector.x > 0){
+        while (angle >= 360) {
+            angle -= 360;
+        }
+        if (angle < 45 || angle > 315) {
             return FlxObject.RIGHT;
-        } else if (vector.x < 0) {
-            return FlxObject.LEFT;
-        } else if (vector.y < 0) {
+        } else if (angle < 135) {
             return FlxObject.DOWN;
-        } else if (vector.y > 0) {
+        } else if (angle < 235) {
+            return FlxObject.LEFT;
+        } else {
             return FlxObject.UP;
         }
-
-        return facing;
     }
 }

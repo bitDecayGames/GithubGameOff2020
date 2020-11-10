@@ -56,7 +56,6 @@ class Player extends Entity {
 
             attacking = true;
             attack(facing);
-			trace('Attacking');
             Timer.delay(() -> {
                 attacking = false;
             }, 200);

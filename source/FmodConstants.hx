@@ -10,8 +10,10 @@ class FmodSongs {
 }
 
 class FmodSFX {
+    public static inline var EnemyDeath:String = "event:/SFX/Enemy/EnemyDeath";
     public static inline var MenuHover:String = "event:/SFX/Menu/MenuHover";
     public static inline var MenuSelect:String = "event:/SFX/Menu/MenuSelect";
+    public static inline var CollectCoin:String = "event:/SFX/Player/Collect/CollectCoin";
     public static inline var FootstepRock:String = "event:/SFX/Player/Footsteps/FootstepRock";
     public static inline var ShovelEnemyImpact:String = "event:/SFX/Player/Shovel/ShovelEnemyImpact";
     public static inline var ShovelSwing:String = "event:/SFX/Player/Shovel/ShovelSwing";

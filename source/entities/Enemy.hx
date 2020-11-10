@@ -32,7 +32,12 @@ class Enemy extends Entity {
         attacking = false;
         makeGraphic(Std.int(size.x), Std.int(size.y), FlxColor.BLUE);
         setPosition(position.x, position.y);
-	}
+    }
+    
+    override public function destroy() {
+        FmodManager.PlaySoundOneShot(FmodSFX.EnemyDeath);
+        super.destroy();
+    }
 
 	override public function update(delta:Float):Void {
         super.update(delta);
@@ -85,7 +90,7 @@ class Enemy extends Entity {
     function dropLoot() {
         for (i in 0...2){
             var loot = new Loot(getMidpoint().x, getMidpoint().y);
-            parentState.add(loot);
+            parentState.addLoot(loot);
         }
     }
 

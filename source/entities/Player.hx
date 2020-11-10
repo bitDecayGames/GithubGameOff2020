@@ -1,5 +1,6 @@
 package entities;
 
+import actions.Actions;
 import states.PlayState;
 import haxe.Timer;
 import flixel.util.FlxColor;
@@ -12,8 +13,11 @@ import flixel.FlxSprite;
 
 class Player extends Entity {
 
+    var controls:Actions;
+
 	public function new(_parentState:PlayState) {
         super();
+        controls = new Actions();
         size = new FlxPoint(16, 32);
         speed = 75;
         direction = 0;
@@ -52,7 +56,7 @@ class Player extends Entity {
 		potentialDirection = readDirectionInput();
         facing = determineFacing(potentialDirection);
 
-		if (FlxG.keys.justPressed.Z && !attacking) {
+		if (controls.attack.check() && !attacking) {
 
             attacking = true;
             attack(facing);
@@ -123,19 +127,19 @@ class Player extends Entity {
 
         var _potentialDirection = new FlxPoint(0, 0);
 
-        if (FlxG.keys.pressed.UP) {
+        if (controls.up.check()) {
             _potentialDirection.add(0, 1);
         }
 
-		if (FlxG.keys.pressed.DOWN) {
+		if (controls.down.check()) {
             _potentialDirection.add(0, -1);
         }
 
-		if (FlxG.keys.pressed.LEFT) {
+		if (controls.left.check()) {
             _potentialDirection.add(-1, 0);
         }
 
-		if (FlxG.keys.pressed.RIGHT) {
+		if (controls.right.check()) {
             _potentialDirection.add(1, 0);
         }
 

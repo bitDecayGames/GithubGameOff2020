@@ -39,7 +39,7 @@ class Player extends Entity {
         setFacingFlip(FlxObject.LEFT, true, false);
         setFacingFlip(FlxObject.RIGHT, false, false);
     }
-    
+
     public function animCallback(name:String, frameNumber:Int, frameIndex:Int):Void {
 		if (StringTools.contains(name, "walk_") && frameNumber == 3 || frameNumber == 7) {
 			FmodManager.PlaySoundOneShot(FmodSFX.FootstepRock);
@@ -126,19 +126,19 @@ class Player extends Entity {
 
         if (FlxG.keys.pressed.UP) {
             _potentialDirection.add(0, 1);
-        } 
-        
+        }
+
 		if (FlxG.keys.pressed.DOWN) {
             _potentialDirection.add(0, -1);
-        } 
-        
+        }
+
 		if (FlxG.keys.pressed.LEFT) {
             _potentialDirection.add(-1, 0);
-        } 
-        
+        }
+
 		if (FlxG.keys.pressed.RIGHT) {
             _potentialDirection.add(1, 0);
-        } 
+        }
 
         return _potentialDirection;
     }
@@ -173,5 +173,6 @@ class Player extends Entity {
         }
 
         return facing;
+
     }
 }

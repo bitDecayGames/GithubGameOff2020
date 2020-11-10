@@ -14,6 +14,7 @@ import flixel.FlxSprite;
 class Player extends Entity {
 
     var controls:Actions;
+    var stepFXPlayed:Bool = false;
 
 	public function new(_parentState:PlayState) {
         super();
@@ -38,6 +39,8 @@ class Player extends Entity {
         animation.add("stand_down", [0], animationSpeed);
         animation.add("stand_left", [9], animationSpeed);
 
+        animation.play("stand_down");
+
         animation.callback = animCallback;
 
         setFacingFlip(FlxObject.LEFT, true, false);
@@ -45,13 +48,17 @@ class Player extends Entity {
     }
 
     public function animCallback(name:String, frameNumber:Int, frameIndex:Int):Void {
-		if (StringTools.contains(name, "walk_") && frameNumber == 3 || frameNumber == 7) {
+		if (!stepFXPlayed && StringTools.contains(name, "walk_") && frameNumber == 3 || frameNumber == 7) {
 			FmodManager.PlaySoundOneShot(FmodSFX.FootstepRock);
-		}
+            stepFXPlayed = true;
+		} else {
+            // reset this once a different frame happens
+            stepFXPlayed = false;
+        }
 	}
 
 	override public function update(delta:Float):Void {
-		super.update(delta);
+        super.update(delta);
         var potentialDirection:FlxPoint = new FlxPoint(0, 0);
 		potentialDirection = readDirectionInput();
         facing = determineFacing(potentialDirection);
@@ -93,13 +100,13 @@ class Player extends Entity {
         } else {
             switch _facing {
                 case FlxObject.RIGHT:
-                    animation.play("walk_right");
+                    animation.play("walk_right", animation.curAnim.curFrame);
                 case FlxObject.DOWN:
-                    animation.play("walk_down");
+                    animation.play("walk_down", animation.curAnim.curFrame);
                 case FlxObject.LEFT:
-                    animation.play("walk_left");
+                    animation.play("walk_left", animation.curAnim.curFrame);
                 case FlxObject.UP:
-                    animation.play("walk_up");
+                    animation.play("walk_up", animation.curAnim.curFrame);
             }
         }
     }

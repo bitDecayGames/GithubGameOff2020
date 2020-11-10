@@ -21,7 +21,7 @@ class Player extends Entity {
         parentState = _parentState;
         setPosition(0, 0);
 
-        super.loadGraphic(AssetPaths.player__png, true, 16, 32);
+        super.loadGraphic(AssetPaths.Player__png, true, 16, 32);
 
         var animationSpeed:Int = 8;
 

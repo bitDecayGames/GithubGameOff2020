@@ -26,7 +26,7 @@ class PlayState extends FlxState
 	{
 		super.create();
 
-		FmodManager.PlaySong(FmodSongs.LetsGo);
+		FmodManager.PlaySong(FmodSongs.Cave);
 
 		player = new Player(this);
 		add(player);

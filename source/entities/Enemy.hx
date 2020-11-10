@@ -35,7 +35,7 @@ class Enemy extends Entity {
     }
     
     override public function destroy() {
-        FmodManager.PlaySoundOneShot(FmodSFX.EnemyDeath);
+        FmodManager.PlaySoundOneShot(FmodSFX.Crumble);
         super.destroy();
     }
 

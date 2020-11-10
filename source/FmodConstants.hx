@@ -6,11 +6,12 @@
 package;
 
 class FmodSongs {
-    public static inline var LetsGo:String = "event:/Music/LetsGo";
+    public static inline var Cave:String = "event:/Music/Cave";
 }
 
 class FmodSFX {
-    public static inline var EnemyDeath:String = "event:/SFX/Enemy/EnemyDeath";
+    public static inline var RatDeath:String = "event:/SFX/Enemy/Rat/RatDeath";
+    public static inline var Crumble:String = "event:/SFX/Environment/Crumble";
     public static inline var MenuHover:String = "event:/SFX/Menu/MenuHover";
     public static inline var MenuSelect:String = "event:/SFX/Menu/MenuSelect";
     public static inline var CollectCoin:String = "event:/SFX/Player/Collect/CollectCoin";

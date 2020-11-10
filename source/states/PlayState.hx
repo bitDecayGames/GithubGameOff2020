@@ -52,8 +52,7 @@ class PlayState extends FlxState
 		add(loot);
 	}
 
-	override public function update(elapsed:Float)
-	{
+	override public function update(elapsed:Float) {
 		super.update(elapsed);
 
 		for (enemy in enemies) {

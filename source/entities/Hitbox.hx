@@ -10,10 +10,9 @@ class Hitbox extends FlxSprite {
     var timeActive:Float;
 
     public function new(_timeActive:Float, _position:FlxPoint, _size:FlxPoint) {
-        super();
+        super(_position.x, _position.y);
         timeActive = _timeActive;
         makeGraphic(Std.int(_size.x), Std.int(_size.y), new FlxColor(0xFF220000));
-        setPosition(_position.x, _position.y);
     }
 
     override public function update(delta:Float):Void {

@@ -1,21 +1,31 @@
 package entities;
 
+import behavior.NavBundle;
 import flixel.tile.FlxBaseTilemap.FlxTilemapDiagonalPolicy;
 import flixel.util.FlxPath;
 import flixel.FlxObject;
 import flixel.math.FlxPoint;
 import flixel.FlxSprite;
 import states.PlayState;
+import behavior.movement.MovementBehavior;
+import behavior.movement.ManhattanPath;
+import behavior.aggression.AggressionBehavior;
+import behavior.aggression.FinishPath;
 
 class Rat extends Enemy {
 
-	public function new(_parentState:PlayState, _player:FlxSprite, position:FlxPoint) {
+    var movement:MovementBehavior;
+    var aggro:AggressionBehavior;
+
+	public function new(_parentState:PlayState, _player:Player, position:FlxPoint) {
         super(_parentState, _player, position);
         path = new FlxPath();
+        movement = new ManhattanPath(_player);
+        aggro = new FinishPath();
 
         speed = 30;
 
-		super.loadGraphic(AssetPaths.rat__png, true, 16, 16);
+        super.loadGraphic(AssetPaths.rat__png, true, 16, 16);
 
         var animationSpeed:Int = 5;
 
@@ -49,8 +59,14 @@ class Rat extends Enemy {
         }
 
 		if (!inKnockback) {
+            // this nav bundle should get created somewhere else
+            var bundle = new NavBundle(parentState.currentLevel, player);
             if (path.finished || path.nodes.length == 0) {
-                generateNewPath();
+                path.start(movement.generatePath(this, bundle), speed);
+            }
+
+            if (aggro.trigger(this, bundle)) {
+                // TODO: enter ATTACK STATE
             }
 
 			playAnimation(facing, directionVector);

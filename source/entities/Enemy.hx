@@ -20,13 +20,13 @@ import flixel.FlxSprite;
 
 class Enemy extends Entity {
 
-    var player:FlxSprite;
+    var player:Player;
     var collidedHitboxes:Map<Hitbox, Bool> = new Map<Hitbox, Bool>();
     var directionVector:FlxVector;
 
     var level:Level;
 
-	public function new(_parentState:PlayState, _player:FlxSprite, position:FlxPoint) {
+	public function new(_parentState:PlayState, _player:Player, position:FlxPoint) {
         super();
         health = 3;
         player = _player;

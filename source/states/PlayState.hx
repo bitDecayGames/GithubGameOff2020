@@ -24,7 +24,7 @@ class PlayState extends FlxState
 	var loots:Array<Loot> = new Array<Loot>();
 	var enemies:Array<Enemy> = new Array<Enemy>();
 
-	var currentLevel:Level;
+	public var currentLevel:Level;
 
 	var moneyText:FlxText;
 	var money:Int = 0;

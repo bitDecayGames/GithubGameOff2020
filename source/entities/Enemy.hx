@@ -25,7 +25,7 @@ class Enemy extends Entity {
 
 	public function new(_parentState:PlayState, _player:FlxSprite, position:FlxPoint) {
         super();
-        healthPoints = 3;
+        health = 3;
         player = _player;
         size = new FlxPoint(10, 10);
         speed = 10;
@@ -48,7 +48,7 @@ class Enemy extends Entity {
             knockbackDuration -= delta;
             if (knockbackDuration <= 0) {
                 inKnockback = false;
-                if (healthPoints <= 0) {
+                if (health <= 0) {
                     dropLoot();
                     destroy();
                 }
@@ -70,7 +70,7 @@ class Enemy extends Entity {
     }
 
     public function applyDamage(_damage:Int) {
-        healthPoints -= _damage;
+        health -= _damage;
     }
 
     public function setKnockback(_knockbackDirection:FlxPoint, _knockbackSpeed:Float, _knockbackDuration:Float) {

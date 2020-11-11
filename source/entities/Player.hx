@@ -1,5 +1,6 @@
 package entities;
 
+import haxefmod.flixel.FmodFlxUtilities;
 import flixel.effects.FlxFlicker;
 import actions.Actions;
 import states.PlayState;
@@ -20,15 +21,18 @@ class Player extends Entity {
     var playerHitboxOffsetX = 4;
     var playerHitboxOffsetY = 8;
 
-	public function new(_parentState:PlayState) {
+    public var invincibilityTimeLeft:Float;
+
+	public function new(_parentState:PlayState, _spawnPosition:FlxPoint) {
         super();
         controls = new Actions();
+        health = 5;
         size = new FlxPoint(16, 32);
         speed = 75;
         direction = 0;
         attacking = false;
         parentState = _parentState;
-        setPosition(0, 0);
+        setPosition(_spawnPosition.x, _spawnPosition.y);
 
         super.loadGraphic(AssetPaths.Player__png, true, 16, 32);
 
@@ -67,6 +71,8 @@ class Player extends Entity {
 
 	override public function update(delta:Float):Void {
         super.update(delta);
+        invincibilityTimeLeft -= delta;
+
         var potentialDirection:FlxPoint = new FlxPoint(0, 0);
 		potentialDirection = readDirectionInput();
         facing = determineFacing(potentialDirection);
@@ -76,6 +82,9 @@ class Player extends Entity {
             knockbackDuration -= delta;
             if (knockbackDuration <= 0) {
                 inKnockback = false;
+                if (health <= 0) {
+                    FmodFlxUtilities.TransitionToState(new PlayState());
+                }
             }
             playDamageAnimation(facing);
         } else {
@@ -139,7 +148,7 @@ class Player extends Entity {
     }
 
     public function applyDamage(_damage:Int) {
-        healthPoints -= _damage;
+        health -= _damage;
     }
 
     public function setKnockback(_knockbackDirection:FlxPoint, _knockbackSpeed:Float, _knockbackDuration:Float) {
@@ -148,7 +157,8 @@ class Player extends Entity {
         knockbackSpeed = _knockbackSpeed;
         knockbackDuration = _knockbackDuration;
 
-        FlxFlicker.flicker(this, knockbackDuration);
+        FlxFlicker.flicker(this, knockbackDuration*4);
+        invincibilityTimeLeft = knockbackDuration*4;
     }
 
     function attack(facing:Int) {

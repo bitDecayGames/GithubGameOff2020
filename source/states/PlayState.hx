@@ -25,6 +25,7 @@ class PlayState extends FlxState
 
 	var moneyText:FlxText;
 	var money:Int = 0;
+	var playerHealth:FlxText;
 
 	override public function create()
 	{
@@ -32,7 +33,7 @@ class PlayState extends FlxState
 
 		FmodManager.PlaySong(FmodSongs.Cave);
 
-		player = new Player(this);
+		player = new Player(this, new FlxPoint(FlxG.width/2, FlxG.height/2));
 		add(player);
 
 		var enemy1 = new entities.Rat(this, player, new FlxPoint(100, 30));
@@ -47,6 +48,8 @@ class PlayState extends FlxState
 
 		moneyText = new FlxText(1, 1, 1000, "Money: ", 10);
 		add(moneyText);
+		playerHealth = new FlxText(1, 15, 1000, "Health: ", 10);
+		add(playerHealth);
 	}
 
 	public function addHitbox(hitbox:Hitbox) {
@@ -66,7 +69,8 @@ class PlayState extends FlxState
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
 
-		moneyText.text = "Money: " + money;
+		moneyText.text = "Moneyd: " + money;
+		playerHealth.text = "Health: " + player.health;
 
 		for (enemy in enemies) {
 			for (hitbox in hitboxes) {
@@ -81,10 +85,10 @@ class PlayState extends FlxState
 			}
 
 			if (FlxG.overlap(player, enemy)) {
-				if (!player.inKnockback){
+				if (player.invincibilityTimeLeft <= 0){
 					FmodManager.PlaySoundOneShot(FmodSFX.PlayerTakeDamage);
 					player.applyDamage(1);
-					player.setKnockback(determineKnockbackDirectionForPlayer(player, enemy), 100, .5);
+					player.setKnockback(determineKnockbackDirectionForPlayer(player, enemy), 100, .25);
 				}
 			}
 		}

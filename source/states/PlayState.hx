@@ -25,7 +25,8 @@ class PlayState extends FlxState
 
 	var moneyText:FlxText;
 	var money:Int = 0;
-	var playerHealth:FlxText;
+	var playerHealthText:FlxText;
+	var playerInvincibilityTimeText:FlxText;
 
 	override public function create()
 	{
@@ -48,8 +49,10 @@ class PlayState extends FlxState
 
 		moneyText = new FlxText(1, 1, 1000, "Money: ", 10);
 		add(moneyText);
-		playerHealth = new FlxText(1, 15, 1000, "Health: ", 10);
-		add(playerHealth);
+		playerHealthText = new FlxText(1, 15, 1000, "Health: ", 10);
+		add(playerHealthText);
+		playerInvincibilityTimeText = new FlxText(1, 31, 1000, "Invincibility time: ", 10);
+		add(playerInvincibilityTimeText);
 	}
 
 	public function addHitbox(hitbox:Hitbox) {
@@ -69,8 +72,9 @@ class PlayState extends FlxState
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
 
-		moneyText.text = "Moneyd: " + money;
-		playerHealth.text = "Health: " + player.health;
+		moneyText.text = "Money: " + money;
+		playerHealthText.text = "Health: " + player.health;
+		playerInvincibilityTimeText.text = "Invincibility time: " + player.invincibilityTimeLeft;
 
 		for (enemy in enemies) {
 			for (hitbox in hitboxes) {

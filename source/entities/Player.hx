@@ -71,7 +71,9 @@ class Player extends Entity {
 
 	override public function update(delta:Float):Void {
         super.update(delta);
-        invincibilityTimeLeft -= delta;
+        if (invincibilityTimeLeft > 0){
+            invincibilityTimeLeft -= delta;
+        }
 
         var potentialDirection:FlxPoint = new FlxPoint(0, 0);
 		potentialDirection = readDirectionInput();

@@ -30,7 +30,12 @@ class Rat extends Enemy {
 
         setFacingFlip(FlxObject.LEFT, true, false);
         setFacingFlip(FlxObject.RIGHT, false, false);
-	}
+    }
+    
+    override public function destroy() {
+        FmodManager.PlaySoundOneShot(FmodSFX.RatDeath);
+        kill();
+    }
 
 	override public function update(delta:Float):Void {
 		super.update(delta);

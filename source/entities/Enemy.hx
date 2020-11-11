@@ -37,7 +37,6 @@ class Enemy extends Entity {
     }
 
     override public function destroy() {
-        FmodManager.PlaySoundOneShot(FmodSFX.RatDeath);
         kill();
     }
 
@@ -84,7 +83,7 @@ class Enemy extends Entity {
     }
 
     function determineDirection(player:FlxSprite):FlxPoint {
-        // Adding 4 to the y value to make the rat go from the player's feet
+        // Adding 4 to the y value to make the enemy aim lower
         var direction = new FlxPoint(player.getMidpoint().x-getMidpoint().x, player.getMidpoint().y+4-getMidpoint().y);
         var directionNormalized = MathHelpers.NormalizeVector(direction);
         return directionNormalized;

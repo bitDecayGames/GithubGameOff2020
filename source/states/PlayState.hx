@@ -1,5 +1,6 @@
 package states;
 
+import flixel.text.FlxText;
 import entities.Loot;
 import helpers.MathHelpers;
 import flixel.math.FlxMath;
@@ -22,6 +23,9 @@ class PlayState extends FlxState
 	var loots:Array<Loot> = new Array<Loot>();
 	var enemies:Array<Enemy> = new Array<Enemy>();
 
+	var moneyText:FlxText;
+	var money:Int = 0;
+
 	override public function create()
 	{
 		super.create();
@@ -31,7 +35,7 @@ class PlayState extends FlxState
 		player = new Player(this);
 		add(player);
 
-		var enemy1 = new entities.Rat(this, player, new FlxPoint(30, 30));
+		var enemy1 = new entities.Rat(this, player, new FlxPoint(100, 30));
 		enemies.push(enemy1);
 		add(enemy1);
 		var enemy2 = new Enemy(this, player, new FlxPoint(FlxG.width-30, 30));
@@ -40,6 +44,9 @@ class PlayState extends FlxState
 		var enemy3 = new Enemy(this, player, new FlxPoint(FlxG.width-30, FlxG.height-30));
 		enemies.push(enemy3);
 		add(enemy3);
+
+		moneyText = new FlxText(1, 1, 1000, "Money: ", 10);
+		add(moneyText);
 	}
 
 	public function addHitbox(hitbox:Hitbox) {
@@ -52,8 +59,14 @@ class PlayState extends FlxState
 		add(loot);
 	}
 
+	public function IncreaseMoney(_money:Int) {
+		money += _money;
+	}
+
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
+
+		moneyText.text = "Money: " + money;
 
 		for (enemy in enemies) {
 			for (hitbox in hitboxes) {
@@ -66,12 +79,21 @@ class PlayState extends FlxState
 					}
 				}
 			}
+
+			if (FlxG.overlap(player, enemy)) {
+				if (!player.inKnockback){
+					FmodManager.PlaySoundOneShot(FmodSFX.PlayerTakeDamage);
+					player.applyDamage(1);
+					player.setKnockback(determineKnockbackDirectionForPlayer(player, enemy), 100, .5);
+				}
+			}
 		}
 
 		for (loot in loots) {
 			if (FlxG.overlap(player, loot)) {
 				loot.destroy();
 				FmodManager.PlaySoundOneShot(FmodSFX.CollectCoin);
+				IncreaseMoney(1);
 			}
 		}
 	}
@@ -91,6 +113,12 @@ class PlayState extends FlxState
 				knockbackDirection =  new FlxPoint(1, 1);
 		}
 		return knockbackDirection;
+	}
+
+	public function determineKnockbackDirectionForPlayer(_player:Player, _enemy:Enemy):FlxPoint {
+        var direction = new FlxPoint(player.getMidpoint().x-_enemy.getMidpoint().x, _enemy.getMidpoint().y-player.getMidpoint().y);
+        var directionNormalized = MathHelpers.NormalizeVector(direction);
+        return directionNormalized;
 	}
 
 	override public function onFocus() {

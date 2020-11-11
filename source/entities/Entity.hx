@@ -15,7 +15,7 @@ class Entity extends FlxSprite{
     var healthPoints:Int;
 
     // Knockback
-    var inKnockback:Bool;
+    public var inKnockback:Bool;
     var knockbackDirection:FlxPoint;
     var knockbackSpeed:Float;
     var knockbackDuration:Float;

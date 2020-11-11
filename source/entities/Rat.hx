@@ -9,7 +9,7 @@ class Rat extends Enemy {
 
 	public function new(_parentState:PlayState, _player:FlxSprite, position:FlxPoint) {
 		super(_parentState, _player, position);
-        speed = 60;
+        speed = 30;
 
 		super.loadGraphic(AssetPaths.rat__png, true, 16, 16);
 

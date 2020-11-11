@@ -25,7 +25,7 @@ class Enemy extends Entity {
 
 	public function new(_parentState:PlayState, _player:FlxSprite, position:FlxPoint) {
         super();
-        healthPoints = 5;
+        healthPoints = 3;
         player = _player;
         size = new FlxPoint(10, 10);
         speed = 10;
@@ -37,7 +37,7 @@ class Enemy extends Entity {
     }
 
     override public function destroy() {
-        FmodManager.PlaySoundOneShot(FmodSFX.Crumble);
+        FmodManager.PlaySoundOneShot(FmodSFX.RatDeath);
         kill();
     }
 
@@ -84,7 +84,8 @@ class Enemy extends Entity {
     }
 
     function determineDirection(player:FlxSprite):FlxPoint {
-        var direction = new FlxPoint(player.x-x, player.y-y);
+        // Adding 4 to the y value to make the rat go from the player's feet
+        var direction = new FlxPoint(player.getMidpoint().x-getMidpoint().x, player.getMidpoint().y+4-getMidpoint().y);
         var directionNormalized = MathHelpers.NormalizeVector(direction);
         return directionNormalized;
     }

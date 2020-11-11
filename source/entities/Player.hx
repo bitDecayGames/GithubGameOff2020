@@ -21,7 +21,7 @@ class Player extends Entity {
     var playerHitboxOffsetX = 4;
     var playerHitboxOffsetY = 8;
 
-    public var invincibilityTimeLeft:Float;
+    public var invincibilityTimeLeft:Float = 0;
 
 	public function new(_parentState:PlayState, _spawnPosition:FlxPoint) {
         super();

@@ -1,5 +1,7 @@
 package entities;
 
+import haxefmod.flixel.FmodFlxUtilities;
+import flixel.effects.FlxFlicker;
 import actions.Actions;
 import states.PlayState;
 import haxe.Timer;
@@ -17,17 +19,27 @@ class Player extends Entity {
     var stepFXPlayed:Bool = false;
     var movementRatio = new FlxPoint(1, 0.8);
 
-	public function new(_parentState:PlayState) {
+    var playerHitboxOffsetX = 4;
+    var playerHitboxOffsetY = 8;
+
+    public var invincibilityTimeLeft:Float = 0;
+
+	public function new(_parentState:PlayState, _spawnPosition:FlxPoint) {
         super();
         controls = new Actions();
+        health = 5;
         size = new FlxPoint(16, 32);
         speed = 75;
         direction = 0;
         attacking = false;
         parentState = _parentState;
-        setPosition(0, 0);
+        setPosition(_spawnPosition.x, _spawnPosition.y);
 
         super.loadGraphic(AssetPaths.Player__png, true, 16, 32);
+
+        // Update hitbox to be smaller than sprite
+        setSize(8, 16);
+        offset.set(playerHitboxOffsetX, playerHitboxOffsetY);
 
         var animationSpeed:Int = 8;
 
@@ -60,28 +72,43 @@ class Player extends Entity {
 
 	override public function update(delta:Float):Void {
         super.update(delta);
+        if (invincibilityTimeLeft > 0){
+            invincibilityTimeLeft -= delta;
+        }
+
         var potentialDirection:FlxPoint = new FlxPoint(0, 0);
 		potentialDirection = readDirectionInput();
         facing = determineFacing(potentialDirection);
 
-		if (controls.attack.check() && !attacking) {
+        if (inKnockback){
+            setPosition(x + knockbackDirection.x*delta*knockbackSpeed, y + knockbackDirection.y*delta*knockbackSpeed*-1);
+            knockbackDuration -= delta;
+            if (knockbackDuration <= 0) {
+                inKnockback = false;
+                if (health <= 0) {
+                    FmodFlxUtilities.TransitionToState(new PlayState());
+                }
+            }
+            playDamageAnimation(facing);
+        } else {
+            if (controls.attack.check() && !attacking) {
 
-            attacking = true;
-            attack(facing);
-            Timer.delay(() -> {
-                attacking = false;
-            }, 200);
-        }
+                attacking = true;
+                attack(facing);
+                Timer.delay(() -> {
+                    attacking = false;
+                }, 200);
+            }
 
-        var directionVector:FlxPoint = null;
-        if (!attacking){
-            directionVector = MathHelpers.NormalizeVector(potentialDirection);
-            directionVector.scale(delta*speed);
-            directionVector.set(directionVector.x * movementRatio.x, directionVector.y * movementRatio.y);
-            // y needs to be flipped to move character in the right direction
-            setPosition(x + directionVector.x, y + directionVector.y);
+            var directionVector:FlxPoint = null;
+            if (!attacking){
+                directionVector = MathHelpers.NormalizeVector(potentialDirection);
+                directionVector.scale(delta*speed);
+                // y needs to be flipped to move character in the right direction
+                setPosition(x + directionVector.x, y + directionVector.y);
+            }
+            playAnimation(facing, directionVector);
         }
-        playAnimation(facing, directionVector);
     }
 
     function playAnimation(_facing:Int, _directionVector:FlxPoint){
@@ -110,6 +137,33 @@ class Player extends Entity {
         }
     }
 
+    function playDamageAnimation(_facing:Int){
+        switch _facing {
+            case FlxObject.RIGHT:
+                animation.play("stand_right");
+            case FlxObject.DOWN:
+                animation.play("stand_down");
+            case FlxObject.LEFT:
+                animation.play("stand_left");
+            case FlxObject.UP:
+                animation.play("stand_up");
+        }
+    }
+
+    public function applyDamage(_damage:Int) {
+        health -= _damage;
+    }
+
+    public function setKnockback(_knockbackDirection:FlxPoint, _knockbackSpeed:Float, _knockbackDuration:Float) {
+        inKnockback = true;
+        knockbackDirection = _knockbackDirection;
+        knockbackSpeed = _knockbackSpeed;
+        knockbackDuration = _knockbackDuration;
+
+        FlxFlicker.flicker(this, knockbackDuration*4);
+        invincibilityTimeLeft = knockbackDuration*4;
+    }
+
     function attack(facing:Int) {
 
         FmodManager.PlaySoundOneShot(FmodSFX.ShovelSwing);
@@ -119,13 +173,13 @@ class Player extends Entity {
 
         switch facing {
             case FlxObject.RIGHT:
-                attackLocation = new FlxPoint(x+size.x, y+(size.y/2)-(hitboxSize.y/2));
+                attackLocation = new FlxPoint(x+size.x-playerHitboxOffsetX, y+(size.y/2)-(hitboxSize.y/2)-playerHitboxOffsetY);
             case FlxObject.DOWN:
-                attackLocation = new FlxPoint(x+(size.x/2)-hitboxSize.x/2, y+size.y);
+                attackLocation = new FlxPoint(x+(size.x/2)-(hitboxSize.x/2)-playerHitboxOffsetX, y+size.y-playerHitboxOffsetY);
             case FlxObject.LEFT:
-                attackLocation = new FlxPoint(x-hitboxSize.x, y+(size.y/2)-(hitboxSize.y/2));
+                attackLocation = new FlxPoint(x-hitboxSize.x-playerHitboxOffsetX, y+(size.y/2)-(hitboxSize.y/2)-playerHitboxOffsetY);
             case FlxObject.UP:
-                attackLocation = new FlxPoint(x+(size.x/2)-(hitboxSize.x/2), y-hitboxSize.y);
+                attackLocation = new FlxPoint(x+(size.x/2)-(hitboxSize.x/2)-playerHitboxOffsetX, y-hitboxSize.y-playerHitboxOffsetY);
             default:
                 attackLocation = new FlxPoint(x, y);
         }

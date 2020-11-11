@@ -28,7 +28,7 @@ class Enemy extends Entity {
 
 	public function new(_parentState:PlayState, _player:FlxSprite, position:FlxPoint) {
         super();
-        healthPoints = 5;
+        health = 3;
         player = _player;
         size = new FlxPoint(10, 10);
         speed = 10;
@@ -46,7 +46,6 @@ class Enemy extends Entity {
     }
 
     override public function destroy() {
-        FmodManager.PlaySoundOneShot(FmodSFX.EnemyDeath);
         kill();
     }
 
@@ -58,7 +57,7 @@ class Enemy extends Entity {
             knockbackDuration -= delta;
             if (knockbackDuration <= 0) {
                 inKnockback = false;
-                if (healthPoints <= 0) {
+                if (health <= 0) {
                     dropLoot();
                     destroy();
                 }
@@ -80,7 +79,7 @@ class Enemy extends Entity {
     }
 
     public function applyDamage(_damage:Int) {
-        healthPoints -= _damage;
+        health -= _damage;
     }
 
     public function setKnockback(_knockbackDirection:FlxPoint, _knockbackSpeed:Float, _knockbackDuration:Float) {
@@ -93,7 +92,8 @@ class Enemy extends Entity {
     }
 
     function determineDirection(player:FlxSprite):FlxPoint {
-        var direction = new FlxPoint(player.x-x, player.y-y);
+        // Adding 4 to the y value to make the enemy aim lower
+        var direction = new FlxPoint(player.getMidpoint().x-getMidpoint().x, player.getMidpoint().y+4-getMidpoint().y);
         var directionNormalized = MathHelpers.NormalizeVector(direction);
         return directionNormalized;
     }

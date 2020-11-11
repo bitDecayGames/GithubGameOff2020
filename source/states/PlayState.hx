@@ -1,6 +1,7 @@
 package states;
 
 import level.Level;
+import flixel.text.FlxText;
 import entities.Loot;
 import helpers.MathHelpers;
 import flixel.math.FlxMath;
@@ -25,6 +26,10 @@ class PlayState extends FlxState
 
 	var currentLevel:Level;
 
+	var moneyText:FlxText;
+	var money:Int = 0;
+	var playerHealthText:FlxText;
+
 	override public function create()
 	{
 		super.create();
@@ -33,25 +38,30 @@ class PlayState extends FlxState
 		FlxG.debugger.drawDebug = true;
 		#end
 
-		FmodManager.PlaySong(FmodSongs.LetsGo);
+		FmodManager.PlaySong(FmodSongs.Cave);
 
 		currentLevel = new Level();
 		add(currentLevel.debugLayer);
 		add(currentLevel.navigationLayer);
 
-		player = new Player(this);
+		player = new Player(this, new FlxPoint(FlxG.width/2, FlxG.height/2));
 		add(player);
 
-		var enemy1 = new entities.Rat(this, player, new FlxPoint(30, 30));
+		var enemy1 = new entities.Rat(this, player, new FlxPoint(100, 30));
 		enemy1.setNavigation(currentLevel, player);
 		enemies.push(enemy1);
 		add(enemy1);
-		var enemy2 = new Enemy(this, player, new FlxPoint(FlxG.width-30, 30));
-		enemies.push(enemy2);
-		add(enemy2);
-		var enemy3 = new Enemy(this, player, new FlxPoint(FlxG.width-30, FlxG.height-30));
-		enemies.push(enemy3);
-		add(enemy3);
+		// var enemy2 = new Enemy(this, player, new FlxPoint(FlxG.width-30, 30));
+		// enemies.push(enemy2);
+		// add(enemy2);
+		// var enemy3 = new Enemy(this, player, new FlxPoint(FlxG.width-30, FlxG.height-30));
+		// enemies.push(enemy3);
+		// add(enemy3);
+
+		moneyText = new FlxText(1, 1, 1000, "Money: ", 10);
+		add(moneyText);
+		playerHealthText = new FlxText(1, 15, 1000, "Health: ", 10);
+		add(playerHealthText);
 	}
 
 	public function addHitbox(hitbox:Hitbox) {
@@ -64,18 +74,37 @@ class PlayState extends FlxState
 		add(loot);
 	}
 
+	public function IncreaseMoney(_money:Int) {
+		money += _money;
+	}
+
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
+
+		moneyText.text = "Money: " + money;
+		playerHealthText.text = "Health: " + player.health;
+
+		FlxG.watch.addQuick("enemies: ", enemies.length);
 
 		for (enemy in enemies) {
 			for (hitbox in hitboxes) {
 				if (FlxG.overlap(enemy, hitbox)) {
+					trace("RAT GOT TOUCHED");
 					if (!enemy.hasBeenHitByThisHitbox(hitbox)){
+						trace("RAT GOT SMAK");
 						FmodManager.PlaySoundOneShot(FmodSFX.ShovelEnemyImpact);
 						enemy.applyDamage(1);
 						enemy.setKnockback(determineKnockbackDirection(player.facing), 100, .5);
 						enemy.trackHitbox(hitbox);
 					}
+				}
+			}
+
+			if (FlxG.overlap(player, enemy)) {
+				if (player.invincibilityTimeLeft <= 0){
+					FmodManager.PlaySoundOneShot(FmodSFX.PlayerTakeDamage);
+					player.applyDamage(1);
+					player.setKnockback(determineKnockbackDirectionForPlayer(player, enemy), 100, .25);
 				}
 			}
 		}
@@ -84,6 +113,7 @@ class PlayState extends FlxState
 			if (FlxG.overlap(player, loot)) {
 				loot.destroy();
 				FmodManager.PlaySoundOneShot(FmodSFX.CollectCoin);
+				IncreaseMoney(1);
 			}
 		}
 	}
@@ -103,6 +133,12 @@ class PlayState extends FlxState
 				knockbackDirection =  new FlxPoint(1, 1);
 		}
 		return knockbackDirection;
+	}
+
+	public function determineKnockbackDirectionForPlayer(_player:Player, _enemy:Enemy):FlxPoint {
+        var direction = new FlxPoint(player.getMidpoint().x-_enemy.getMidpoint().x, _enemy.getMidpoint().y-player.getMidpoint().y);
+        var directionNormalized = MathHelpers.NormalizeVector(direction);
+        return directionNormalized;
 	}
 
 	override public function onFocus() {

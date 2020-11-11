@@ -12,7 +12,8 @@ class Rat extends Enemy {
 	public function new(_parentState:PlayState, _player:FlxSprite, position:FlxPoint) {
         super(_parentState, _player, position);
         path = new FlxPath();
-        speed = 60;
+
+        speed = 30;
 
 		super.loadGraphic(AssetPaths.rat__png, true, 16, 16);
 
@@ -33,31 +34,35 @@ class Rat extends Enemy {
 
         setFacingFlip(FlxObject.LEFT, true, false);
         setFacingFlip(FlxObject.RIGHT, false, false);
-	}
+    }
+
+    override public function destroy() {
+        FmodManager.PlaySoundOneShot(FmodSFX.RatDeath);
+        kill();
+    }
 
 	override public function update(delta:Float):Void {
 		super.update(delta);
 
-        if (path.finished || path.nodes.length == 0) {
-            trace("new path needed for rat");
-            generateNewPath();
+        if (inKnockback) {
+            path.cancel();
         }
 
 		if (!inKnockback) {
+            if (path.finished || path.nodes.length == 0) {
+                generateNewPath();
+            }
+
 			playAnimation(facing, directionVector);
         }
     }
 
     private function generateNewPath() {
-        trace("Looking for path from: " + getMidpoint() + " to " + player.getMidpoint());
         var playerTile = level.navigationLayer.getTileIndexByCoords(player.getMidpoint());
         var playerTileCoords = level.navigationLayer.getTileCoordsByIndex(playerTile, true);
         var points = level.navigationLayer.findPath(getMidpoint(), playerTileCoords, FlxTilemapDiagonalPolicy.NONE);
         if (points != null) {
-            trace("found new path");
             path.start(points, speed);
-        } else {
-            trace("no path could be found");
         }
     }
 

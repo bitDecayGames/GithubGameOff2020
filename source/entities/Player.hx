@@ -15,6 +15,7 @@ class Player extends Entity {
 
     var controls:Actions;
     var stepFXPlayed:Bool = false;
+    var movementRatio = new FlxPoint(1, 0.8);
 
 	public function new(_parentState:PlayState) {
         super();
@@ -76,6 +77,7 @@ class Player extends Entity {
         if (!attacking){
             directionVector = MathHelpers.NormalizeVector(potentialDirection);
             directionVector.scale(delta*speed);
+            directionVector.set(directionVector.x * movementRatio.x, directionVector.y * movementRatio.y);
             // y needs to be flipped to move character in the right direction
             setPosition(x + directionVector.x, y + directionVector.y);
         }

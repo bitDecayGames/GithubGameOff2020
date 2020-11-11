@@ -1,5 +1,6 @@
 package entities;
 
+import level.Level;
 import flixel.math.FlxVector;
 import flixel.math.FlxMath;
 import flixel.util.FlxPath;
@@ -23,6 +24,8 @@ class Enemy extends Entity {
     var collidedHitboxes:Map<Hitbox, Bool> = new Map<Hitbox, Bool>();
     var directionVector:FlxVector;
 
+    var level:Level;
+
 	public function new(_parentState:PlayState, _player:FlxSprite, position:FlxPoint) {
         super();
         healthPoints = 5;
@@ -34,6 +37,12 @@ class Enemy extends Entity {
         attacking = false;
         makeGraphic(Std.int(size.x), Std.int(size.y), FlxColor.BLUE);
         setPosition(position.x, position.y);
+    }
+
+    // setNavigation should take as arguments everything an enemy will need in order to make decisions
+    //               regarding how to act in the world
+    public function setNavigation(level:Level, player:Player) {
+        this.level = level;
     }
 
     override public function destroy() {
@@ -55,10 +64,10 @@ class Enemy extends Entity {
                 }
             }
         } else {
-            var direction:FlxPoint = determineDirection(player);
-            facing = determineFacing(direction);
-            directionVector = MathHelpers.NormalizeVector(direction);
-            setPosition(x + directionVector.x*delta*speed, y + directionVector.y*delta*speed);
+            // var direction:FlxPoint = determineDirection(player);
+            // facing = determineFacing(direction);
+            // directionVector = MathHelpers.NormalizeVector(direction);
+            // setPosition(x + directionVector.x*delta*speed, y + directionVector.y*delta*speed);
         }
     }
 

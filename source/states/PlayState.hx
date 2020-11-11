@@ -1,5 +1,6 @@
 package states;
 
+import level.Level;
 import entities.Loot;
 import helpers.MathHelpers;
 import flixel.math.FlxMath;
@@ -22,16 +23,27 @@ class PlayState extends FlxState
 	var loots:Array<Loot> = new Array<Loot>();
 	var enemies:Array<Enemy> = new Array<Enemy>();
 
+	var currentLevel:Level;
+
 	override public function create()
 	{
 		super.create();
 
+		#if debug
+		FlxG.debugger.drawDebug = true;
+		#end
+
 		FmodManager.PlaySong(FmodSongs.LetsGo);
+
+		currentLevel = new Level();
+		add(currentLevel.debugLayer);
+		add(currentLevel.navigationLayer);
 
 		player = new Player(this);
 		add(player);
 
 		var enemy1 = new entities.Rat(this, player, new FlxPoint(30, 30));
+		enemy1.setNavigation(currentLevel, player);
 		enemies.push(enemy1);
 		add(enemy1);
 		var enemy2 = new Enemy(this, player, new FlxPoint(FlxG.width-30, 30));

@@ -100,7 +100,7 @@
 	<object class="MixerBusPanner" id="{428881c8-5e2e-48e1-828f-6f2625fe2138}" />
 	<object class="MultiSound" id="{5f95e01f-4270-44f4-a006-0b15203bb16f}">
 		<property name="start">
-			<value>0.2109375</value>
+			<value>0.078125</value>
 		</property>
 		<property name="length">
 			<value>0.46154195011337867</value>
@@ -131,7 +131,7 @@
 	</object>
 	<object class="EventSound" id="{7b59d056-3956-4414-b8c8-4ea9d1b3c7c4}">
 		<property name="length">
-			<value>0.2109375</value>
+			<value>0.078125</value>
 		</property>
 		<relationship name="event">
 			<destination>{3597cd96-a1a4-4592-afaa-13b57f740c7e}</destination>

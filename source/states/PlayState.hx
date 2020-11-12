@@ -1,5 +1,7 @@
 package states;
 
+import shaders.Lighten;
+import openfl.filters.ShaderFilter;
 import level.Level;
 import flixel.text.FlxText;
 import entities.Loot;
@@ -29,6 +31,9 @@ class PlayState extends FlxState
 	var moneyText:FlxText;
 	var money:Int = 0;
 	var playerHealthText:FlxText;
+	
+	var shader:Lighten;
+	var lightFilter:ShaderFilter;
 
 	override public function create()
 	{
@@ -37,6 +42,8 @@ class PlayState extends FlxState
 		#if debug
 		FlxG.debugger.drawDebug = true;
 		#end
+
+		setupLightShader();
 
 		FmodManager.PlaySong(FmodSongs.Cave);
 
@@ -64,6 +71,18 @@ class PlayState extends FlxState
 		add(playerHealthText);
 	}
 
+	private function setupLightShader() {
+		shader = new Lighten();
+		shader.iTime.value = [0];
+		shader.lightSourceX.value = [0];
+		shader.lightSourceY.value = [0];
+		shader.aspectRatio.value = [1 / (FlxG.width/FlxG.height)];
+		shader.lightRadius.value = [.35];
+		shader.isShaderActive.value = [true];
+		lightFilter = new ShaderFilter(shader);
+		camera.setFilters([lightFilter]);
+	}
+
 	public function addHitbox(hitbox:Hitbox) {
 		hitboxes.push(hitbox);
 		add(hitbox);
@@ -80,6 +99,15 @@ class PlayState extends FlxState
 
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
+
+		shader.iTime.value[0] += elapsed;
+		shader.lightSourceX.value[0] = player.getMidpoint().x / FlxG.width;
+		shader.lightSourceY.value[0] = player.getMidpoint().y / FlxG.height;
+
+		if(FlxG.keys.justPressed.P) {
+			shader.isShaderActive.value[0] = !shader.isShaderActive.value[0];
+		}
+
 
 		moneyText.text = "Money: " + money;
 		playerHealthText.text = "Health: " + player.health;

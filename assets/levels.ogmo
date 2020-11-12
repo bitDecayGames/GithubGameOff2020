@@ -1,0 +1,43 @@
+{
+  "name": "GameOff2020",
+  "ogmoVersion": "3.3.0",
+  "levelPaths": ["."],
+  "backgroundColor": "#282c34ff",
+  "gridColor": "#3c4049cc",
+  "anglesRadians": false,
+  "directoryDepth": 5,
+  "layerGridDefaultSize": {"x": 16, "y": 16},
+  "levelDefaultSize": {"x": 320, "y": 240},
+  "levelMinSize": {"x": 320, "y": 240},
+  "levelMaxSize": {"x": 4096, "y": 4096},
+  "levelValues": [],
+  "defaultExportMode": ".json",
+  "compactExport": false,
+  "externalScript": "..\\..\\..\\..\\Game Dev\\Ogmo Editor\\win-unpacked",
+  "playCommand": "lime test html5 -debug",
+  "entityTags": [],
+  "layers": [
+    {
+      "definition": "tile",
+      "name": "navigation",
+      "gridSize": {"x": 16, "y": 16},
+      "exportID": "05435511",
+      "exportMode": 0,
+      "arrayMode": 0,
+      "defaultTileset": "debug"
+    },
+    {
+      "definition": "tile",
+      "name": "debug",
+      "gridSize": {"x": 16, "y": 16},
+      "exportID": "05631290",
+      "exportMode": 0,
+      "arrayMode": 0,
+      "defaultTileset": "debug"
+    }
+  ],
+  "entities": [],
+  "tilesets": [
+    {"label": "debug", "path": "images/tilesets/filler.png", "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAYAAACOEfKtAAAAY0lEQVR42u3YQQ3AIBBE0XVAsMERNXhDASTV2KYWuiea95Ix8I8TkbRGvTObvaQWp3sj7Kt9moACCiiggAIKKKCAAgoooIACCiiggO4sAAAAAAAAAAAAAAAAAAAAAAAAAOBvHoM0QTlTJk9ZAAAAAElFTkSuQmCC", "tileWidth": 16, "tileHeight": 16, "tileSeparationX": 0, "tileSeparationY": 0}
+  ]
+}

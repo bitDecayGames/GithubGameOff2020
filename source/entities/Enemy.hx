@@ -1,5 +1,7 @@
 package entities;
 
+import level.Level;
+import flixel.math.FlxVector;
 import flixel.math.FlxMath;
 import flixel.util.FlxPath;
 import flixel.effects.FlxFlicker;
@@ -18,12 +20,15 @@ import flixel.FlxSprite;
 
 class Enemy extends Entity {
 
-    var player:FlxSprite;
+    var player:Player;
     var collidedHitboxes:Map<Hitbox, Bool> = new Map<Hitbox, Bool>();
+    var directionVector:FlxVector;
 
-	public function new(_parentState:PlayState, _player:FlxSprite, position:FlxPoint) {
+    var level:Level;
+
+	public function new(_parentState:PlayState, _player:Player, position:FlxPoint) {
         super();
-        healthPoints = 5;
+        health = 3;
         player = _player;
         size = new FlxPoint(10, 10);
         speed = 10;
@@ -33,30 +38,35 @@ class Enemy extends Entity {
         makeGraphic(Std.int(size.x), Std.int(size.y), FlxColor.BLUE);
         setPosition(position.x, position.y);
     }
-    
+
+    // setNavigation should take as arguments everything an enemy will need in order to make decisions
+    //               regarding how to act in the world
+    public function setNavigation(level:Level, player:Player) {
+        this.level = level;
+    }
+
     override public function destroy() {
-        FmodManager.PlaySoundOneShot(FmodSFX.EnemyDeath);
-        super.destroy();
+        kill();
     }
 
 	override public function update(delta:Float):Void {
         super.update(delta);
-        
+
         if (inKnockback){
             setPosition(x + knockbackDirection.x*delta*knockbackSpeed, y + knockbackDirection.y*delta*knockbackSpeed*-1);
             knockbackDuration -= delta;
             if (knockbackDuration <= 0) {
                 inKnockback = false;
-                if (healthPoints <= 0) {
+                if (health <= 0) {
                     dropLoot();
                     destroy();
                 }
             }
         } else {
-            var direction:FlxPoint = determineDirection(player);
-            facing = determineFacing(direction);
-            var directionVector = MathHelpers.NormalizeVector(direction);
-            setPosition(x + directionVector.x*delta*speed, y + directionVector.y*delta*speed);
+            // var direction:FlxPoint = determineDirection(player);
+            // facing = determineFacing(direction);
+            // directionVector = MathHelpers.NormalizeVector(direction);
+            // setPosition(x + directionVector.x*delta*speed, y + directionVector.y*delta*speed);
         }
     }
 
@@ -69,7 +79,7 @@ class Enemy extends Entity {
     }
 
     public function applyDamage(_damage:Int) {
-        healthPoints -= _damage;
+        health -= _damage;
     }
 
     public function setKnockback(_knockbackDirection:FlxPoint, _knockbackSpeed:Float, _knockbackDuration:Float) {
@@ -82,7 +92,8 @@ class Enemy extends Entity {
     }
 
     function determineDirection(player:FlxSprite):FlxPoint {
-        var direction = new FlxPoint(player.x-x, player.y-y);
+        // Adding 4 to the y value to make the enemy aim lower
+        var direction = new FlxPoint(player.getMidpoint().x-getMidpoint().x, player.getMidpoint().y+4-getMidpoint().y);
         var directionNormalized = MathHelpers.NormalizeVector(direction);
         return directionNormalized;
     }
@@ -94,35 +105,23 @@ class Enemy extends Entity {
         }
     }
 
-    function determineFacing(vector:FlxPoint):Int {
-        if (vector.x > 0 && vector.y > 0) {
-            if (facing == FlxObject.UP || facing == FlxObject.RIGHT){
-                return facing;
-            }
-        } else if (vector.x > 0 && vector.y < 0) {
-            if (facing == FlxObject.DOWN || facing == FlxObject.RIGHT){
-                return facing;
-            }
-        } else if (vector.x < 0 && vector.y < 0) {
-            if (facing == FlxObject.DOWN || facing == FlxObject.LEFT){
-                return facing;
-            }
-        } else if (vector.x < 0 && vector.y > 0) {
-            if (facing == FlxObject.UP || facing == FlxObject.LEFT){
-                return facing;
-            }
+    function determineFacing(vector:FlxVector):Int {
+        // degrees here is CLOCKWISE, with straight-right being 0
+        var angle = vector.degrees;
+        while (angle < 0) {
+            angle += 360;
         }
-
-        if (vector.x > 0){
+        while (angle >= 360) {
+            angle -= 360;
+        }
+        if (angle < 45 || angle > 315) {
             return FlxObject.RIGHT;
-        } else if (vector.x < 0) {
-            return FlxObject.LEFT;
-        } else if (vector.y < 0) {
+        } else if (angle < 135) {
             return FlxObject.DOWN;
-        } else if (vector.y > 0) {
+        } else if (angle < 235) {
+            return FlxObject.LEFT;
+        } else {
             return FlxObject.UP;
         }
-
-        return facing;
     }
 }

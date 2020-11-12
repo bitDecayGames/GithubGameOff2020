@@ -24,6 +24,8 @@ class Player extends Entity {
 
     public var invincibilityTimeLeft:Float = 0;
 
+    public var shovel:FlxSprite;
+
 	public function new(_parentState:PlayState, _spawnPosition:FlxPoint) {
         super();
         controls = new Actions();
@@ -75,6 +77,11 @@ class Player extends Entity {
         if (invincibilityTimeLeft > 0){
             invincibilityTimeLeft -= delta;
         }
+
+        
+		if(FlxG.keys.justPressed.R) {
+			angle += 90;
+		}
 
         var potentialDirection:FlxPoint = new FlxPoint(0, 0);
 		potentialDirection = readDirectionInput();
@@ -166,6 +173,10 @@ class Player extends Entity {
 
     function attack(facing:Int) {
 
+        if (shovel != null){
+            shovel.destroy();
+        }
+
         FmodManager.PlaySoundOneShot(FmodSFX.ShovelSwing);
 
         var attackLocation:FlxPoint;
@@ -185,7 +196,39 @@ class Player extends Entity {
         }
         var hitbox = new Hitbox(.2, attackLocation, hitboxSize);
         parentState.addHitbox(hitbox);
+        spawnShovel(attackLocation, facing);
     }
+
+    function spawnShovel(position:FlxPoint, facing:Int) {
+        shovel = new FlxSprite();
+        parentState.add(shovel);
+        shovel.setPosition(position.x, position.y);
+        shovel.loadGraphic(AssetPaths.Player__png, true, 16, 32);
+        shovel.animation.add("swing", [27,28,29,30,31,32,33,34,35], 30);
+        shovel.animation.play("swing");
+        shovel.animation.callback = shovelAnimCallback;
+
+        switch facing {
+            case FlxObject.RIGHT:
+                shovel.angle = 0;
+            case FlxObject.DOWN:
+                shovel.angle = 90;
+            case FlxObject.LEFT:
+                shovel.angle = 180;
+            case FlxObject.UP:
+                shovel.angle = 270;
+            default:
+                shovel.angle = 225;
+        }
+    }
+
+    public function shovelAnimCallback(name:String, frameNumber:Int, frameIndex:Int):Void {
+        if (name == "swing") {
+            if (frameNumber == 8) {
+                shovel.destroy();
+            }
+        }
+	}
 
     function readDirectionInput():FlxPoint {
 

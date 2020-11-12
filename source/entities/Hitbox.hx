@@ -13,6 +13,7 @@ class Hitbox extends FlxSprite {
         super(_position.x, _position.y);
         timeActive = _timeActive;
         makeGraphic(Std.int(_size.x), Std.int(_size.y), new FlxColor(0xFF220000));
+        visible = false;
     }
 
     override public function update(delta:Float):Void {

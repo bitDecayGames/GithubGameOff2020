@@ -31,7 +31,7 @@ class PlayState extends FlxState
 	var moneyText:FlxText;
 	var money:Int = 0;
 	var playerHealthText:FlxText;
-	
+
 	var shader:Lighten;
 	var lightFilter:ShaderFilter;
 
@@ -42,6 +42,8 @@ class PlayState extends FlxState
 		#if debug
 		FlxG.debugger.drawDebug = true;
 		#end
+
+		camera.pixelPerfectRender = true;
 
 		setupLightShader();
 
@@ -76,8 +78,7 @@ class PlayState extends FlxState
 		shader.iTime.value = [0];
 		shader.lightSourceX.value = [0];
 		shader.lightSourceY.value = [0];
-		shader.aspectRatio.value = [1 / (FlxG.width/FlxG.height)];
-		shader.lightRadius.value = [.35];
+		shader.lightRadius.value = [100];
 		shader.isShaderActive.value = [true];
 		lightFilter = new ShaderFilter(shader);
 		camera.setFilters([lightFilter]);
@@ -101,8 +102,8 @@ class PlayState extends FlxState
 		super.update(elapsed);
 
 		shader.iTime.value[0] += elapsed;
-		shader.lightSourceX.value[0] = player.getMidpoint().x / FlxG.width;
-		shader.lightSourceY.value[0] = player.getMidpoint().y / FlxG.height;
+		shader.lightSourceX.value[0] = player.getMidpoint().x;
+		shader.lightSourceY.value[0] = player.getMidpoint().y;
 
 		if(FlxG.keys.justPressed.P) {
 			shader.isShaderActive.value[0] = !shader.isShaderActive.value[0];

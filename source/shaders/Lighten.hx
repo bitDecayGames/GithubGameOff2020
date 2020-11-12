@@ -11,12 +11,13 @@ class Lighten extends FlxShader
         uniform float iTime;
         uniform float lightSourceX;
         uniform float lightSourceY;
-        uniform float aspectRatio;
         uniform float lightRadius;
         uniform bool isShaderActive;
 
         void main()
         {
+            // This should be available as a built in, but where?
+            vec2 ingameResolution = vec2(320, 240);
             vec2 uv = openfl_TextureCoordv;
             vec4 pixel = texture2D(bitmap, openfl_TextureCoordv);
 
@@ -25,16 +26,16 @@ class Lighten extends FlxShader
 				gl_FragColor = pixel;
 				return;
             }
-            
-            vec2 lightSourceVector = vec2(lightSourceX, lightSourceY);
-            vec2 screenAspectRatio = vec2(aspectRatio, 1);
 
-            // the distance from the light source as a value from 0 to 1 
+            vec2 lightSourceVector = vec2(floor(lightSourceX), floor(lightSourceY));
+            vec2 uvInGameRes = vec2(floor(uv.x * ingameResolution.x), floor(uv.y * ingameResolution.y));
+
+            // the distance from the light source as a value from 0 to 1
             // a value of (.5, .5) would mean the distance between the pixel and light source is half the distance of the entire screen
-            vec2 distanceFromLightSourceVector = lightSourceVector - uv; 
+            vec2 dist = lightSourceVector - uvInGameRes;
 
             // Adjust for screen aspect ratio
-            float distanceFromLightSource = length(distanceFromLightSourceVector / screenAspectRatio); 
+            float distanceFromLightSource = floor(length(dist));
 
             if (distanceFromLightSource >= lightRadius) {
                 pixel = vec4(0, 0, 0, 1.0);
@@ -45,5 +46,5 @@ class Lighten extends FlxShader
     public function new()
     {
         super();
-    }    
+    }
 }

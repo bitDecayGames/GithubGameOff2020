@@ -12,6 +12,7 @@ import flixel.FlxG;
 import flixel.math.FlxPoint;
 import flixel.FlxObject;
 import flixel.FlxSprite;
+using extensions.FlxObjectExt;
 
 class Player extends Entity {
 
@@ -77,11 +78,6 @@ class Player extends Entity {
         if (invincibilityTimeLeft > 0){
             invincibilityTimeLeft -= delta;
         }
-
-        
-		if(FlxG.keys.justPressed.R) {
-			angle += 90;
-		}
 
         var potentialDirection:FlxPoint = new FlxPoint(0, 0);
 		potentialDirection = readDirectionInput();
@@ -184,28 +180,28 @@ class Player extends Entity {
 
         switch facing {
             case FlxObject.RIGHT:
-                attackLocation = new FlxPoint(x+size.x-playerHitboxOffsetX, y+(size.y/2)-(hitboxSize.y/2)-playerHitboxOffsetY);
+                attackLocation = new FlxPoint(x+size.x/2, y+(size.y/2)-(hitboxSize.y/2)-playerHitboxOffsetY);
             case FlxObject.DOWN:
-                attackLocation = new FlxPoint(x+(size.x/2)-(hitboxSize.x/2)-playerHitboxOffsetX, y+size.y-playerHitboxOffsetY);
+                attackLocation = new FlxPoint(x+(size.x/2)-(hitboxSize.x/2)-playerHitboxOffsetX, y+size.y/2);
             case FlxObject.LEFT:
-                attackLocation = new FlxPoint(x-hitboxSize.x-playerHitboxOffsetX, y+(size.y/2)-(hitboxSize.y/2)-playerHitboxOffsetY);
+                attackLocation = new FlxPoint(x-hitboxSize.x, y+(size.y/2)-(hitboxSize.y/2)-playerHitboxOffsetY);
             case FlxObject.UP:
-                attackLocation = new FlxPoint(x+(size.x/2)-(hitboxSize.x/2)-playerHitboxOffsetX, y-hitboxSize.y-playerHitboxOffsetY);
+                attackLocation = new FlxPoint(x+(size.x/2)-(hitboxSize.x/2)-playerHitboxOffsetX, y-hitboxSize.y);
             default:
                 attackLocation = new FlxPoint(x, y);
         }
         var hitbox = new Hitbox(.2, attackLocation, hitboxSize);
         parentState.addHitbox(hitbox);
-        spawnShovel(attackLocation, facing);
+        spawnShovel(hitbox.getMidpoint(), facing);
     }
 
     function spawnShovel(position:FlxPoint, facing:Int) {
         shovel = new FlxSprite();
         parentState.add(shovel);
-        shovel.setPosition(position.x, position.y);
         shovel.loadGraphic(AssetPaths.Player__png, true, 16, 32);
         shovel.animation.add("swing", [27,28,29,30,31,32,33,34,35], 30);
         shovel.animation.play("swing");
+        shovel.setMidpoint(position.x, position.y);
         shovel.animation.callback = shovelAnimCallback;
 
         switch facing {

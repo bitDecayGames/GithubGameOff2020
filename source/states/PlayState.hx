@@ -1,5 +1,9 @@
 package states;
 
+import entities.Rope;
+import flixel.FlxCamera;
+import flixel.group.FlxGroup;
+import haxefmod.flixel.FmodFlxUtilities;
 import shaders.Lighten;
 import openfl.filters.ShaderFilter;
 import level.Level;
@@ -35,6 +39,11 @@ class PlayState extends FlxState
 	var shader:Lighten;
 	var lightFilter:ShaderFilter;
 
+	var uiCamera:FlxCamera;
+	var uiGroup:FlxGroup;
+
+	var levelExit:FlxSprite;
+
 	override public function create()
 	{
 		super.create();
@@ -42,6 +51,12 @@ class PlayState extends FlxState
 		#if debug
 		FlxG.debugger.drawDebug = true;
 		#end
+
+		FlxCamera.defaultCameras = [FlxG.camera];
+
+		uiCamera = new FlxCamera(0, 0, 320, 240);
+		uiCamera.bgColor = FlxColor.TRANSPARENT;
+		FlxG.cameras.add(uiCamera);
 
 		camera.pixelPerfectRender = true;
 
@@ -52,6 +67,11 @@ class PlayState extends FlxState
 		currentLevel = new Level();
 		add(currentLevel.debugLayer);
 		add(currentLevel.navigationLayer);
+		add(currentLevel.interactableLayer);
+
+		var exitTiles = currentLevel.interactableLayer.getTileCoords(3, false);
+		levelExit = new Rope(exitTiles[0], new FlxPoint(16,16));
+		add(levelExit);
 
 		player = new Player(this, new FlxPoint(FlxG.width/2, FlxG.height/2));
 		add(player);
@@ -68,8 +88,10 @@ class PlayState extends FlxState
 		// add(enemy3);
 
 		moneyText = new FlxText(1, 1, 1000, "Money: ", 10);
+		moneyText.cameras = [uiCamera];
 		add(moneyText);
 		playerHealthText = new FlxText(1, 15, 1000, "Health: ", 10);
+		playerHealthText.cameras = [uiCamera];
 		add(playerHealthText);
 	}
 
@@ -101,6 +123,10 @@ class PlayState extends FlxState
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
 
+		if (FlxG.overlap(player, levelExit)) {
+			FmodFlxUtilities.TransitionToState(new PlayState());
+		}
+
 		shader.iTime.value[0] += elapsed;
 		shader.lightSourceX.value[0] = player.getMidpoint().x;
 		shader.lightSourceY.value[0] = player.getMidpoint().y;
@@ -115,6 +141,10 @@ class PlayState extends FlxState
 			} else {
 				player.revive();
 			}
+		}
+
+		if(FlxG.keys.justPressed.R) {
+			FmodFlxUtilities.TransitionToState(new PlayState());
 		}
 
 		moneyText.text = "Money: " + money;

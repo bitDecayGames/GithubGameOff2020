@@ -1,5 +1,6 @@
 package states;
 
+import haxefmod.flixel.FmodFlxUtilities;
 import shaders.Lighten;
 import openfl.filters.ShaderFilter;
 import level.Level;
@@ -107,6 +108,9 @@ class PlayState extends FlxState
 
 		if(FlxG.keys.justPressed.P) {
 			shader.isShaderActive.value[0] = !shader.isShaderActive.value[0];
+		}
+		if(FlxG.keys.justPressed.R) {
+			FmodFlxUtilities.TransitionToState(new PlayState());
 		}
 
 

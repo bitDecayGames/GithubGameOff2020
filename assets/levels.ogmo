@@ -34,10 +34,19 @@
       "exportMode": 0,
       "arrayMode": 0,
       "defaultTileset": "debug"
+    },
+    {
+      "definition": "tile",
+      "name": "interactable",
+      "gridSize": {"x": 16, "y": 16},
+      "exportID": "23889099",
+      "exportMode": 0,
+      "arrayMode": 0,
+      "defaultTileset": "debug"
     }
   ],
   "entities": [],
   "tilesets": [
-    {"label": "debug", "path": "images/tilesets/filler.png", "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAYAAACOEfKtAAAAY0lEQVR42u3YQQ3AIBBE0XVAsMERNXhDASTV2KYWuiea95Ix8I8TkbRGvTObvaQWp3sj7Kt9moACCiiggAIKKKCAAgoooIACCiiggO4sAAAAAAAAAAAAAAAAAAAAAAAAAOBvHoM0QTlTJk9ZAAAAAElFTkSuQmCC", "tileWidth": 16, "tileHeight": 16, "tileSeparationX": 0, "tileSeparationY": 0}
+    {"label": "debug", "path": "images/tilesets/filler.png", "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAYAAACOEfKtAAAAbElEQVR42u3YQQ2AMBBE0XVAuCKhRzQgAktoQEGboJEGC90DSfNeMgb+cSKS6rm+md37ktpxbanF374I7SlDE1BAAQUUUEABBRRQQAEFFFBAAQUU0J0FAAAAAAAAAAAAAAAAAAAAAAAAAMymA9aAJ1dNEHcVAAAAAElFTkSuQmCC", "tileWidth": 16, "tileHeight": 16, "tileSeparationX": 0, "tileSeparationY": 0}
   ]
 }

@@ -68,13 +68,14 @@ class Rat extends Enemy {
 
 	override public function update(delta:Float):Void {
         super.update(delta);
-        behavior.process(delta);
 
         if (inKnockback) {
             path.cancel();
         }
 
 		if (!inKnockback) {
+            behavior.process(delta);
+
             if (velocity.x > 0){
                 facing = FlxObject.RIGHT;
             } else if (velocity.x < 0) {

@@ -109,6 +109,13 @@ class PlayState extends FlxState
 			shader.isShaderActive.value[0] = !shader.isShaderActive.value[0];
 		}
 
+		if(FlxG.keys.justPressed.G) {
+			if (player.alive) {
+				player.kill();
+			} else {
+				player.revive();
+			}
+		}
 
 		moneyText.text = "Money: " + money;
 		playerHealthText.text = "Health: " + player.health;

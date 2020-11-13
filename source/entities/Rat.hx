@@ -1,29 +1,46 @@
 package entities;
 
+import behavior.tree.BTContext;
+import behavior.tree.composite.Sequence;
+import behavior.tree.decorator.Repeater;
+import behavior.leaf.PlayerAlive;
+import behavior.leaf.util.Wait;
+import behavior.leaf.movement.ManhattanPath;
+import behavior.leaf.TargetPlayer;
+import behavior.tree.BTree;
 import behavior.NavBundle;
-import flixel.tile.FlxBaseTilemap.FlxTilemapDiagonalPolicy;
 import flixel.util.FlxPath;
 import flixel.FlxObject;
 import flixel.math.FlxPoint;
 import flixel.FlxSprite;
 import states.PlayState;
-import behavior.movement.MovementBehavior;
-import behavior.movement.ManhattanPath;
-import behavior.aggression.AggressionBehavior;
-import behavior.aggression.FinishPath;
 
 class Rat extends Enemy {
-
-    var movement:MovementBehavior;
-    var aggro:AggressionBehavior;
+    var behavior:BTree;
 
 	public function new(_parentState:PlayState, _player:Player, position:FlxPoint) {
         super(_parentState, _player, position);
         path = new FlxPath();
-        movement = new ManhattanPath(_player);
-        aggro = new FinishPath();
-
         speed = 30;
+
+        behavior = new BTree(
+            new Repeater(
+                new Sequence([
+                    new Wait(1, 3),
+                    new PlayerAlive(
+                        new TargetPlayer(
+                            new ManhattanPath(speed)
+                        )
+                    )
+                ])
+            )
+        );
+        var context = new BTContext();
+        context.set("player", player);
+        context.set("enemy", this);
+        context.set("navBundle", new NavBundle(parentState.currentLevel, player));
+        behavior.init(context);
+
 
         super.loadGraphic(AssetPaths.rat__png, true, 16, 16);
 
@@ -40,8 +57,6 @@ class Rat extends Enemy {
 
         animation.play("stand_down");
 
-        // animation.callback = animCallback;
-
         setFacingFlip(FlxObject.LEFT, true, false);
         setFacingFlip(FlxObject.RIGHT, false, false);
     }
@@ -52,33 +67,25 @@ class Rat extends Enemy {
     }
 
 	override public function update(delta:Float):Void {
-		super.update(delta);
+        super.update(delta);
+        behavior.process(delta);
 
         if (inKnockback) {
             path.cancel();
         }
 
 		if (!inKnockback) {
-            // this nav bundle should get created somewhere else
-            var bundle = new NavBundle(parentState.currentLevel, player);
-            if (path.finished || path.nodes.length == 0) {
-                path.start(movement.generatePath(this, bundle), speed);
+            if (velocity.x > 0){
+                facing = FlxObject.RIGHT;
+            } else if (velocity.x < 0) {
+                facing = FlxObject.LEFT;
+            } else if (velocity.y < 0) {
+                facing = FlxObject.UP;
+            } else if (velocity.y > 0) {
+                facing = FlxObject.DOWN;
             }
 
-            if (aggro.trigger(this, bundle)) {
-                // TODO: enter ATTACK STATE
-            }
-
-			playAnimation(facing, directionVector);
-        }
-    }
-
-    private function generateNewPath() {
-        var playerTile = level.navigationLayer.getTileIndexByCoords(player.getMidpoint());
-        var playerTileCoords = level.navigationLayer.getTileCoordsByIndex(playerTile, true);
-        var points = level.navigationLayer.findPath(getMidpoint(), playerTileCoords, FlxTilemapDiagonalPolicy.NONE);
-        if (points != null) {
-            path.start(points, speed);
+			playAnimation(facing, velocity);
         }
     }
 

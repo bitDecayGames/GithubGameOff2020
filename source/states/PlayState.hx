@@ -1,5 +1,6 @@
 package states;
 
+import states.OutsideTheMinesState;
 import entities.Rope;
 import flixel.FlxCamera;
 import flixel.group.FlxGroup;
@@ -124,7 +125,7 @@ class PlayState extends FlxState
 		super.update(elapsed);
 
 		if (FlxG.overlap(player, levelExit)) {
-			FmodFlxUtilities.TransitionToState(new PlayState());
+			FmodFlxUtilities.TransitionToState(new OutsideTheMinesState());
 		}
 
 		shader.iTime.value[0] += elapsed;

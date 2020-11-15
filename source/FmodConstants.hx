@@ -7,6 +7,7 @@ package;
 
 class FmodSongs {
     public static inline var Cave:String = "event:/Music/Cave";
+    public static inline var OutsideTheMines:String = "event:/Music/OutsideTheMines";
 }
 
 class FmodSFX {

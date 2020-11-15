@@ -94,7 +94,8 @@ class Player extends Entity {
             }
             playDamageAnimation(facing);
         } else {
-            if (controls.attack.check() && !attacking) {
+            // Talk to Tanner about the parent state check
+            if (controls.attack.check() && !attacking && parentState != null) {
 
                 attacking = true;
                 attack(facing);

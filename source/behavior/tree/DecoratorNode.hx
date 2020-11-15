@@ -1,6 +1,6 @@
 package behavior.tree;
 
-class ParentNode implements Node {
+class DecoratorNode implements Node {
     var child:Node;
     var context:BTContext;
 

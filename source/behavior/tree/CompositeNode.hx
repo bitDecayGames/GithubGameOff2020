@@ -1,6 +1,6 @@
 package behavior.tree;
 
-class MultiParentNode implements Node {
+class CompositeNode implements Node {
     var children:Array<Node>;
     var context:BTContext;
 

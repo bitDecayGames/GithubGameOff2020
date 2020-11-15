@@ -1,11 +1,15 @@
 package entities;
 
+import flixel.math.FlxVector;
 import behavior.tree.BTContext;
 import behavior.tree.composite.Sequence;
+import behavior.tree.composite.Selector;
 import behavior.tree.decorator.Repeater;
 import behavior.leaf.PlayerAlive;
 import behavior.leaf.util.Wait;
 import behavior.leaf.movement.ManhattanPath;
+import behavior.leaf.movement.MoveBackAndForth;
+import behavior.leaf.position.InlineWithTarget;
 import behavior.leaf.TargetPlayer;
 import behavior.tree.BTree;
 import behavior.NavBundle;
@@ -15,7 +19,7 @@ import flixel.math.FlxPoint;
 import flixel.FlxSprite;
 import states.PlayState;
 
-class Rat extends Enemy {
+class Snake extends Enemy {
     var behavior:BTree;
 
 	public function new(_parentState:PlayState, _player:Player, position:FlxPoint) {
@@ -25,13 +29,15 @@ class Rat extends Enemy {
 
         behavior = new BTree(
             new Repeater(
-                new Sequence([
-                    new Wait(1, 3),
+                new Selector([
                     new PlayerAlive(
                         new TargetPlayer(
-                            new ManhattanPath()
+                            new InlineWithTarget(
+                                new ManhattanPath()
+                            )
                         )
-                    )
+                    ),
+                    new MoveBackAndForth()
                 ])
             )
         );
@@ -39,6 +45,7 @@ class Rat extends Enemy {
         context.set("self", this);
         context.set("speed", speed);
         context.set("navBundle", new NavBundle(parentState.currentLevel, player));
+        context.set("direction", FlxVector.get(0, -1).normalize());
         behavior.init(context);
 
 

@@ -2,7 +2,7 @@ package behavior.tree.composite;
 
 import flixel.FlxG;
 
-class Sequence extends MultiParentNode {
+class Sequence extends CompositeNode {
     var index:Int;
     var lastIndex:Int;
     var lastStatus:NodeStatus;

@@ -1,6 +1,6 @@
 package behavior.tree.decorator;
 
-class Repeater extends ParentNode {
+class Repeater extends DecoratorNode {
     public function new(child:Node) {
         super(child);
     }

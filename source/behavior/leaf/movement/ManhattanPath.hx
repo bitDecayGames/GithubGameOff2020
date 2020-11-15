@@ -1,5 +1,6 @@
 package behavior.leaf.movement;
 
+import flixel.FlxSprite;
 import behavior.tree.NodeStatus;
 import behavior.tree.LeafNode;
 import behavior.tree.BTContext;
@@ -10,16 +11,13 @@ import flixel.math.FlxPoint;
 class ManhattanPath extends LeafNode {
 
 	var started:Bool = false;
-	var speed:Float;
 
-	public function new(speed:Float) {
-		this.speed = speed;
-	}
+	public function new() {}
 
-	public function generatePath(enemy:Enemy, dest:FlxPoint, bundle:NavBundle):Array<FlxPoint> {
+	public function generatePath(spr:FlxSprite, dest:FlxPoint, bundle:NavBundle):Array<FlxPoint> {
 		var destinationTile = bundle.level.navigationLayer.getTileIndexByCoords(dest);
         var destinationTileCoords = bundle.level.navigationLayer.getTileCoordsByIndex(destinationTile, true);
-        var points = bundle.level.navigationLayer.findPath(enemy.getMidpoint(), destinationTileCoords, FlxTilemapDiagonalPolicy.NONE);
+        var points = bundle.level.navigationLayer.findPath(spr.getMidpoint(), destinationTileCoords, FlxTilemapDiagonalPolicy.NONE);
         return points;
 	}
 
@@ -29,7 +27,8 @@ class ManhattanPath extends LeafNode {
 	}
 
 	override public function process(delta:Float):NodeStatus {
-		var enemy = cast(context.get("enemy"), Enemy);
+		var self = cast(context.get("self"), FlxSprite);
+		var speed = cast(context.get("speed"), Float);
 
 		if (!started) {
 			started = true;
@@ -37,14 +36,14 @@ class ManhattanPath extends LeafNode {
 				return FAIL;
 			}
 
-			var points = generatePath(enemy, context.get("target"), context.get("navBundle"));
+			var points = generatePath(self, context.get("target"), context.get("navBundle"));
 			if (points == null || points.length == 0) {
 				return FAIL;
 			}
 
-			enemy.path.start(points, speed);
+			self.path.start(points, speed);
 		} else {
-			if (enemy.path.finished || enemy.path.nodes.length == 0) {
+			if (self.path.finished || self.path.nodes.length == 0) {
 				started = false;
 				return SUCCESS;
 			}

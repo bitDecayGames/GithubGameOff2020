@@ -1,6 +1,8 @@
 package states;
 
 import flixel.tile.FlxTilemap;
+import flixel.FlxBasic;
+import flixel.util.FlxSort;
 import com.bitdecay.textpop.TextPop;
 import states.OutsideTheMinesState;
 import entities.Rope;
@@ -44,14 +46,14 @@ class PlayState extends FlxState
 	var lightFilter:ShaderFilter;
 
 	var uiCamera:FlxCamera;
-	var uiGroup:FlxGroup;
+
+	var worldGroup:FlxGroup = new FlxGroup();
 
 	var levelExit:FlxSprite;
 
 	override public function create()
 	{
 		super.create();
-
 		#if debug
 		FlxG.debugger.drawDebug = true;
 		#end
@@ -78,22 +80,20 @@ class PlayState extends FlxState
 		add(levelExit);
 
 		player = new Player(this, new FlxPoint(FlxG.width/2, FlxG.height/2));
-		add(player);
+		worldGroup.add(player);
+
 
 		var enemy1 = new entities.Rat(this, player, new FlxPoint(250, 30));
 		enemy1.setNavigation(currentLevel, player);
 		enemies.add(enemy1);
-		add(enemy1);
-		var enemy2 = new entities.Snake(this, player, new FlxPoint(100, 50));
-		enemy2.setNavigation(currentLevel, player);
-		enemies.add(enemy2);
-		add(enemy2);
-		// var enemy2 = new Enemy(this, player, new FlxPoint(FlxG.width-30, 30));
-		// enemies.push(enemy2);
-		// add(enemy2);
+		worldGroup.add(enemy1);
+		// var enemy2 = new entities.Snake(this, player, new FlxPoint(100, 50));
+		// enemy2.setNavigation(currentLevel, player);
+		// enemies.add(enemy2);
+		// worldGroup.add(enemy2);
 		// var enemy3 = new Enemy(this, player, new FlxPoint(FlxG.width-30, FlxG.height-30));
-		// enemies.push(enemy3);
-		// add(enemy3);
+		// enemies.add(enemy3);
+		// worldGroup.add(enemy3);
 
 		moneyText = new FlxText(1, 1, 1000, "Money: ", 10);
 		moneyText.cameras = [uiCamera];
@@ -101,6 +101,8 @@ class PlayState extends FlxState
 		playerHealthText = new FlxText(1, 15, 1000, "Health: ", 10);
 		playerHealthText.cameras = [uiCamera];
 		add(playerHealthText);
+
+		add(worldGroup);
 	}
 
 	private function setupLightShader() {
@@ -121,7 +123,7 @@ class PlayState extends FlxState
 
 	public function addLoot(loot:Loot) {
 		loots.add(loot);
-		add(loot);
+		worldGroup.add(loot);
 	}
 
 	public function IncreaseMoney(_money:Int) {
@@ -205,6 +207,25 @@ class PlayState extends FlxState
 		FlxG.overlap(enemies, hitboxes, enemyHitboxTouch);
 		FlxG.overlap(player, enemies, playerEnemyTouch);
 		FlxG.overlap(player, loots, playerLootTouch);
+
+		worldGroup.sort(sortByY, FlxSort.ASCENDING);
+	}
+
+	private function sortByY(Order:Int, basic1:FlxBasic, basic2:FlxBasic):Int {
+		var result:Int = 0;
+
+		var obj1:FlxObject = cast (basic1, FlxObject);
+		var obj2:FlxObject = cast (basic2, FlxObject);
+		if (obj1.y < obj2.y)
+		{
+			result = Order;
+		}
+		else if (obj1.y > obj2.y)
+		{
+			result = -Order;
+		}
+
+		return result;
 	}
 
 	public function determineKnockbackDirection(playerFacing:Int):FlxPoint {

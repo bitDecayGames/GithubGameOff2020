@@ -99,7 +99,7 @@ class Enemy extends Entity {
     }
 
     function dropLoot() {
-        for (i in 0...2){
+        for (i in 0...5){
             var loot = new Loot(getMidpoint().x, getMidpoint().y);
             parentState.addLoot(loot);
         }

@@ -9,13 +9,27 @@ import flixel.FlxSprite;
 
 class Loot extends FlxSprite {
 
+    public var coinType:String;
+    public var coinValue:Int;
+
     var loopDropRadius = 25;
 
     public function new(_x:Float, _y:Float) {
         super(_x, _y);
 
-        // Filler art
-        makeGraphic(Std.int(5), Std.int(5), FlxColor.GREEN);
+        var random = Math.random();
+        if (random < .5){
+            coinType = "silver";
+            coinValue = 1;
+        } else {
+            coinType = "gold";
+            coinValue = 5;
+        }
+
+        loadCoinGraphic(coinType);
+        animation.add("spin", [0,1,2,3,4,5], 10);
+        animation.play("spin");
+
 
         // Calculate final drop point
         var theta = Math.random() * 2 * Math.PI;
@@ -33,5 +47,13 @@ class Loot extends FlxSprite {
 
         // Start the movement and add it to the state
         path.start(points, 100, FlxPath.FORWARD);
+    }
+
+    private function loadCoinGraphic(_coinType:String){
+        if (_coinType == "silver") {
+            super.loadGraphic(AssetPaths.silver_coin__png, true, 8, 8);
+        } else {
+            super.loadGraphic(AssetPaths.gold_coin__png, true, 8, 8);
+        }
     }
 }

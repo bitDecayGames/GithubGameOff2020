@@ -1,5 +1,6 @@
 package entities;
 
+import flixel.FlxG;
 import behavior.tree.BTContext;
 import behavior.tree.composite.Sequence;
 import behavior.tree.decorator.Repeater;

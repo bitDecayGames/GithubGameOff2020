@@ -15,7 +15,9 @@ class Loot extends FlxSprite {
     var loopDropRadius = 25;
 
     public function new(_x:Float, _y:Float) {
-        super(_x, _y);
+        // accounting for known half-width and half-height here
+        // assume we are placing loot based on center
+        super(_x + 4, _y + 4);
 
         var random = Math.random();
         if (random < .5){

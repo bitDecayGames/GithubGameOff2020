@@ -157,8 +157,12 @@ class PlayState extends FlxState
 	}
 
 	private function levelLootTouch(tilemap:FlxTilemap, loot:Loot) {
-		trace("Loot dun touched the level");
+		// TODO: The goal here is to have the loot stay on the map.
+		// However, collisions don't seem to behave properly.
+		// This function will make it obvious when things START working
 		loot.path.cancel();
+		loot.color = FlxColor.BLUE;
+		loot.scale.set(5,5);
 	}
 
 	override public function update(elapsed:Float) {
@@ -195,6 +199,7 @@ class PlayState extends FlxState
 
 		FlxG.collide(currentLevel.navigationLayer, player);
 		FlxG.collide(currentLevel.navigationLayer, enemies);
+		// TODO: For some reason colliding things on paths with the level doesn't work
 		FlxG.collide(currentLevel.navigationLayer, loots, levelLootTouch);
 		FlxG.collide(player, levelExit, playerExitTouch);
 		FlxG.overlap(enemies, hitboxes, enemyHitboxTouch);

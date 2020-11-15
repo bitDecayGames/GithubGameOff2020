@@ -27,9 +27,9 @@ import flixel.FlxObject;
 class PlayState extends FlxState
 {
 	var player:Player;
-	var hitboxes:Array<Hitbox> = new Array<Hitbox>();
-	var loots:Array<Loot> = new Array<Loot>();
-	var enemies:Array<Enemy> = new Array<Enemy>();
+	var hitboxes:FlxTypedGroup<Hitbox> = new FlxTypedGroup<Hitbox>();
+	var loots:FlxTypedGroup<Loot> = new FlxTypedGroup<Loot>();
+	var enemies:FlxTypedGroup<Enemy> = new FlxTypedGroup<Enemy>();
 
 	public var currentLevel:Level;
 
@@ -79,11 +79,11 @@ class PlayState extends FlxState
 
 		var enemy1 = new entities.Rat(this, player, new FlxPoint(250, 30));
 		enemy1.setNavigation(currentLevel, player);
-		enemies.push(enemy1);
+		enemies.add(enemy1);
 		add(enemy1);
 		var enemy2 = new entities.Snake(this, player, new FlxPoint(100, 50));
 		enemy2.setNavigation(currentLevel, player);
-		enemies.push(enemy2);
+		enemies.add(enemy2);
 		add(enemy2);
 		// var enemy2 = new Enemy(this, player, new FlxPoint(FlxG.width-30, 30));
 		// enemies.push(enemy2);
@@ -112,12 +112,12 @@ class PlayState extends FlxState
 	}
 
 	public function addHitbox(hitbox:Hitbox) {
-		hitboxes.push(hitbox);
+		hitboxes.add(hitbox);
 		add(hitbox);
 	}
 
 	public function addLoot(loot:Loot) {
-		loots.push(loot);
+		loots.add(loot);
 		add(loot);
 	}
 
@@ -125,12 +125,37 @@ class PlayState extends FlxState
 		money += _money;
 	}
 
+	private function playerExitTouch(p:Player, r:Rope) {
+		FmodFlxUtilities.TransitionToState(new OutsideTheMinesState());
+	}
+
+	private function enemyHitboxTouch(enemy:Enemy, hitbox:Hitbox) {
+		if (!enemy.hasBeenHitByThisHitbox(hitbox)){
+			FmodManager.PlaySoundOneShot(FmodSFX.ShovelEnemyImpact);
+			enemy.applyDamage(1);
+			enemy.setKnockback(determineKnockbackDirection(player.facing), 100, .5);
+			enemy.trackHitbox(hitbox);
+		}
+	}
+
+	private function playerEnemyTouch(player:Player, enemy:Enemy) {
+		if (player.invincibilityTimeLeft <= 0){
+			FmodManager.PlaySoundOneShot(FmodSFX.PlayerTakeDamage);
+			player.applyDamage(1);
+			player.setKnockback(determineKnockbackDirectionForPlayer(player, enemy), 100, .25);
+		}
+	}
+
+	private function playerLootTouch(player:Player, loot:Loot) {
+		loot.destroy();
+				FmodManager.PlaySoundOneShot(FmodSFX.CollectCoin);
+				IncreaseMoney(1);
+	}
+
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
 
-		if (FlxG.overlap(player, levelExit)) {
-			FmodFlxUtilities.TransitionToState(new OutsideTheMinesState());
-		}
+
 
 		shader.iTime.value[0] += elapsed;
 		shader.lightSourceX.value[0] = player.getMidpoint().x;
@@ -157,36 +182,10 @@ class PlayState extends FlxState
 
 		FlxG.watch.addQuick("enemies: ", enemies.length);
 
-		for (enemy in enemies) {
-			for (hitbox in hitboxes) {
-				if (FlxG.overlap(enemy, hitbox)) {
-					trace("RAT GOT TOUCHED");
-					if (!enemy.hasBeenHitByThisHitbox(hitbox)){
-						trace("RAT GOT SMAK");
-						FmodManager.PlaySoundOneShot(FmodSFX.ShovelEnemyImpact);
-						enemy.applyDamage(1);
-						enemy.setKnockback(determineKnockbackDirection(player.facing), 100, .5);
-						enemy.trackHitbox(hitbox);
-					}
-				}
-			}
-
-			if (FlxG.overlap(player, enemy)) {
-				if (player.invincibilityTimeLeft <= 0){
-					FmodManager.PlaySoundOneShot(FmodSFX.PlayerTakeDamage);
-					player.applyDamage(1);
-					player.setKnockback(determineKnockbackDirectionForPlayer(player, enemy), 100, .25);
-				}
-			}
-		}
-
-		for (loot in loots) {
-			if (FlxG.overlap(player, loot)) {
-				loot.destroy();
-				FmodManager.PlaySoundOneShot(FmodSFX.CollectCoin);
-				IncreaseMoney(1);
-			}
-		}
+		FlxG.collide(player, levelExit, playerExitTouch);
+		FlxG.overlap(enemies, hitboxes, enemyHitboxTouch);
+		FlxG.overlap(player, enemies, playerEnemyTouch);
+		FlxG.overlap(player, loots, playerLootTouch);
 	}
 
 	public function determineKnockbackDirection(playerFacing:Int):FlxPoint {

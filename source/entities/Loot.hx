@@ -12,9 +12,7 @@ class Loot extends FlxSprite {
     var loopDropRadius = 25;
 
     public function new(_x:Float, _y:Float) {
-        super();
-        x = _x;
-        y = _y;
+        super(_x, _y);
 
         // Filler art
         makeGraphic(Std.int(5), Std.int(5), FlxColor.GREEN);
@@ -31,7 +29,7 @@ class Loot extends FlxSprite {
         var midpoint = MathHelpers.GetMidpoint(initialPoint, randomPointAroundPlayer);
         var topOfArc = FlxMath.minInt(Std.int(randomPointAroundPlayer.y), Std.int(randomPointAroundPlayer.y));
         midpoint.y = topOfArc-10;
-        var points:Array<FlxPoint> = [midpoint, randomPointAroundPlayer];
+        var points:Array<FlxPoint> = [getPosition(), midpoint, randomPointAroundPlayer];
 
         // Start the movement and add it to the state
         path.start(points, 100, FlxPath.FORWARD);

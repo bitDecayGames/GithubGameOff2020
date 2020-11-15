@@ -1,5 +1,6 @@
 package states;
 
+import flixel.tile.FlxTilemap;
 import states.OutsideTheMinesState;
 import entities.Rope;
 import flixel.FlxCamera;
@@ -152,6 +153,11 @@ class PlayState extends FlxState
 				IncreaseMoney(1);
 	}
 
+	private function levelLootTouch(tilemap:FlxTilemap, loot:Loot) {
+		trace("Loot dun touched the level");
+		loot.path.cancel();
+	}
+
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
 
@@ -182,7 +188,7 @@ class PlayState extends FlxState
 
 		FlxG.collide(currentLevel.navigationLayer, player);
 		FlxG.collide(currentLevel.navigationLayer, enemies);
-		FlxG.collide(currentLevel.navigationLayer, loots);
+		FlxG.collide(currentLevel.navigationLayer, loots, levelLootTouch);
 		FlxG.collide(player, levelExit, playerExitTouch);
 		FlxG.overlap(enemies, hitboxes, enemyHitboxTouch);
 		FlxG.overlap(player, enemies, playerEnemyTouch);

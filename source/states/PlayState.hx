@@ -1,5 +1,6 @@
 package states;
 
+import com.bitdecay.textpop.TextPop;
 import states.OutsideTheMinesState;
 import entities.Rope;
 import flixel.FlxCamera;
@@ -23,6 +24,7 @@ import entities.Enemy;
 import flixel.FlxState;
 import flixel.math.FlxPoint;
 import flixel.FlxObject;
+import textpop.SlowFade;
 
 class PlayState extends FlxState
 {
@@ -147,6 +149,10 @@ class PlayState extends FlxState
 		if(FlxG.keys.justPressed.R) {
 			FmodFlxUtilities.TransitionToState(new PlayState());
 		}
+		if(FlxG.keys.justPressed.T) {
+			var loot = new Loot(player.x+50, player.y);
+			addLoot(loot);
+		}
 
 		moneyText.text = "Money: " + money;
 		playerHealthText.text = "Health: " + player.health;
@@ -178,9 +184,10 @@ class PlayState extends FlxState
 
 		for (loot in loots) {
 			if (FlxG.overlap(player, loot)) {
-				loot.destroy();
 				FmodManager.PlaySoundOneShot(FmodSFX.CollectCoin);
-				IncreaseMoney(1);
+				IncreaseMoney(loot.coinValue);
+				TextPop.pop(Std.int(player.x), Std.int(player.y), "$"+loot.coinValue, new SlowFade(), 7);
+				loot.destroy();
 			}
 		}
 	}

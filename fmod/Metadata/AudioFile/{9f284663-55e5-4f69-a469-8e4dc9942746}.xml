@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <objects serializationModel="Studio.02.00.00">
-	<object class="AudioFile" id="{55ec561f-a454-4d89-9690-a6f1c67932b7}">
+	<object class="AudioFile" id="{9f284663-55e5-4f69-a469-8e4dc9942746}">
 		<property name="assetPath">
-			<value>Outside the Mines (Shop).ogg</value>
+			<value>Outside the Mines (Empty).ogg</value>
 		</property>
 		<property name="isStreaming">
 			<value>true</value>

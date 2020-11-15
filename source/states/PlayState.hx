@@ -155,8 +155,6 @@ class PlayState extends FlxState
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
 
-
-
 		shader.iTime.value[0] += elapsed;
 		shader.lightSourceX.value[0] = player.getMidpoint().x;
 		shader.lightSourceY.value[0] = player.getMidpoint().y;
@@ -182,6 +180,9 @@ class PlayState extends FlxState
 
 		FlxG.watch.addQuick("enemies: ", enemies.length);
 
+		FlxG.collide(currentLevel.navigationLayer, player);
+		FlxG.collide(currentLevel.navigationLayer, enemies);
+		FlxG.collide(currentLevel.navigationLayer, loots);
 		FlxG.collide(player, levelExit, playerExitTouch);
 		FlxG.overlap(enemies, hitboxes, enemyHitboxTouch);
 		FlxG.overlap(player, enemies, playerEnemyTouch);

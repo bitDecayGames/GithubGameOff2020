@@ -1,5 +1,6 @@
 package entities;
 
+import flixel.FlxG;
 import flixel.math.FlxVector;
 import behavior.tree.BTContext;
 import behavior.tree.composite.Sequence;
@@ -51,19 +52,18 @@ class Snake extends Enemy {
 
         super.loadGraphic(AssetPaths.snake__png, true, 16, 16);
 
-        var animationSpeed:Int = 5;
+        var animationSpeed:Int = 15;
 
-        var widthInFrames = Std.int(width / 16);
-        var row = 16 * widthInFrames;
+        var famesPerRow = Std.int(this.frame.parent.width / width);
 
-        animation.add("walk_up", [for (i in (row * 2 + 1)...(row * 2 + widthInFrames)) i], animationSpeed);
-        animation.add("walk_down", [for (i in 0...widthInFrames) i], animationSpeed);
-        animation.add("walk_left", [for (i in (row * 1 + 1)...(row * 1 + widthInFrames)) i], animationSpeed);
-        animation.add("walk_right", [for (i in (row * 1 + 1)...(row * 1 + widthInFrames)) i], animationSpeed);
-        animation.add("stand_up", [row * 2], animationSpeed);
+        animation.add("walk_up", [for (i in (famesPerRow * 2 + 1)...(famesPerRow * 3)) i], animationSpeed);
+        animation.add("walk_down", [for (i in famesPerRow * 0 + 1...famesPerRow) i], animationSpeed);
+        animation.add("walk_left", [for (i in (famesPerRow * 1 + 1)...(famesPerRow * 2)) i], animationSpeed);
+        animation.add("walk_right", [for (i in (famesPerRow * 1 + 1)...(famesPerRow * 2)) i], animationSpeed);
+        animation.add("stand_up", [famesPerRow * 2], animationSpeed);
         animation.add("stand_down", [0], animationSpeed);
-        animation.add("stand_left", [row * 1], animationSpeed);
-        animation.add("stand_right", [row * 1], animationSpeed);
+        animation.add("stand_left", [famesPerRow * 1], animationSpeed);
+        animation.add("stand_right", [famesPerRow * 1], animationSpeed);
 
         animation.play("stand_down");
 
@@ -96,12 +96,14 @@ class Snake extends Enemy {
                 facing = FlxObject.DOWN;
             }
 
-			playAnimation(facing, velocity);
+            playAnimation(facing, velocity);
         }
     }
 
 	function playAnimation(_facing:Int, _directionVector:FlxPoint){
-        if (_directionVector == null || _directionVector.x == 0 && _directionVector.y == 0){
+        FlxG.watch.addQuick("given velocity: ", _directionVector);
+        FlxG.watch.addQuick("given facing: ", _facing);
+        if (_directionVector == null || (_directionVector.x == 0 && _directionVector.y == 0)) {
             switch _facing {
                 case FlxObject.RIGHT:
                     animation.play("stand_right");

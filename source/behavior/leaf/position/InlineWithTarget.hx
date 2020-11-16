@@ -9,6 +9,9 @@ import behavior.tree.DecoratorNode;
 import behavior.tree.BTContext;
 
 class InlineWithTarget extends DecoratorNode {
+
+    private var triggered:Bool = false;
+
     public function new(child:Node) {
         super(child);
     }
@@ -22,8 +25,18 @@ class InlineWithTarget extends DecoratorNode {
             return FAIL;
         }
 
-        if (cardinalAlignment(context.get("self"), context.get("target"))) {
-            return child.process(delta);
+        if (triggered || cardinalAlignment(context.get("self"), context.get("target"))) {
+            switch (child.process(delta)) {
+                case SUCCESS:
+                    triggered = false;
+                    return SUCCESS;
+                case FAIL:
+                    triggered = false;
+                    return FAIL;
+                case RUNNING:
+                    triggered = true;
+                    return RUNNING;
+            }
         } else {
             return FAIL;
         }

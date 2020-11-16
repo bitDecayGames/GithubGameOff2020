@@ -8,6 +8,7 @@ import behavior.tree.composite.Selector;
 import behavior.tree.decorator.Repeater;
 import behavior.leaf.PlayerAlive;
 import behavior.leaf.util.Wait;
+import behavior.leaf.util.Succeed;
 import behavior.leaf.movement.ManhattanPath;
 import behavior.leaf.movement.MoveBackAndForth;
 import behavior.leaf.position.InlineWithTarget;
@@ -33,9 +34,10 @@ class Snake extends Enemy {
                 new Selector([
                     new PlayerAlive(
                         new TargetPlayer(
-                            new InlineWithTarget(
+                            new Sequence([
+                                new InlineWithTarget(new Succeed()),
                                 new ManhattanPath()
-                            )
+                            ])
                         )
                     ),
                     new MoveBackAndForth()

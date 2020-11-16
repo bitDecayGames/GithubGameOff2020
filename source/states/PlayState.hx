@@ -87,10 +87,10 @@ class PlayState extends FlxState
 		enemy1.setNavigation(currentLevel, player);
 		enemies.add(enemy1);
 		worldGroup.add(enemy1);
-		// var enemy2 = new entities.Snake(this, player, new FlxPoint(100, 50));
-		// enemy2.setNavigation(currentLevel, player);
-		// enemies.add(enemy2);
-		// worldGroup.add(enemy2);
+		var enemy2 = new entities.Snake(this, player, new FlxPoint(100, 50));
+		enemy2.setNavigation(currentLevel, player);
+		enemies.add(enemy2);
+		worldGroup.add(enemy2);
 		// var enemy3 = new Enemy(this, player, new FlxPoint(FlxG.width-30, FlxG.height-30));
 		// enemies.add(enemy3);
 		// worldGroup.add(enemy3);

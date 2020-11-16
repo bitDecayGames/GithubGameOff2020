@@ -49,18 +49,21 @@ class Snake extends Enemy {
         behavior.init(context);
 
 
-        super.loadGraphic(AssetPaths.rat__png, true, 16, 16);
+        super.loadGraphic(AssetPaths.snake__png, true, 16, 16);
 
         var animationSpeed:Int = 5;
 
-        animation.add("walk_up", [7, 8], animationSpeed);
-        animation.add("walk_right", [4, 5], animationSpeed);
-        animation.add("walk_down", [1, 2], animationSpeed);
-        animation.add("walk_left", [4, 5], animationSpeed);
-        animation.add("stand_up", [6], animationSpeed);
-        animation.add("stand_right", [3], animationSpeed);
+        var widthInFrames = Std.int(width / 16);
+        var row = 16 * widthInFrames;
+
+        animation.add("walk_up", [for (i in (row * 2 + 1)...(row * 2 + widthInFrames)) i], animationSpeed);
+        animation.add("walk_down", [for (i in 0...widthInFrames) i], animationSpeed);
+        animation.add("walk_left", [for (i in (row * 1 + 1)...(row * 1 + widthInFrames)) i], animationSpeed);
+        animation.add("walk_right", [for (i in (row * 1 + 1)...(row * 1 + widthInFrames)) i], animationSpeed);
+        animation.add("stand_up", [row * 2], animationSpeed);
         animation.add("stand_down", [0], animationSpeed);
-        animation.add("stand_left", [3], animationSpeed);
+        animation.add("stand_left", [row * 1], animationSpeed);
+        animation.add("stand_right", [row * 1], animationSpeed);
 
         animation.play("stand_down");
 

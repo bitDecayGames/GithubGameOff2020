@@ -45,34 +45,5 @@ class MoveBackAndForth extends LeafNode {
 		} else {
 			return RUNNING;
 		}
-
-        // if (!started) {
-		// 	started = true;
-
-        //     // this may be terrible
-        //     var tileSize = bundle.level.navigationLayer.height / bundle.level.navigationLayer.heightInTiles;
-
-        //     var current = self.getMidpoint();
-        //     var dest = FlxPoint.get(current.x, current.y).addPoint(direction.scaleNew(tileSize));
-        //     var destWallCheck = FlxPoint.get().copyFrom(dest).addPoint(direction.addNew(new FlxVector(self.getHitbox().width / 2, self.getHitbox().height / 2)));
-		// 	var rayResult = FlxPoint.get();
-
-		// 	trace("casting from " + current + " to " + destWallCheck);
-        //     if (bundle.level.navigationLayer.ray(current, destWallCheck, rayResult)) {
-		// 		trace("cast success! No collision");
-        //         self.path.start([dest], speed);
-        //     } else {
-		// 		trace("cast fail! collision at: " + rayResult);
-		// 		self.path.start([rayResult.subtractPoint(direction.addNew(new FlxVector(self.getHitbox().width / 2, self.getHitbox().height / 2)))], speed);
-		// 		direction.scale(-1);
-        //     }
-		// } else {
-		// 	if (self.path.finished || self.path.nodes.length == 0) {
-		// 		started = false;
-		// 		return SUCCESS;
-		// 	}
-		// }
-
-		// return RUNNING;
 	}
 }

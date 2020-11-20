@@ -1,5 +1,6 @@
 package states;
 
+import dialogbox.DialogManager;
 import entities.Rope;
 import flixel.FlxCamera;
 import flixel.group.FlxGroup;
@@ -44,6 +45,8 @@ class OutsideTheMinesState extends FlxState
 	var uiGroup:FlxGroup;
 
 	var axe:FlxSprite;
+	
+	var dialogManager:dialogbox.DialogManager;
 
 	override public function create()
 	{
@@ -81,10 +84,15 @@ class OutsideTheMinesState extends FlxState
 		playerHealthText = new FlxText(1, 15, 1000, "Health: ", 10);
 		playerHealthText.cameras = [uiCamera];
 		add(playerHealthText);
+		
+		dialogManager = new DialogManager(this, uiCamera);
+		dialogManager.loadDialog(0);
 	}
 
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
+
+		dialogManager.update();
 		
 		if (FlxG.keys.justPressed.Z) {
 			

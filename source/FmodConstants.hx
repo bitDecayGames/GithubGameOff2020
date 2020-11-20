@@ -14,6 +14,7 @@ class FmodSFX {
     public static inline var RatDamage:String = "event:/SFX/Enemy/Rat/RatDamage";
     public static inline var RatDeath:String = "event:/SFX/Enemy/Rat/RatDeath";
     public static inline var Crumble:String = "event:/SFX/Environment/Crumble";
+    public static inline var Type:String = "event:/SFX/Hud/Type";
     public static inline var MenuHover:String = "event:/SFX/Menu/MenuHover";
     public static inline var MenuSelect:String = "event:/SFX/Menu/MenuSelect";
     public static inline var CollectCoin:String = "event:/SFX/Player/Collect/CollectCoin";

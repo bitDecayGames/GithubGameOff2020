@@ -33,7 +33,9 @@ class Snake extends Enemy {
 	public function new(_parentState:PlayState, _player:Player, position:FlxPoint) {
         super(_parentState, _player, position);
         path = new FlxPath();
-        speed = 30;
+
+        baseStats.speed = 30;
+        refresh();
 
         behavior = new BTree(
             new Repeater(
@@ -56,7 +58,7 @@ class Snake extends Enemy {
         );
         var context = new BTContext();
         context.set("self", this);
-        context.set("speed", speed);
+        context.set("speed", baseStats.speed);
         context.set("navBundle", new NavBundle(parentState.currentLevel, player));
         context.set("direction", FlxVector.get(0, -1).normalize());
         behavior.init(context);

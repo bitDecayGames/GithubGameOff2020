@@ -31,7 +31,10 @@ class Enemy extends Entity {
         health = 3;
         player = _player;
         size = new FlxPoint(10, 10);
-        speed = 10;
+
+        baseStats.speed = 10;
+        refresh();
+
         direction = 0;
         parentState = _parentState;
         attacking = false;

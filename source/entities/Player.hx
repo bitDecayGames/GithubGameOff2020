@@ -1,5 +1,6 @@
 package entities;
 
+import entities.Stats.StatModifier;
 import haxefmod.flixel.FmodFlxUtilities;
 import flixel.effects.FlxFlicker;
 import actions.Actions;
@@ -30,9 +31,13 @@ class Player extends Entity {
 	public function new(_parentState:PlayState, _spawnPosition:FlxPoint) {
         super();
         controls = new Actions();
-        health = 5;
+
+        baseStats.lightRadius = 100;
+        baseStats.maxHealth = 5;
+        baseStats.speed = 75;
+        refresh();
+
         size = new FlxPoint(16, 32);
-        speed = 75;
         direction = 0;
         attacking = false;
         parentState = _parentState;
@@ -107,7 +112,7 @@ class Player extends Entity {
             var directionVector:FlxPoint = null;
             if (!attacking){
                 directionVector = MathHelpers.NormalizeVector(potentialDirection);
-                directionVector.scale(delta*speed);
+                directionVector.scale(delta*activeStats.speed);
                 // y needs to be flipped to move character in the right direction
                 setPosition(x + directionVector.x, y + directionVector.y);
             }

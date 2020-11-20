@@ -1,5 +1,7 @@
 package states;
 
+import entities.Stats;
+import haxe.Timer;
 import flixel.tile.FlxTilemap;
 import flixel.FlxBasic;
 import flixel.util.FlxSort;
@@ -104,6 +106,13 @@ class PlayState extends FlxState
 		add(playerHealthText);
 
 		add(worldGroup);
+
+		Timer.delay(() -> {
+			trace("adding mod");
+			player.addModifier(function (stats:Stats) {
+				stats.speed += 50;
+			});
+		}, 5000);
 	}
 
 	private function setupLightShader() {

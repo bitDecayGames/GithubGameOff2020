@@ -40,13 +40,10 @@ class AttackTarget extends LeafNode {
 
         if (attackAnimation != null) {
             if (self.animation.curAnim.name != attackAnimName) {
-                trace("current anim: " + self.animation.curAnim.name);
-                trace("starting anim: " + attackAnimation.name);
                 self.animation.play(attackAnimName);
                 return RUNNING;
             } else {
                 if (attackAnimation.finished) {
-                    trace("anim finished: " + attackAnimation.name);
                     return SUCCESS;
                 }
             }

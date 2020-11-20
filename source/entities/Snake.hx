@@ -1,5 +1,6 @@
 package entities;
 
+import js.html.TouchList;
 import flixel.FlxG;
 import flixel.math.FlxVector;
 import behavior.tree.BTContext;
@@ -24,6 +25,7 @@ import flixel.FlxObject;
 import flixel.math.FlxPoint;
 import flixel.FlxSprite;
 import states.PlayState;
+import entities.AcidShot;
 
 class Snake extends Enemy {
     var behavior:BTree;
@@ -84,8 +86,31 @@ class Snake extends Enemy {
 
         animation.play("stand_down");
 
+        animation.callback = callback;
+
         setFacingFlip(FlxObject.LEFT, true, false);
         setFacingFlip(FlxObject.RIGHT, false, false);
+    }
+
+    function callback(name:String, frameNumber:Int, frameIndex:Int) {
+        // is it crappy to have the animation trigger the projectile?
+        if (StringTools.startsWith(name, "attack_")) {
+            if (frameNumber == 0) {
+                if (StringTools.endsWith(name, "up")) {
+                    trace("pew up");
+                    parentState.addProjectile(new AcidShot(this.x, this.y, 270, 80));
+                } else if (StringTools.endsWith(name, "down")) {
+                    trace("pew down");
+                    parentState.addProjectile(new AcidShot(this.x, this.y, 90, 80));
+                } else if (StringTools.endsWith(name, "left")) {
+                    trace("pew left");
+                    parentState.addProjectile(new AcidShot(this.x, this.y, 180, 80));
+                } else if (StringTools.endsWith(name, "right")) {
+                    trace("pew right");
+                    parentState.addProjectile(new AcidShot(this.x, this.y, 0, 80));
+                }
+            }
+        }
     }
 
     override public function destroy() {

@@ -35,6 +35,7 @@ class PlayState extends FlxState
 	var hitboxes:FlxTypedGroup<Hitbox> = new FlxTypedGroup<Hitbox>();
 	var loots:FlxTypedGroup<Loot> = new FlxTypedGroup<Loot>();
 	var enemies:FlxTypedGroup<Enemy> = new FlxTypedGroup<Enemy>();
+	var projectiles:FlxTypedGroup<FlxSprite> = new FlxTypedGroup<FlxSprite>();
 
 	public var currentLevel:Level;
 
@@ -126,6 +127,11 @@ class PlayState extends FlxState
 		worldGroup.add(loot);
 	}
 
+	public function addProjectile(proj:FlxSprite) {
+		projectiles.add(proj);
+		worldGroup.add(proj);
+	}
+
 	public function IncreaseMoney(_money:Int) {
 		money += _money;
 	}
@@ -148,6 +154,15 @@ class PlayState extends FlxState
 			FmodManager.PlaySoundOneShot(FmodSFX.PlayerTakeDamage);
 			player.applyDamage(1);
 			player.setKnockback(determineKnockbackDirectionForPlayer(player, enemy), 100, .25);
+		}
+	}
+
+	private function playerProjectileTouch(player:Player, proj:FlxSprite) {
+		if (player.invincibilityTimeLeft <= 0){
+			FmodManager.PlaySoundOneShot(FmodSFX.PlayerTakeDamage);
+			player.applyDamage(1);
+			player.setKnockback(determineKnockbackDirectionForPlayer(player, proj), 100, .25);
+			proj.kill();
 		}
 	}
 
@@ -206,6 +221,7 @@ class PlayState extends FlxState
 		FlxG.collide(player, levelExit, playerExitTouch);
 		FlxG.overlap(enemies, hitboxes, enemyHitboxTouch);
 		FlxG.overlap(player, enemies, playerEnemyTouch);
+		FlxG.overlap(player, projectiles, playerProjectileTouch);
 		FlxG.overlap(player, loots, playerLootTouch);
 
 		worldGroup.sort(sortByY, FlxSort.ASCENDING);
@@ -245,8 +261,8 @@ class PlayState extends FlxState
 		return knockbackDirection;
 	}
 
-	public function determineKnockbackDirectionForPlayer(_player:Player, _enemy:Enemy):FlxPoint {
-        var direction = new FlxPoint(player.getMidpoint().x-_enemy.getMidpoint().x, _enemy.getMidpoint().y-player.getMidpoint().y);
+	public function determineKnockbackDirectionForPlayer(_player:Player, other:FlxSprite):FlxPoint {
+        var direction = new FlxPoint(player.getMidpoint().x-other.getMidpoint().x, other.getMidpoint().y-player.getMidpoint().y);
         var directionNormalized = MathHelpers.NormalizeVector(direction);
         return directionNormalized;
 	}

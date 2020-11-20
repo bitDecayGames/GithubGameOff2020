@@ -22,6 +22,7 @@ import entities.Enemy;
 import flixel.FlxState;
 import flixel.math.FlxPoint;
 import flixel.FlxObject;
+import entities.Interactable;
 
 class OutsideTheMinesState extends FlxState
 {
@@ -42,7 +43,7 @@ class OutsideTheMinesState extends FlxState
 	var uiCamera:FlxCamera;
 	var uiGroup:FlxGroup;
 
-	var levelExit:FlxSprite;
+	var axe:FlxSprite;
 
 	override public function create()
 	{
@@ -68,8 +69,8 @@ class OutsideTheMinesState extends FlxState
 		add(currentLevel.interactableLayer);
 
 		var exitTiles = currentLevel.interactableLayer.getTileCoords(3, false);
-		levelExit = new Rope(exitTiles[0], new FlxPoint(16,16));
-		add(levelExit);
+		axe = new Interactable("axe", exitTiles[0]);
+		add(axe);
 
 		player = new Player(null, new FlxPoint(FlxG.width/2, FlxG.height/2));
 		add(player);
@@ -85,8 +86,12 @@ class OutsideTheMinesState extends FlxState
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
 		
+		if (FlxG.keys.justPressed.Z) {
+			
+		}
+
 		var shopVolumeRadius = 100;
-		var distanceFromShop = player.getPosition().distanceTo(levelExit.getPosition());
+		var distanceFromShop = player.getPosition().distanceTo(axe.getPosition());
 		var shopVolume = Math.max(0, 1-(distanceFromShop/shopVolumeRadius));
 		trace("Shop volume: " + shopVolume);
 		FmodManager.SetEventParameterOnSong("ShopVolume", shopVolume);

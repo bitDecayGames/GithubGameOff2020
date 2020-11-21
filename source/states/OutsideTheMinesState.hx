@@ -1,5 +1,8 @@
 package states;
 
+import haxe.Timer;
+import flixel.tweens.FlxTween;
+import shaders.MosaicManager;
 import dialogbox.DialogManager;
 import entities.Rope;
 import flixel.FlxCamera;
@@ -38,8 +41,8 @@ class OutsideTheMinesState extends FlxState
 	var money:Int = 0;
 	var playerHealthText:FlxText;
 
-	var shader:Lighten;
-	var lightFilter:ShaderFilter;
+	var mosaicShaderManager:MosaicManager;
+	var mosaicFilter:ShaderFilter;
 
 	var uiCamera:FlxCamera;
 	var uiGroup:FlxGroup;
@@ -64,7 +67,39 @@ class OutsideTheMinesState extends FlxState
 
 		camera.pixelPerfectRender = true;
 
-		FmodManager.PlaySong(FmodSongs.OutsideTheMines);
+		mosaicShaderManager = new MosaicManager();
+		mosaicFilter = new ShaderFilter(mosaicShaderManager.shader);
+		camera.setFilters([mosaicFilter]);
+		uiCamera.setFilters([mosaicFilter]);
+		
+		// mosaicShaderManager.setStrength(5, 5);
+
+		camera.alpha = 0;
+		uiCamera.alpha = 0;
+		
+		FmodManager.PlaySoundOneShot(FmodSFX.PlayerFall);
+		FmodManager.StopSongImmediately();
+
+		Timer.delay(() -> {
+
+			camera.fade(FlxColor.BLACK, 1.5, true);
+			uiCamera.fade(FlxColor.BLACK, 1.5, true);
+			
+			camera.alpha = 1;
+			uiCamera.alpha = 1;
+
+			FlxTween.num(15, 1, 3, {}, function(v)
+				{
+					mosaicShaderManager.setStrength(v, v);
+				}).onComplete = (t) -> {
+					camera.setFilters([]);
+					uiCamera.setFilters([]);
+					
+					dialogManager = new DialogManager(this, uiCamera);
+					dialogManager.loadDialog(0);
+					FmodManager.PlaySong(FmodSongs.OutsideTheMines);
+				};
+		}, 4000);
 
 		currentLevel = new Level();
 		add(currentLevel.debugLayer);
@@ -85,22 +120,29 @@ class OutsideTheMinesState extends FlxState
 		playerHealthText.cameras = [uiCamera];
 		add(playerHealthText);
 		
-		dialogManager = new DialogManager(this, uiCamera);
-		dialogManager.loadDialog(0);
 	}
 
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
 
-		dialogManager.update();
+		if (dialogManager != null){
+			dialogManager.update();
+		}
 		
+		if(FlxG.keys.justPressed.N) {
+			FmodFlxUtilities.TransitionToState(new PlayState());
+        	FmodManager.StopSoundImmediately("typewriterSoundId");
+		}
+
 		if (FlxG.keys.justPressed.Z) {
 			
 		}
 
 		var shopVolumeRadius = 100;
 		var distanceFromShop = player.getPosition().distanceTo(axe.getPosition());
-		var shopVolume = Math.max(0, 1-(distanceFromShop/shopVolumeRadius));
+		// Dynamic volume commented out for now
+		// var shopVolume = Math.max(0, 1-(distanceFromShop/shopVolumeRadius));
+		var shopVolume = 1;
 		trace("Shop volume: " + shopVolume);
 		FmodManager.SetEventParameterOnSong("ShopVolume", shopVolume);
 

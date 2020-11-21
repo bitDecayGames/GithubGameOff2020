@@ -25,7 +25,7 @@ class DialogManager {
     public function update() {
         if (typeText.getIsTyping()){
             if (!FmodManager.IsSoundPlaying(typewriterSoundId)){
-                FmodManager.PlaySoundAndAssignId(FmodSFX.Type, typewriterSoundId);
+                FmodManager.PlaySoundAndAssignId(FmodSFX.Typewriter, typewriterSoundId);
             }
         } 
         if (typeText == null || !typeText.getIsTyping()) {

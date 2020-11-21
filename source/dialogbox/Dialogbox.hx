@@ -13,6 +13,7 @@ class Dialogbox extends FlxBasic {
     static inline final CharactersPerTextBox = 91;
     static inline final FontSize = 10;
 
+    var nextPageDelayMs = 4000;
     var nextPageTimer:Timer;
 
     // caller's state so we can add our FlxTypeText to the game loop
@@ -90,7 +91,7 @@ class Dialogbox extends FlxBasic {
         var allowNextPage=function():Void {
             canContinueToNextPage = true;
             
-            nextPageTimer = new Timer(3000);
+            nextPageTimer = new Timer(nextPageDelayMs);
             nextPageTimer.run = continueToNextPage;
         }
         executor.submit(allowNextPage, ONCE(10));

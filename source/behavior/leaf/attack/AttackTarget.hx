@@ -10,13 +10,11 @@ class AttackTarget extends LeafNode {
 
 	public function new() {}
 
-	override public function process(delta:Float):NodeStatus {
+	override public function doProcess(delta:Float):NodeStatus {
 		var self = cast(context.get("self"), FlxSprite);
         var target = cast(context.get("target"), FlxPoint);
 
         var diff = self.getPosition(FlxPoint.get()).subtractPoint(target);
-
-        trace("the diff: ", diff);
 
         var attackAnimName = "attack_";
 

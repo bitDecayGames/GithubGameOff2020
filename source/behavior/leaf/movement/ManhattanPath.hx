@@ -26,12 +26,11 @@ class ManhattanPath extends LeafNode {
 		started = false;
 	}
 
-	override public function process(delta:Float):NodeStatus {
+	override public function doProcess(delta:Float):NodeStatus {
 		var self = cast(context.get("self"), FlxSprite);
 		var speed = cast(context.get("speed"), Float);
 
 		if (!started) {
-			started = true;
 			if (context.get("target") == null) {
 				return FAIL;
 			}
@@ -42,6 +41,7 @@ class ManhattanPath extends LeafNode {
 			}
 
 			self.path.start(points, speed);
+			started = true;
 		} else {
 			if (self.path.finished || self.path.nodes.length == 0) {
 				started = false;

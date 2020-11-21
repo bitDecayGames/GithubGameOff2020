@@ -17,7 +17,7 @@ class Sequence extends CompositeNode {
         lastIndex = -1;
     }
 
-    override public function process(delta:Float):NodeStatus {
+    override public function doProcess(delta:Float):NodeStatus {
         if (lastIndex != index && index < children.length) {
             children[index].init(context);
             lastIndex = index;

@@ -10,7 +10,7 @@ class TargetPlayer extends DecoratorNode {
         super(child);
     }
 
-    override public function process(delta:Float):NodeStatus {
+    override public function doProcess(delta:Float):NodeStatus {
         if (context.get("navBundle") != null) {
             context.set("target", cast(context.get("navBundle"), NavBundle).player.getMidpoint());
         }

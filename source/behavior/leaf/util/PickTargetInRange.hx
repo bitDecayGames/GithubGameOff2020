@@ -9,7 +9,7 @@ import behavior.tree.NodeStatus;
 class PickTargetInRange extends LeafNode {
     public function new() {}
 
-    override public function process(delta:Float):NodeStatus {
+    override public function doProcess(delta:Float):NodeStatus {
         if (context.get("navBundle") != null) {
             var nav = cast(context.get("navBundle"), NavBundle);
             var range = cast(context.get("range"), Float);
@@ -20,12 +20,10 @@ class PickTargetInRange extends LeafNode {
                 var mod = FlxPoint.get(1, 0).scale(FlxG.random.float(range/4, range)).rotate(FlxPoint.weak(), FlxG.random.float(0, 360));
                 if (!nav.level.navigationLayer.overlapsPoint(start.getPosition().addPoint(mod))) {
                     context.set("target", mod);
-                    trace("pick success");
                     return SUCCESS;
                 }
             }
         }
-        trace("pick fail");
         return FAIL;
     }
 }

@@ -5,7 +5,7 @@ class Repeater extends DecoratorNode {
         super(child);
     }
 
-    override public function process(delta:Float):NodeStatus {
+    override public function doProcess(delta:Float):NodeStatus {
         child.process(delta);
         return RUNNING;
     }

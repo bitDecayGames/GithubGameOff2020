@@ -121,6 +121,7 @@ class OutsideTheMinesState extends BaseState
 		add(player);
 
 		player.setControlsActive(false);
+		player.setCanAttack(false);
 
 		moneyText = new FlxText(1, 1, 1000, "Money: ", 10);
 		moneyText.cameras = [uiCamera];
@@ -143,8 +144,8 @@ class OutsideTheMinesState extends BaseState
         	FmodManager.StopSoundImmediately("typewriterSoundId");
 		}
 
-		if (FlxG.keys.justPressed.Z) {
-			
+		if (FlxG.keys.justPressed.U) {
+			player.setCanAttack(true);
 		}
 
 		var shopVolumeRadius = 100;

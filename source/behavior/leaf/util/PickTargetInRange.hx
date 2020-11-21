@@ -20,11 +20,12 @@ class PickTargetInRange extends LeafNode {
                 var mod = FlxPoint.get(1, 0).scale(FlxG.random.float(range/4, range)).rotate(FlxPoint.weak(), FlxG.random.float(0, 360));
                 if (!nav.level.navigationLayer.overlapsPoint(start.getPosition().addPoint(mod))) {
                     context.set("target", mod);
+                    trace("pick success");
                     return SUCCESS;
                 }
             }
         }
-
+        trace("pick fail");
         return FAIL;
     }
 }

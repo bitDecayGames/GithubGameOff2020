@@ -1,5 +1,7 @@
 package states;
 
+import interactables.Axe;
+import textpop.SlowFadeDown;
 import textpop.SlowFade;
 import com.bitdecay.textpop.TextPop;
 import haxe.Timer;
@@ -28,7 +30,7 @@ import entities.Enemy;
 import flixel.FlxState;
 import flixel.math.FlxPoint;
 import flixel.FlxObject;
-import entities.Interactable;
+import interactables.Interactable;
 
 class OutsideTheMinesState extends BaseState
 {
@@ -39,7 +41,7 @@ class OutsideTheMinesState extends BaseState
 	var player:Player;
 
 	var moneyText:FlxText;
-	var money:Int = 0;
+	var money:Int = 5;
 	var playerHealthText:FlxText;
 
 	var mosaicShaderManager:MosaicManager;
@@ -50,6 +52,8 @@ class OutsideTheMinesState extends BaseState
 
 	var axe:Interactable;
 	
+	var levelExit:FlxSprite;
+
 	var dialogManager:dialogbox.DialogManager;
 
 	public function new(?_skipIntro:Bool = false) {
@@ -84,22 +88,26 @@ class OutsideTheMinesState extends BaseState
 		add(currentLevel.navigationLayer);
 		add(currentLevel.interactableLayer);
 
-		var exitTiles = currentLevel.interactableLayer.getTileCoords(3, false);
-		axe = new Interactable("axe", exitTiles[0]);
+		var itemTiles = currentLevel.interactableLayer.getTileCoords(3, false);
+		axe = new Axe(itemTiles[0]);
 		addInteractable(axe);
+		
+		var exitTiles = currentLevel.interactableLayer.getTileCoords(4, false);
+		levelExit = new Rope(exitTiles[0], new FlxPoint(16,16));
+		add(levelExit);
 
 		player = new Player(this, new FlxPoint(FlxG.width/2, FlxG.height/2));
-		add(player);
+		worldGroup.add(player);
 
 		// This will be set in state eventually
 		player.setCanAttack(false);
 
-		moneyText = new FlxText(1, 1, 1000, "Money: ", 10);
-		moneyText.cameras = [uiCamera];
-		add(moneyText);
-		playerHealthText = new FlxText(1, 15, 1000, "Health: ", 10);
+		playerHealthText = new FlxText(1, 1, 1000, "Health: ", 10);
 		playerHealthText.cameras = [uiCamera];
 		add(playerHealthText);
+		moneyText = new FlxText(1, 15, 1000, "Money: ", 10);
+		moneyText.cameras = [uiCamera];
+		add(moneyText);
 		
 		add(worldGroup);
 		
@@ -165,6 +173,14 @@ class OutsideTheMinesState extends BaseState
 			player.setCanAttack(true);
 		}
 
+		if (FlxG.keys.justPressed.MINUS) {
+			money--;
+		}
+
+		if (FlxG.keys.justPressed.PLUS) {
+			money++;
+		}
+
 		var shopVolumeRadius = 100;
 		var distanceFromShop = player.getPosition().distanceTo(axe.getPosition());
 		// Dynamic volume commented out for now
@@ -178,13 +194,25 @@ class OutsideTheMinesState extends BaseState
 
 		
 		FlxG.overlap(interactables, hitboxes, interactWithItem);
+		FlxG.collide(player, levelExit, playerExitTouch);
 	}
 
-	private function interactWithItem(interactable:Enemy, hitbox:Hitbox) {
-		interactable.destroy();
-		player.setCanAttack(true);
-		FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchase);
-		TextPop.pop(Std.int(player.x), Std.int(player.y), "Shovel", new SlowFade(), 7);
-		TextPop.pop(Std.int(player.x-15), Std.int(player.y-10), "-$5", new SlowFade(), 7);
+	private function interactWithItem(interactable:Interactable, hitbox:Hitbox) {
+		if (!interactable.hasBeenHitByThisHitbox(hitbox)) {
+			if (money >= interactable.cost){
+				money -= interactable.cost;
+				interactable.onInteract(player);
+				TextPop.pop(Std.int(40), Std.int(30), "-$5", new SlowFadeDown(), 10);
+				FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchase);
+			} else {
+				TextPop.pop(Std.int(player.x), Std.int(player.y), "Not enough money", new SlowFade(), 10);
+				FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchaseFail);
+			}
+			interactable.trackHitbox(hitbox);
+		}
+	}
+
+	private function playerExitTouch(p:Player, r:Rope) {
+		FmodFlxUtilities.TransitionToState(new PlayState());
 	}
 }

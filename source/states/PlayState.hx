@@ -70,7 +70,7 @@ class PlayState extends BaseState
 		add(currentLevel.navigationLayer);
 		add(currentLevel.interactableLayer);
 
-		var exitTiles = currentLevel.interactableLayer.getTileCoords(3, false);
+		var exitTiles = currentLevel.interactableLayer.getTileCoords(4, false);
 		levelExit = new Rope(exitTiles[0], new FlxPoint(16,16));
 		add(levelExit);
 
@@ -121,7 +121,7 @@ class PlayState extends BaseState
 	}
 
 	private function playerExitTouch(p:Player, r:Rope) {
-		FmodFlxUtilities.TransitionToState(new OutsideTheMinesState());
+		FmodFlxUtilities.TransitionToState(new OutsideTheMinesState(OutsideTheMinesState.SkipIntro));
 	}
 
 	private function enemyHitboxTouch(enemy:Enemy, hitbox:Hitbox) {
@@ -178,7 +178,7 @@ class PlayState extends BaseState
 		}
 
 		if(FlxG.keys.justPressed.N) {
-			FmodFlxUtilities.TransitionToState(new OutsideTheMinesState());
+			FmodFlxUtilities.TransitionToState(new OutsideTheMinesState(OutsideTheMinesState.SkipIntro));
 		}
 
 		if(FlxG.keys.justPressed.G) {

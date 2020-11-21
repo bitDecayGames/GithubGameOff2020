@@ -42,12 +42,6 @@ class Enemy extends Entity {
         setPosition(position.x, position.y);
     }
 
-    // setNavigation should take as arguments everything an enemy will need in order to make decisions
-    //               regarding how to act in the world
-    public function setNavigation(level:Level, player:Player) {
-        this.level = level;
-    }
-
     override public function destroy() {
         kill();
     }

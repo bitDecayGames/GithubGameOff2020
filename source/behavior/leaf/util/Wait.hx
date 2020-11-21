@@ -6,20 +6,10 @@ import behavior.tree.NodeStatus;
 import behavior.tree.LeafNode;
 
 class Wait extends LeafNode {
-    var min:Float;
-    var max:Float;
-
     var started:Bool;
     var remaining:Float;
 
-    public function new(min:Float, max:Float = -1) {
-        this.min = min;
-        this.max = max;
-
-        if (max == -1) {
-            max = min;
-        }
-    }
+    public function new() {}
 
     override public function init(context:BTContext) {
         super.init(context);
@@ -32,9 +22,13 @@ class Wait extends LeafNode {
             if (started) {
                 return SUCCESS;
             } else {
+                var min = cast(context.get("minWait"), Float);
+                var max = min;
+                if (context.get("maxWait") != null) {
+                    max = cast(context.get("maxWait"), Float);
+                }
                 remaining = FlxG.random.float(min, max);
                 started = true;
-                trace("timer set to wait: " + remaining);
             }
         }
 

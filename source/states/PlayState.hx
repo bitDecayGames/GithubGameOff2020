@@ -86,17 +86,15 @@ class PlayState extends FlxState
 		worldGroup.add(player);
 
 
-		var enemy1 = new entities.Rat(this, player, new FlxPoint(250, 30));
-		enemy1.setNavigation(currentLevel, player);
+		var enemy1 = new entities.enemies.Rat(this, player, new FlxPoint(250, 30));
 		enemies.add(enemy1);
 		worldGroup.add(enemy1);
-		var enemy2 = new entities.Snake(this, player, new FlxPoint(100, 50));
-		enemy2.setNavigation(currentLevel, player);
+		var enemy2 = new entities.enemies.Snake(this, player, new FlxPoint(100, 50));
 		enemies.add(enemy2);
 		worldGroup.add(enemy2);
-		// var enemy3 = new Enemy(this, player, new FlxPoint(FlxG.width-30, FlxG.height-30));
-		// enemies.add(enemy3);
-		// worldGroup.add(enemy3);
+		var enemy3 = new entities.enemies.Bat(this, player, new FlxPoint(100, 100));
+		enemies.add(enemy3);
+		worldGroup.add(enemy3);
 
 		moneyText = new FlxText(1, 1, 1000, "Money: ", 10);
 		moneyText.cameras = [uiCamera];

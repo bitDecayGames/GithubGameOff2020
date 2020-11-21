@@ -1,5 +1,6 @@
 package entities;
 
+import states.BaseState;
 import entities.Stats.StatModifier;
 import haxefmod.flixel.FmodFlxUtilities;
 import flixel.effects.FlxFlicker;
@@ -18,6 +19,8 @@ using extensions.FlxObjectExt;
 class Player extends Entity {
 
     var controls:Actions;
+    var areControlsActive = true;
+
     var stepFXPlayed:Bool = false;
     var movementRatio = new FlxPoint(1, 0.8);
 
@@ -28,7 +31,7 @@ class Player extends Entity {
 
     public var shovel:FlxSprite;
 
-	public function new(_parentState:PlayState, _spawnPosition:FlxPoint) {
+	public function new(_parentState:BaseState, _spawnPosition:FlxPoint) {
         super();
         controls = new Actions();
 
@@ -76,7 +79,11 @@ class Player extends Entity {
             // reset this once a different frame happens
             stepFXPlayed = false;
         }
-	}
+    }
+    
+    public function setControlsActive(_areActive:Bool){
+        areControlsActive = _areActive;
+    }
 
 	override public function update(delta:Float):Void {
         super.update(delta);
@@ -98,9 +105,8 @@ class Player extends Entity {
                 }
             }
             playDamageAnimation(facing);
-        } else {
-            // Talk to Tanner about the parent state check
-            if (controls.attack.check() && !attacking && parentState != null) {
+        } else if (areControlsActive) {
+            if (controls.attack.check() && !attacking) {
 
                 attacking = true;
                 attack(facing);

@@ -1,5 +1,6 @@
 package entities;
 
+import states.BaseState;
 import entities.Stats.StatModifier;
 import states.PlayState;
 import flixel.FlxSprite;
@@ -8,7 +9,7 @@ import flixel.math.FlxPoint;
 
 class Entity extends FlxSprite {
 
-    var parentState:PlayState;
+    var parentState:BaseState;
     var size:FlxPoint;
     var direction:Int;
     var attacking:Bool;

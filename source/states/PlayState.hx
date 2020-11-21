@@ -31,15 +31,9 @@ import flixel.math.FlxPoint;
 import flixel.FlxObject;
 import textpop.SlowFade;
 
-class PlayState extends FlxState
+class PlayState extends BaseState
 {
 	var player:Player;
-	var hitboxes:FlxTypedGroup<Hitbox> = new FlxTypedGroup<Hitbox>();
-	var loots:FlxTypedGroup<Loot> = new FlxTypedGroup<Loot>();
-	var enemies:FlxTypedGroup<Enemy> = new FlxTypedGroup<Enemy>();
-	var projectiles:FlxTypedGroup<FlxSprite> = new FlxTypedGroup<FlxSprite>();
-
-	public var currentLevel:Level;
 
 	var moneyText:FlxText;
 	var money:Int = 0;
@@ -49,8 +43,6 @@ class PlayState extends FlxState
 	var lightFilter:ShaderFilter;
 
 	var uiCamera:FlxCamera;
-
-	var worldGroup:FlxGroup = new FlxGroup();
 
 	var levelExit:FlxSprite;
 
@@ -124,21 +116,6 @@ class PlayState extends FlxState
 		camera.setFilters([lightFilter]);
 	}
 
-	public function addHitbox(hitbox:Hitbox) {
-		hitboxes.add(hitbox);
-		add(hitbox);
-	}
-
-	public function addLoot(loot:Loot) {
-		loots.add(loot);
-		worldGroup.add(loot);
-	}
-
-	public function addProjectile(proj:FlxSprite) {
-		projectiles.add(proj);
-		worldGroup.add(proj);
-	}
-
 	public function IncreaseMoney(_money:Int) {
 		money += _money;
 	}
@@ -198,6 +175,10 @@ class PlayState extends FlxState
 
 		if(FlxG.keys.justPressed.P) {
 			shader.isShaderActive.value[0] = !shader.isShaderActive.value[0];
+		}
+
+		if(FlxG.keys.justPressed.N) {
+			FmodFlxUtilities.TransitionToState(new OutsideTheMinesState());
 		}
 
 		if(FlxG.keys.justPressed.G) {
@@ -272,15 +253,5 @@ class PlayState extends FlxState
         var direction = new FlxPoint(player.getMidpoint().x-other.getMidpoint().x, other.getMidpoint().y-player.getMidpoint().y);
         var directionNormalized = MathHelpers.NormalizeVector(direction);
         return directionNormalized;
-	}
-
-	override public function onFocus() {
-		super.onFocus();
-		FmodManager.UnpauseSong();
-	}
-
-	override public function onFocusLost() {
-		super.onFocusLost();
-		FmodManager.PauseSong();
 	}
 }

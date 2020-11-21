@@ -1,5 +1,6 @@
 package states;
 
+import entities.Interactable;
 import entities.Stats;
 import haxe.Timer;
 import flixel.tile.FlxTilemap;
@@ -39,6 +40,7 @@ class BaseState extends FlxState
 	var loots:FlxTypedGroup<Loot> = new FlxTypedGroup<Loot>();
 	var enemies:FlxTypedGroup<Enemy> = new FlxTypedGroup<Enemy>();
 	var projectiles:FlxTypedGroup<FlxSprite> = new FlxTypedGroup<FlxSprite>();
+	var interactables:FlxTypedGroup<Interactable> = new FlxTypedGroup<Interactable>();
 
 	var worldGroup:FlxGroup = new FlxGroup();
 
@@ -55,6 +57,11 @@ class BaseState extends FlxState
 	public function addProjectile(proj:FlxSprite) {
 		projectiles.add(proj);
 		worldGroup.add(proj);
+	}
+
+	public function addInteractable(interactable:Interactable) {
+		interactables.add(interactable);
+		worldGroup.add(interactable);
 	}
 
 	override public function onFocus() {

@@ -31,7 +31,7 @@ class Actions {
 		right.addKey(FlxKey.RIGHT, PRESSED);
 		right.addGamepad(DPAD_RIGHT, PRESSED);
 
-		attack.addKey(FlxKey.Z, PRESSED);
-		attack.addGamepad(A, PRESSED);
+		attack.addKey(FlxKey.Z, JUST_PRESSED);
+		attack.addGamepad(A, JUST_PRESSED);
 	}
 }

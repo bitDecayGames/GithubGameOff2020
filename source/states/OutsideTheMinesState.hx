@@ -1,5 +1,7 @@
 package states;
 
+import textpop.SlowFade;
+import com.bitdecay.textpop.TextPop;
 import haxe.Timer;
 import flixel.tweens.FlxTween;
 import shaders.MosaicManager;
@@ -30,6 +32,10 @@ import entities.Interactable;
 
 class OutsideTheMinesState extends BaseState
 {
+	public inline static var SkipIntro:Bool = true;
+
+	var skipIntro:Bool;
+
 	var player:Player;
 
 	var moneyText:FlxText;
@@ -42,9 +48,14 @@ class OutsideTheMinesState extends BaseState
 	var uiCamera:FlxCamera;
 	var uiGroup:FlxGroup;
 
-	var axe:FlxSprite;
+	var axe:Interactable;
 	
 	var dialogManager:dialogbox.DialogManager;
+
+	public function new(?_skipIntro:Bool = false) {
+		skipIntro = _skipIntro;
+		super();
+	}
 
 	override public function create()
 	{
@@ -64,49 +75,9 @@ class OutsideTheMinesState extends BaseState
 
 		mosaicShaderManager = new MosaicManager();
 		mosaicFilter = new ShaderFilter(mosaicShaderManager.shader);
-		camera.setFilters([mosaicFilter]);
-		uiCamera.setFilters([mosaicFilter]);
-		
-		// mosaicShaderManager.setStrength(5, 5);
 
-		camera.alpha = 0;
-		uiCamera.alpha = 0;
-		
 		FmodManager.StopSongImmediately();
-
 		FmodManager.PlaySong(FmodSongs.OutsideTheMines);
-
-		var fallSoundDelay = 2000;
-		var fadeInDelay = fallSoundDelay + 6000;
-		var standUpDelay = 2000;
-
-		Timer.delay(() -> {
-			FmodManager.PlaySoundOneShot(FmodSFX.PlayerFall);
-		}, fallSoundDelay);
-
-
-		Timer.delay(() -> {
-
-			camera.fade(FlxColor.BLACK, 1.5, true);
-			uiCamera.fade(FlxColor.BLACK, 1.5, true);
-			
-			camera.alpha = 1;
-			uiCamera.alpha = 1;
-
-			FlxTween.num(15, 1, 3, {}, function(v)
-				{
-					mosaicShaderManager.setStrength(v, v);
-				}).onComplete = (t) -> {
-					camera.setFilters([]);
-					uiCamera.setFilters([]);
-					
-					Timer.delay(() -> {
-						player.setControlsActive(true);
-						dialogManager = new DialogManager(this, uiCamera);
-						dialogManager.loadDialog(0);
-					}, standUpDelay);
-				};
-		}, fadeInDelay);
 
 		currentLevel = new Level();
 		add(currentLevel.debugLayer);
@@ -115,12 +86,12 @@ class OutsideTheMinesState extends BaseState
 
 		var exitTiles = currentLevel.interactableLayer.getTileCoords(3, false);
 		axe = new Interactable("axe", exitTiles[0]);
-		add(axe);
+		addInteractable(axe);
 
 		player = new Player(this, new FlxPoint(FlxG.width/2, FlxG.height/2));
 		add(player);
 
-		player.setControlsActive(false);
+		// This will be set in state eventually
 		player.setCanAttack(false);
 
 		moneyText = new FlxText(1, 1, 1000, "Money: ", 10);
@@ -130,6 +101,52 @@ class OutsideTheMinesState extends BaseState
 		playerHealthText.cameras = [uiCamera];
 		add(playerHealthText);
 		
+		add(worldGroup);
+		
+		if (skipIntro){
+			dialogManager = new DialogManager(this, uiCamera);
+			dialogManager.loadDialog(0);
+		} else {
+
+			player.setControlsActive(false);
+
+			camera.setFilters([mosaicFilter]);
+			uiCamera.setFilters([mosaicFilter]);
+
+			camera.alpha = 0;
+			uiCamera.alpha = 0;
+	
+			var fallSoundDelay = 2000;
+			var fadeInDelay = fallSoundDelay + 6000;
+			var standUpDelay = 2000;
+	
+			Timer.delay(() -> {
+				FmodManager.PlaySoundOneShot(FmodSFX.PlayerFall);
+			}, fallSoundDelay);
+	
+			Timer.delay(() -> {
+	
+				camera.fade(FlxColor.BLACK, 1.5, true);
+				uiCamera.fade(FlxColor.BLACK, 1.5, true);
+				
+				camera.alpha = 1;
+				uiCamera.alpha = 1;
+	
+				FlxTween.num(15, 1, 3, {}, function(v)
+					{
+						mosaicShaderManager.setStrength(v, v);
+					}).onComplete = (t) -> {
+						camera.setFilters([]);
+						uiCamera.setFilters([]);
+						
+						Timer.delay(() -> {
+							player.setControlsActive(true);
+							dialogManager = new DialogManager(this, uiCamera);
+							dialogManager.loadDialog(0);
+						}, standUpDelay);
+					};
+			}, fadeInDelay);
+		} 
 	}
 
 	override public function update(elapsed:Float) {
@@ -158,5 +175,16 @@ class OutsideTheMinesState extends BaseState
 
 		moneyText.text = "Money: " + money;
 		playerHealthText.text = "Health: " + player.health;
+
+		
+		FlxG.overlap(interactables, hitboxes, interactWithItem);
+	}
+
+	private function interactWithItem(interactable:Enemy, hitbox:Hitbox) {
+		interactable.destroy();
+		player.setCanAttack(true);
+		FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchase);
+		TextPop.pop(Std.int(player.x), Std.int(player.y), "Shovel", new SlowFade(), 7);
+		TextPop.pop(Std.int(player.x-15), Std.int(player.y-10), "-$5", new SlowFade(), 7);
 	}
 }

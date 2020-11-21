@@ -22,7 +22,11 @@ class LoadFmodState extends FlxState {
     override public function update(elapsed:Float):Void {
         if(FmodManager.IsInitialized()){
             #if tanner
-            FlxG.switchState(new OutsideTheMinesState());
+                #if skip_intro
+                FlxG.switchState(new OutsideTheMinesState(OutsideTheMinesState.SkipIntro));
+                #else
+                FlxG.switchState(new OutsideTheMinesState());
+                #end
             #else
             FlxG.switchState(new PlayState());
             #end

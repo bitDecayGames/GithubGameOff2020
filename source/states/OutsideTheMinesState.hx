@@ -28,14 +28,9 @@ import flixel.math.FlxPoint;
 import flixel.FlxObject;
 import entities.Interactable;
 
-class OutsideTheMinesState extends FlxState
+class OutsideTheMinesState extends BaseState
 {
 	var player:Player;
-	var hitboxes:Array<Hitbox> = new Array<Hitbox>();
-	var loots:Array<Loot> = new Array<Loot>();
-	var enemies:Array<Enemy> = new Array<Enemy>();
-
-	public var currentLevel:Level;
 
 	var moneyText:FlxText;
 	var money:Int = 0;
@@ -77,8 +72,18 @@ class OutsideTheMinesState extends FlxState
 		camera.alpha = 0;
 		uiCamera.alpha = 0;
 		
-		FmodManager.PlaySoundOneShot(FmodSFX.PlayerFall);
 		FmodManager.StopSongImmediately();
+
+		FmodManager.PlaySong(FmodSongs.OutsideTheMines);
+
+		var fallSoundDelay = 2000;
+		var fadeInDelay = fallSoundDelay + 6000;
+		var standUpDelay = 2000;
+
+		Timer.delay(() -> {
+			FmodManager.PlaySoundOneShot(FmodSFX.PlayerFall);
+		}, fallSoundDelay);
+
 
 		Timer.delay(() -> {
 
@@ -95,11 +100,13 @@ class OutsideTheMinesState extends FlxState
 					camera.setFilters([]);
 					uiCamera.setFilters([]);
 					
-					dialogManager = new DialogManager(this, uiCamera);
-					dialogManager.loadDialog(0);
-					FmodManager.PlaySong(FmodSongs.OutsideTheMines);
+					Timer.delay(() -> {
+						player.setControlsActive(true);
+						dialogManager = new DialogManager(this, uiCamera);
+						dialogManager.loadDialog(0);
+					}, standUpDelay);
 				};
-		}, 4000);
+		}, fadeInDelay);
 
 		currentLevel = new Level();
 		add(currentLevel.debugLayer);
@@ -110,8 +117,10 @@ class OutsideTheMinesState extends FlxState
 		axe = new Interactable("axe", exitTiles[0]);
 		add(axe);
 
-		player = new Player(null, new FlxPoint(FlxG.width/2, FlxG.height/2));
+		player = new Player(this, new FlxPoint(FlxG.width/2, FlxG.height/2));
 		add(player);
+
+		player.setControlsActive(false);
 
 		moneyText = new FlxText(1, 1, 1000, "Money: ", 10);
 		moneyText.cameras = [uiCamera];
@@ -148,15 +157,5 @@ class OutsideTheMinesState extends FlxState
 
 		moneyText.text = "Money: " + money;
 		playerHealthText.text = "Health: " + player.health;
-	}
-
-	override public function onFocus() {
-		super.onFocus();
-		FmodManager.UnpauseSong();
-	}
-
-	override public function onFocusLost() {
-		super.onFocusLost();
-		FmodManager.PauseSong();
 	}
 }

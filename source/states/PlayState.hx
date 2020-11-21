@@ -202,6 +202,10 @@ class PlayState extends FlxState
 			shader.isShaderActive.value[0] = !shader.isShaderActive.value[0];
 		}
 
+		if(FlxG.keys.justPressed.N) {
+			FmodFlxUtilities.TransitionToState(new OutsideTheMinesState());
+		}
+
 		if(FlxG.keys.justPressed.G) {
 			if (player.alive) {
 				player.kill();

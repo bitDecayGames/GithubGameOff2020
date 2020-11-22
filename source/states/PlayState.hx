@@ -120,7 +120,6 @@ class PlayState extends BaseState
 		shader.iTime.value = [0];
 		shader.lightSourceX.value = [0];
 		shader.lightSourceY.value = [0];
-		shader.lightRadius.value = [100];
 		shader.isShaderActive.value = [true];
 		lightFilter = new ShaderFilter(shader);
 		camera.setFilters([lightFilter]);
@@ -186,8 +185,9 @@ class PlayState extends BaseState
 		FmodManager.Update();
 
 		shader.iTime.value[0] += elapsed;
-		shader.lightSourceX.value[0] = player.getMidpoint().x;
-		shader.lightSourceY.value[0] = player.getMidpoint().y;
+		shader.lightSourceX.value[0] = player.getMidpoint().x + player.lightOffset.x;
+		shader.lightSourceY.value[0] = player.getMidpoint().y + player.lightOffset.y;
+		shader.lightRadius.value = [player.activeStats.lightRadius];
 
 		if(FlxG.keys.justPressed.P) {
 			shader.isShaderActive.value[0] = !shader.isShaderActive.value[0];

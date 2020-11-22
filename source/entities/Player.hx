@@ -31,6 +31,8 @@ class Player extends Entity {
     var playerHitboxOffsetX = 4;
     var playerHitboxOffsetY = 14;
 
+    public var lightOffset = FlxPoint.get(0, -11);
+
     public var invincibilityTimeLeft:Float = 0;
 
     public var shovel:FlxSprite;
@@ -134,6 +136,9 @@ class Player extends Entity {
 
 	override public function update(delta:Float):Void {
         super.update(delta);
+
+        activeStats.lightRadius -= activeStats.lightDrainRate * delta;
+
         if (invincibilityTimeLeft > 0){
             invincibilityTimeLeft -= delta;
         }
@@ -171,7 +176,20 @@ class Player extends Entity {
                 setPosition(x + directionVector.x, y + directionVector.y);
                 facing = determineFacing(potentialDirection);
                 playAnimation(facing, directionVector, attacking);
+                updateLightOffset();
             }
+        }
+    }
+
+    function updateLightOffset() {
+        if (facing == FlxObject.UP) {
+            lightOffset.set(0, -14);
+        } else if (facing == FlxObject.DOWN) {
+            lightOffset.set(0, -11);
+        } else if (facing == FlxObject.LEFT) {
+            lightOffset.set(-5, -11);
+        } else if (facing == FlxObject.RIGHT) {
+            lightOffset.set(5, -11);
         }
     }
 

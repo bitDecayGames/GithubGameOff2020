@@ -3,9 +3,10 @@ package entities;
 typedef StatModifier = Stats -> Void;
 
 class Stats {
-    public var lightRadius = 100;
+    public var lightRadius:Float = 100;
+    public var lightDrainRate:Float = 2; // units per second
     public var maxHealth = 5;
-    public var speed = 75;
+    public var speed:Float = 75;
 
     public function new() {}
 

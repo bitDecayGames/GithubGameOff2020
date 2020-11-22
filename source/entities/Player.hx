@@ -41,6 +41,9 @@ class Player extends Entity {
         baseStats.speed = 75;
         refresh();
 
+        // TODO: this will need to be updated somehow, somewhere based on the stats
+        health = baseStats.maxHealth;
+
         size = new FlxPoint(16, 32);
         direction = 0;
         attacking = false;
@@ -103,11 +106,11 @@ class Player extends Entity {
             facing = FlxObject.DOWN;
         }
     }
-    
+
     public function setControlsActive(_areActive:Bool){
         areControlsActive = _areActive;
     }
-    
+
     public function setCanAttack(_canAttack:Bool){
         canAttack = _canAttack;
     }

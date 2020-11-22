@@ -12,6 +12,7 @@ class Stats {
 
     public function copyTo(other:Stats) {
         other.lightRadius = lightRadius;
+        other.lightDrainRate = lightDrainRate;
         other.maxHealth = maxHealth;
         other.speed = speed;
     }

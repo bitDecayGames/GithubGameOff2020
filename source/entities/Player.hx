@@ -1,5 +1,6 @@
 package entities;
 
+import upgrades.Upgrade;
 import states.BaseState;
 import entities.Stats.StatModifier;
 import haxefmod.flixel.FmodFlxUtilities;
@@ -29,6 +30,8 @@ class Player extends Entity {
     var playerHitboxOffsetY = 8;
 
     public var invincibilityTimeLeft:Float = 0;
+
+    public var upgrades:Array<Upgrade> = new Array<Upgrade>();
 
     public var shovel:FlxSprite;
 
@@ -353,5 +356,18 @@ class Player extends Entity {
         }
 
         return facing;
+    }
+
+    public function addUpgrade(upgrade:Upgrade) {
+        upgrades.push(upgrade);
+        addModifier(upgrade.modifier);
+        organizeUpgrades();
+    }
+
+    public function organizeUpgrades() {
+        for (i in 0...upgrades.length) {
+            upgrades[i].x = i * 16;
+            upgrades[i].y = FlxG.height - upgrades[i].height;
+        }
     }
 }

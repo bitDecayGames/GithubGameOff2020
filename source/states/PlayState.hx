@@ -43,7 +43,11 @@ class PlayState extends BaseState
 	var shader:Lighten;
 	var lightFilter:ShaderFilter;
 
+	// uiCamera to keep stuff locked to screen positions
 	var uiCamera:FlxCamera;
+
+	// Anything added to this group renders only on the uiCamera
+	var uiGroup:FlxGroup = new FlxGroup();
 
 	var levelExit:FlxSprite;
 
@@ -59,15 +63,18 @@ class PlayState extends BaseState
 		uiCamera = new FlxCamera(0, 0, 320, 240);
 		uiCamera.bgColor = FlxColor.TRANSPARENT;
 		FlxG.cameras.add(uiCamera);
+		add(uiGroup);
 
 		camera.pixelPerfectRender = true;
 
 		setupLightShader();
 
 		FmodManager.PlaySong(FmodSongs.Cave);
-		
+
 		camera.fade(FlxColor.BLACK, 1.5, true);
 		uiCamera.fade(FlxColor.BLACK, 1.5, true);
+
+		uiGroup.cameras = [uiCamera];
 
 		currentLevel = new Level();
 		add(currentLevel.debugLayer);
@@ -79,6 +86,11 @@ class PlayState extends BaseState
 		add(levelExit);
 
 		player = new Player(this, new FlxPoint(FlxG.width/2, FlxG.height/2));
+
+		var shovelUpgrade = new upgrades.Shovel();
+		player.addUpgrade(shovelUpgrade);
+		uiGroup.add(shovelUpgrade);
+
 		worldGroup.add(player);
 
 
@@ -96,19 +108,18 @@ class PlayState extends BaseState
 		worldGroup.add(enemy4);
 
 		moneyText = new FlxText(1, 1, 1000, "Money: ", 10);
-		moneyText.cameras = [uiCamera];
-		add(moneyText);
+		uiGroup.add(moneyText);
+
 		playerHealthText = new FlxText(1, 15, 1000, "Health: ", 10);
-		playerHealthText.cameras = [uiCamera];
-		add(playerHealthText);
+		uiGroup.add(playerHealthText);
 
 		add(worldGroup);
 
 		Timer.delay(() -> {
 			trace("adding mod");
-			player.addModifier(function (stats:Stats) {
-				stats.speed += 50;
-			});
+			var speedClog = new upgrades.SpeedClog();
+			uiGroup.add(speedClog);
+			player.addUpgrade(speedClog);
 		}, 5000);
 	}
 

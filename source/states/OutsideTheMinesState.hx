@@ -120,6 +120,8 @@ class OutsideTheMinesState extends BaseState
 
 			player.setControlsActive(false);
 
+			player.animation.play("faceplant");
+
 			camera.setFilters([mosaicFilter]);
 			uiCamera.setFilters([mosaicFilter]);
 
@@ -150,9 +152,9 @@ class OutsideTheMinesState extends BaseState
 						uiCamera.setFilters([]);
 						
 						Timer.delay(() -> {
-							player.setControlsActive(true);
 							dialogManager = new DialogManager(this, uiCamera);
 							dialogManager.loadDialog(0);
+							player.animation.play("faceplant_get_up");
 						}, standUpDelay);
 					};
 			}, fadeInDelay);
@@ -189,7 +191,6 @@ class OutsideTheMinesState extends BaseState
 		// Dynamic volume commented out for now
 		// var shopVolume = Math.max(0, 1-(distanceFromShop/shopVolumeRadius));
 		var shopVolume = 1;
-		trace("Shop volume: " + shopVolume);
 		FmodManager.SetEventParameterOnSong("ShopVolume", shopVolume);
 
 		moneyText.text = "Money: " + money;

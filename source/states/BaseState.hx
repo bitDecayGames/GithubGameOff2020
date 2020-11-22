@@ -1,5 +1,6 @@
 package states;
 
+import interactables.Interactable;
 import entities.Stats;
 import haxe.Timer;
 import flixel.tile.FlxTilemap;
@@ -34,11 +35,13 @@ import textpop.SlowFade;
 class BaseState extends FlxState
 {
 	public var currentLevel:Level;
+	public var isTransitioningStates:Bool;
 
 	var hitboxes:FlxTypedGroup<Hitbox> = new FlxTypedGroup<Hitbox>();
 	var loots:FlxTypedGroup<Loot> = new FlxTypedGroup<Loot>();
 	var enemies:FlxTypedGroup<Enemy> = new FlxTypedGroup<Enemy>();
 	var projectiles:FlxTypedGroup<FlxSprite> = new FlxTypedGroup<FlxSprite>();
+	var interactables:FlxTypedGroup<Interactable> = new FlxTypedGroup<Interactable>();
 
 	var worldGroup:FlxGroup = new FlxGroup();
 
@@ -57,13 +60,22 @@ class BaseState extends FlxState
 		worldGroup.add(proj);
 	}
 
+	public function addInteractable(interactable:Interactable) {
+		interactables.add(interactable);
+		worldGroup.add(interactable);
+	}
+
 	override public function onFocus() {
 		super.onFocus();
 		FmodManager.UnpauseSong();
+		// Hack to deal with the lack of global sound pausing
+		FmodManager.UnpauseSound("typewriterSoundId");
 	}
 
 	override public function onFocusLost() {
 		super.onFocusLost();
 		FmodManager.PauseSong();
+		// Hack to deal with the lack of global sound pausing
+		FmodManager.PauseSound("typewriterSoundId");
 	}
 }

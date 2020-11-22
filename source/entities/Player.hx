@@ -59,17 +59,31 @@ class Player extends Entity {
         animation.add("walk_right", [10,11,12,13,14,15,16,17], animationSpeed);
         animation.add("walk_down", [1,2,3,4,5,6,7,8], animationSpeed);
         animation.add("walk_left", [10,11,12,13,14,15,16,17], animationSpeed);
+
         animation.add("stand_up", [18], animationSpeed);
         animation.add("stand_right", [9], animationSpeed);
         animation.add("stand_down", [0], animationSpeed);
         animation.add("stand_left", [9], animationSpeed);
 
+        var attackAnimationSpeed:Int = 30;
+
+        animation.add("swipe_down", [27,28,29,30,31,32,33,34], attackAnimationSpeed, false);
+        animation.add("swipe_right", [36,37,38,39,40,41,42,43], attackAnimationSpeed, false);
+        animation.add("swipe_up", [45,46,47,48,49,50,51,52], attackAnimationSpeed, false);
+        animation.add("swipe_left", [36,37,38,39,40,41,42,43], attackAnimationSpeed, false);
+
+        animation.add("faceplant", [54], animationSpeed);
+        animation.add("faceplant_get_up", [55,56,57,58,59], animationSpeed, false);
+
         animation.play("stand_down");
 
         animation.callback = animCallback;
+        animation.finishCallback = animationOnFinishCallback;
 
         setFacingFlip(FlxObject.LEFT, true, false);
         setFacingFlip(FlxObject.RIGHT, false, false);
+        setFacingFlip(FlxObject.DOWN, false, false);
+        setFacingFlip(FlxObject.UP, false, false);
     }
 
     public function animCallback(name:String, frameNumber:Int, frameIndex:Int):Void {
@@ -79,6 +93,14 @@ class Player extends Entity {
 		} else {
             // reset this once a different frame happens
             stepFXPlayed = false;
+        }
+    }
+
+    public function animationOnFinishCallback(name:String) {
+        if (name == "faceplant_get_up") {
+            areControlsActive = true;
+            animation.play("stand_down");
+            facing = FlxObject.DOWN;
         }
     }
     
@@ -98,7 +120,6 @@ class Player extends Entity {
 
         var potentialDirection:FlxPoint = new FlxPoint(0, 0);
 		potentialDirection = readDirectionInput();
-        facing = determineFacing(potentialDirection);
 
         if (inKnockback){
             setPosition(x + knockbackDirection.x*delta*knockbackSpeed, y + knockbackDirection.y*delta*knockbackSpeed*-1);
@@ -109,8 +130,9 @@ class Player extends Entity {
                     FmodFlxUtilities.TransitionToState(new PlayState());
                 }
             }
+            facing = determineFacing(potentialDirection);
             playDamageAnimation(facing);
-        } else if (areControlsActive) {
+        } else if (areControlsActive && !parentState.isTransitioningStates) {
             if (controls.attack.check() && !attacking) {
 
                 attacking = true;
@@ -118,20 +140,41 @@ class Player extends Entity {
                 Timer.delay(() -> {
                     attacking = false;
                 }, 200);
+                facing = determineFacing(potentialDirection);
+                playAnimation(facing, null, attacking);
             }
 
             var directionVector:FlxPoint = null;
             if (!attacking){
                 directionVector = MathHelpers.NormalizeVector(potentialDirection);
                 directionVector.scale(delta*activeStats.speed);
-                // y needs to be flipped to move character in the right direction
                 setPosition(x + directionVector.x, y + directionVector.y);
+                facing = determineFacing(potentialDirection);
+                playAnimation(facing, directionVector, attacking);
             }
-            playAnimation(facing, directionVector);
+        }
+
+        if (parentState.isTransitioningStates) {
+            playAnimation(facing, null, attacking);
         }
     }
 
-    function playAnimation(_facing:Int, _directionVector:FlxPoint){
+    function playAnimation(_facing:Int, _directionVector:FlxPoint, _attacking:Bool){
+
+        if (_attacking){
+            switch _facing {
+                case FlxObject.RIGHT:
+                    animation.play("swipe_right");
+                case FlxObject.DOWN:
+                    animation.play("swipe_down");
+                case FlxObject.LEFT:
+                    animation.play("swipe_left");
+                case FlxObject.UP:
+                    animation.play("swipe_up");
+            }
+            return;
+        }
+
         if (_directionVector == null || _directionVector.x == 0 && _directionVector.y == 0){
             switch _facing {
                 case FlxObject.RIGHT:
@@ -176,6 +219,9 @@ class Player extends Entity {
 
     public function setKnockback(_knockbackDirection:FlxPoint, _knockbackSpeed:Float, _knockbackDuration:Float) {
         inKnockback = true;
+        if (shovel != null) {
+            shovel.destroy();
+        }
         knockbackDirection = _knockbackDirection;
         knockbackSpeed = _knockbackSpeed;
         knockbackDuration = _knockbackDuration;
@@ -220,9 +266,12 @@ class Player extends Entity {
     function spawnShovel(position:FlxPoint, facing:Int) {
         shovel = new FlxSprite();
         parentState.add(shovel);
-        shovel.loadGraphic(AssetPaths.Player__png, true, 16, 32);
-        shovel.animation.add("swing", [27,28,29,30,31,32,33,34,35], 30);
+        shovel.loadGraphic(AssetPaths.shovel__png, true, 16, 32);
+        shovel.animation.add("swing", [0,1,2,3,4,5,6,7,8], 30, false);
         shovel.animation.play("swing");
+        shovel.animation.finishCallback = (name) -> {
+            shovel.destroy();
+        }
         shovel.setMidpoint(position.x, position.y);
         shovel.animation.callback = shovelAnimCallback;
 

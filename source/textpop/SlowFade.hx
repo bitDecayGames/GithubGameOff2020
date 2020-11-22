@@ -13,6 +13,10 @@ class SlowFade implements Style {
 
 	public function Stylize(obj:FlxObject):FlxTween {
 		var flxObj:FlxObject = obj;
+		var textObj = cast(obj, FlxText);
+		if (textObj.text == "Not enough money") {
+			textObj.color = FlxColor.RED;
+		}
 		var tween = FlxTween.tween(flxObj, { y: flxObj.y - 30, alpha: 0}, 2);
 		return tween;
 	}

@@ -21,6 +21,8 @@ class FmodSFX {
     public static inline var CollectCoin:String = "event:/SFX/Player/Collect/CollectCoin";
     public static inline var PlayerFall:String = "event:/SFX/Player/Fall/PlayerFall";
     public static inline var FootstepRock:String = "event:/SFX/Player/Footsteps/FootstepRock";
+    public static inline var PlayerPurchase:String = "event:/SFX/Player/Purchase/PlayerPurchase";
+    public static inline var PlayerPurchaseFail:String = "event:/SFX/Player/Purchase/PlayerPurchaseFail";
     public static inline var ShovelEnemyImpact:String = "event:/SFX/Player/Shovel/ShovelEnemyImpact";
     public static inline var ShovelSwing:String = "event:/SFX/Player/Shovel/ShovelSwing";
     public static inline var PlayerTakeDamage:String = "event:/SFX/Player/TakeDamage/PlayerTakeDamage";

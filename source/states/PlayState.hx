@@ -65,13 +65,16 @@ class PlayState extends BaseState
 		setupLightShader();
 
 		FmodManager.PlaySong(FmodSongs.Cave);
+		
+		camera.fade(FlxColor.BLACK, 1.5, true);
+		uiCamera.fade(FlxColor.BLACK, 1.5, true);
 
 		currentLevel = new Level();
 		add(currentLevel.debugLayer);
 		add(currentLevel.navigationLayer);
 		add(currentLevel.interactableLayer);
 
-		var exitTiles = currentLevel.interactableLayer.getTileCoords(3, false);
+		var exitTiles = currentLevel.interactableLayer.getTileCoords(4, false);
 		levelExit = new Rope(exitTiles[0], new FlxPoint(16,16));
 		add(levelExit);
 
@@ -125,7 +128,12 @@ class PlayState extends BaseState
 	}
 
 	private function playerExitTouch(p:Player, r:Rope) {
-		FmodFlxUtilities.TransitionToState(new OutsideTheMinesState());
+		if (!isTransitioningStates){
+			isTransitioningStates = true;
+			camera.fade(FlxColor.BLACK, 2, false, null, true);
+			uiCamera.fade(FlxColor.BLACK, 2, false, null, true);
+			FmodFlxUtilities.TransitionToStateAndStopMusic(new OutsideTheMinesState(OutsideTheMinesState.SkipIntro));
+		}
 	}
 
 	private function enemyHitboxTouch(enemy:Enemy, hitbox:Hitbox) {
@@ -172,6 +180,7 @@ class PlayState extends BaseState
 
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
+		FmodManager.Update();
 
 		shader.iTime.value[0] += elapsed;
 		shader.lightSourceX.value[0] = player.getMidpoint().x;
@@ -182,7 +191,7 @@ class PlayState extends BaseState
 		}
 
 		if(FlxG.keys.justPressed.N) {
-			FmodFlxUtilities.TransitionToState(new OutsideTheMinesState());
+			FmodFlxUtilities.TransitionToState(new OutsideTheMinesState(OutsideTheMinesState.SkipIntro));
 		}
 
 		if(FlxG.keys.justPressed.G) {

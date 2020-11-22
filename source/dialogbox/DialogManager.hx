@@ -13,6 +13,7 @@ class DialogManager {
     var typeText:Dialogbox;
     var parentState:FlxState;
     var renderCamera:FlxCamera;
+    var disableSounds:Bool;
     
     public function new(_parentState:FlxState, _renderCamera:FlxCamera) {
         parentState = _parentState;
@@ -23,6 +24,10 @@ class DialogManager {
     }
 
     public function update() {
+        if (disableSounds){
+            return;
+        }
+
         if (typeText.getIsTyping()){
             if (!FmodManager.IsSoundPlaying(typewriterSoundId)){
                 FmodManager.PlaySoundAndAssignId(FmodSFX.Typewriter, typewriterSoundId);
@@ -51,6 +56,7 @@ class DialogManager {
 
     public function stopSounds() {
         FmodManager.StopSoundImmediately(typewriterSoundId);
+        disableSounds = true;
     }
 
 }

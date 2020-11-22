@@ -1,5 +1,10 @@
 package states;
 
+import interactables.Shovel;
+import interactables.Axe;
+import textpop.SlowFadeDown;
+import textpop.SlowFade;
+import com.bitdecay.textpop.TextPop;
 import haxe.Timer;
 import flixel.tweens.FlxTween;
 import shaders.MosaicManager;
@@ -26,14 +31,18 @@ import entities.Enemy;
 import flixel.FlxState;
 import flixel.math.FlxPoint;
 import flixel.FlxObject;
-import entities.Interactable;
+import interactables.Interactable;
 
 class OutsideTheMinesState extends BaseState
 {
+	public inline static var SkipIntro:Bool = true;
+
+	var skipIntro:Bool;
+
 	var player:Player;
 
 	var moneyText:FlxText;
-	var money:Int = 0;
+	var money:Int = 5;
 	var playerHealthText:FlxText;
 
 	var mosaicShaderManager:MosaicManager;
@@ -42,9 +51,16 @@ class OutsideTheMinesState extends BaseState
 	var uiCamera:FlxCamera;
 	var uiGroup:FlxGroup;
 
-	var axe:FlxSprite;
+	var shovel:Interactable;
 	
+	var levelExit:FlxSprite;
+
 	var dialogManager:dialogbox.DialogManager;
+
+	public function new(?_skipIntro:Bool = false) {
+		skipIntro = _skipIntro;
+		super();
+	}
 
 	override public function create()
 	{
@@ -64,76 +80,91 @@ class OutsideTheMinesState extends BaseState
 
 		mosaicShaderManager = new MosaicManager();
 		mosaicFilter = new ShaderFilter(mosaicShaderManager.shader);
-		camera.setFilters([mosaicFilter]);
-		uiCamera.setFilters([mosaicFilter]);
-		
-		// mosaicShaderManager.setStrength(5, 5);
 
-		camera.alpha = 0;
-		uiCamera.alpha = 0;
-		
 		FmodManager.StopSongImmediately();
-
 		FmodManager.PlaySong(FmodSongs.OutsideTheMines);
-
-		var fallSoundDelay = 2000;
-		var fadeInDelay = fallSoundDelay + 6000;
-		var standUpDelay = 2000;
-
-		Timer.delay(() -> {
-			FmodManager.PlaySoundOneShot(FmodSFX.PlayerFall);
-		}, fallSoundDelay);
-
-
-		Timer.delay(() -> {
-
-			camera.fade(FlxColor.BLACK, 1.5, true);
-			uiCamera.fade(FlxColor.BLACK, 1.5, true);
-			
-			camera.alpha = 1;
-			uiCamera.alpha = 1;
-
-			FlxTween.num(15, 1, 3, {}, function(v)
-				{
-					mosaicShaderManager.setStrength(v, v);
-				}).onComplete = (t) -> {
-					camera.setFilters([]);
-					uiCamera.setFilters([]);
-					
-					Timer.delay(() -> {
-						player.setControlsActive(true);
-						dialogManager = new DialogManager(this, uiCamera);
-						dialogManager.loadDialog(0);
-					}, standUpDelay);
-				};
-		}, fadeInDelay);
 
 		currentLevel = new Level();
 		add(currentLevel.debugLayer);
 		add(currentLevel.navigationLayer);
 		add(currentLevel.interactableLayer);
 
-		var exitTiles = currentLevel.interactableLayer.getTileCoords(3, false);
-		axe = new Interactable("axe", exitTiles[0]);
-		add(axe);
+		var itemTiles = currentLevel.interactableLayer.getTileCoords(3, false);
+		shovel = new Shovel(itemTiles[0]);
+		addInteractable(shovel);
+		
+		var exitTiles = currentLevel.interactableLayer.getTileCoords(4, false);
+		levelExit = new Rope(exitTiles[0], new FlxPoint(16,16));
+		add(levelExit);
 
 		player = new Player(this, new FlxPoint(FlxG.width/2, FlxG.height/2));
-		add(player);
+		worldGroup.add(player);
 
-		player.setControlsActive(false);
+		// This will be set in state eventually
 		player.setCanAttack(false);
 
-		moneyText = new FlxText(1, 1, 1000, "Money: ", 10);
-		moneyText.cameras = [uiCamera];
-		add(moneyText);
-		playerHealthText = new FlxText(1, 15, 1000, "Health: ", 10);
+		playerHealthText = new FlxText(1, 1, 1000, "Health: ", 10);
 		playerHealthText.cameras = [uiCamera];
 		add(playerHealthText);
+		moneyText = new FlxText(1, 15, 1000, "Money: ", 10);
+		moneyText.cameras = [uiCamera];
+		add(moneyText);
 		
+		add(worldGroup);
+		
+		if (skipIntro){
+			camera.fade(FlxColor.BLACK, 1.5, true);
+			uiCamera.fade(FlxColor.BLACK, 1.5, true);
+			dialogManager = new DialogManager(this, uiCamera);
+			dialogManager.loadDialog(0);
+		} else {
+
+			player.setControlsActive(false);
+
+			player.animation.play("faceplant");
+
+			camera.setFilters([mosaicFilter]);
+			uiCamera.setFilters([mosaicFilter]);
+
+			camera.alpha = 0;
+			uiCamera.alpha = 0;
+	
+			var fallSoundDelay = 2000;
+			var fadeInDelay = fallSoundDelay + 6000;
+			var standUpDelay = 2000;
+	
+			Timer.delay(() -> {
+				FmodManager.PlaySoundOneShot(FmodSFX.PlayerFall);
+			}, fallSoundDelay);
+	
+			Timer.delay(() -> {
+	
+				camera.fade(FlxColor.BLACK, 1.5, true);
+				uiCamera.fade(FlxColor.BLACK, 1.5, true);
+				
+				camera.alpha = 1;
+				uiCamera.alpha = 1;
+	
+				FlxTween.num(15, 1, 3, {}, function(v)
+					{
+						mosaicShaderManager.setStrength(v, v);
+					}).onComplete = (t) -> {
+						camera.setFilters([]);
+						uiCamera.setFilters([]);
+						
+						Timer.delay(() -> {
+							dialogManager = new DialogManager(this, uiCamera);
+							dialogManager.loadDialog(0);
+							player.animation.play("faceplant_get_up");
+						}, standUpDelay);
+					};
+			}, fadeInDelay);
+		} 
 	}
 
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
+		FmodManager.Update();
 
 		if (dialogManager != null){
 			dialogManager.update();
@@ -148,15 +179,51 @@ class OutsideTheMinesState extends BaseState
 			player.setCanAttack(true);
 		}
 
+		if (FlxG.keys.justPressed.MINUS) {
+			money--;
+		}
+
+		if (FlxG.keys.justPressed.PLUS) {
+			money++;
+		}
+
 		var shopVolumeRadius = 100;
-		var distanceFromShop = player.getPosition().distanceTo(axe.getPosition());
+		var distanceFromShop = player.getPosition().distanceTo(shovel.getPosition());
 		// Dynamic volume commented out for now
 		// var shopVolume = Math.max(0, 1-(distanceFromShop/shopVolumeRadius));
 		var shopVolume = 1;
-		trace("Shop volume: " + shopVolume);
 		FmodManager.SetEventParameterOnSong("ShopVolume", shopVolume);
 
 		moneyText.text = "Money: " + money;
 		playerHealthText.text = "Health: " + player.health;
+
+		
+		FlxG.overlap(interactables, hitboxes, interactWithItem);
+		FlxG.collide(player, levelExit, playerExitTouch);
+	}
+
+	private function interactWithItem(interactable:Interactable, hitbox:Hitbox) {
+		if (!interactable.hasBeenHitByThisHitbox(hitbox)) {
+			if (money >= interactable.cost){
+				money -= interactable.cost;
+				interactable.onInteract(player);
+				TextPop.pop(Std.int(40), Std.int(30), "-$5", new SlowFadeDown(), 10);
+				FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchase);
+			} else {
+				TextPop.pop(Std.int(player.x), Std.int(player.y), "Not enough money", new SlowFade(), 10);
+				FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchaseFail);
+			}
+			interactable.trackHitbox(hitbox);
+		}
+	}
+
+	private function playerExitTouch(p:Player, r:Rope) {
+		if (!isTransitioningStates){
+			isTransitioningStates = true;
+			dialogManager.stopSounds();
+			camera.fade(FlxColor.BLACK, 2, false, null, true);
+			uiCamera.fade(FlxColor.BLACK, 2, false, null, true);
+			FmodFlxUtilities.TransitionToStateAndStopMusic(new PlayState());
+		}
 	}
 }

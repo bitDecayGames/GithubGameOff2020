@@ -27,7 +27,7 @@ class Player extends Entity {
     var movementRatio = new FlxPoint(1, 0.8);
 
     var playerHitboxOffsetX = 4;
-    var playerHitboxOffsetY = 20;
+    var playerHitboxOffsetY = 14;
 
     public var invincibilityTimeLeft:Float = 0;
 
@@ -56,7 +56,7 @@ class Player extends Entity {
         super.loadGraphic(AssetPaths.Player__png, true, 16, 32);
 
         // Update hitbox to be smaller than sprite
-        setSize(8, 8);
+        setSize(8, 10);
         offset.set(playerHitboxOffsetX, playerHitboxOffsetY);
 
         var animationSpeed:Int = 8;

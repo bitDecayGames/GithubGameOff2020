@@ -1,5 +1,6 @@
 package states;
 
+import interactables.Shoe;
 import flixel.util.FlxSort;
 import helpers.SortingHelpers;
 import interactables.Shovel;
@@ -40,6 +41,11 @@ class OutsideTheMinesState extends BaseState
 {
 	public inline static var SkipIntro:Bool = true;
 
+	public static inline var shovel_index = 1;
+	public static inline var shoe_index = 3;
+	public static inline var rope_index = 5;
+	public static inline var shopkeep_index = 4;
+
 	var skipIntro:Bool;
 
 	var player:Player;
@@ -52,7 +58,6 @@ class OutsideTheMinesState extends BaseState
 	var mosaicFilter:ShaderFilter;
 
 	var uiCamera:FlxCamera;
-	var uiGroup:FlxGroup;
 
 	var shovel:Interactable;
 
@@ -94,16 +99,20 @@ class OutsideTheMinesState extends BaseState
 		currentLevel.interactableLayer.alpha = 0;
 		add(currentLevel.interactableLayer);
 
-		var itemTiles = currentLevel.interactableLayer.getTileCoords(3, false);
+		var itemTiles = currentLevel.interactableLayer.getTileCoords(shovel_index, false);
 		shovel = new Shovel(itemTiles[0]);
 		addInteractable(shovel);
 
-		var exitTiles = currentLevel.interactableLayer.getTileCoords(4, false);
+		itemTiles = currentLevel.interactableLayer.getTileCoords(shoe_index, false);
+		var shoe = new Shoe(itemTiles[0]);
+		addInteractable(shoe);
+
+		var exitTiles = currentLevel.interactableLayer.getTileCoords(rope_index, false);
 		levelExit = new Rope(exitTiles[0], new FlxPoint(16,16));
 		worldGroup.add(levelExit);
 
-		var shopkeepTiles = currentLevel.interactableLayer.getTileCoords(2, false);
-		new Shopkeep(shopkeepTiles[0]);
+		var shopkeepTiles = currentLevel.interactableLayer.getTileCoords(shopkeep_index, false);
+		new Shopkeep(this, shopkeepTiles[0]);
 
 		player = new Player(this, new FlxPoint(FlxG.width/2, FlxG.height/2));
 		worldGroup.add(player);
@@ -119,6 +128,7 @@ class OutsideTheMinesState extends BaseState
 		add(moneyText);
 
 		add(worldGroup);
+		add(uiGroup);
 
 		if (skipIntro){
 			camera.fade(FlxColor.BLACK, 1.5, true);
@@ -210,7 +220,7 @@ class OutsideTheMinesState extends BaseState
 
 		FlxG.overlap(interactables, hitboxes, interactWithItem);
 		FlxG.collide(player, levelExit, playerExitTouch);
-		
+
 		worldGroup.sort(SortingHelpers.SortByY, FlxSort.ASCENDING);
 	}
 
@@ -239,5 +249,14 @@ class OutsideTheMinesState extends BaseState
 			FmodFlxUtilities.TransitionToStateAndStopMusic(new PlayState());
 			player.setPosition(r.x+4, r.y+4);
 		}
+	}
+
+	override public function destroy() {
+		// we don't want the player to get destroyed
+		worldGroup.remove(player);
+		for (int in interactables) {
+			worldGroup.remove(int);
+		}
+		super.destroy();
 	}
 }

@@ -47,9 +47,6 @@ class PlayState extends BaseState
 	// uiCamera to keep stuff locked to screen positions
 	var uiCamera:FlxCamera;
 
-	// Anything added to this group renders only on the uiCamera
-	var uiGroup:FlxGroup = new FlxGroup();
-
 	var levelExit:FlxSprite;
 
 	override public function create()
@@ -64,6 +61,7 @@ class PlayState extends BaseState
 		uiCamera = new FlxCamera(0, 0, 320, 240);
 		uiCamera.bgColor = FlxColor.TRANSPARENT;
 		FlxG.cameras.add(uiCamera);
+		uiGroup.cameras = [uiCamera];
 		add(uiGroup);
 
 		camera.pixelPerfectRender = true;
@@ -74,8 +72,6 @@ class PlayState extends BaseState
 
 		camera.fade(FlxColor.BLACK, 1.5, true);
 		uiCamera.fade(FlxColor.BLACK, 1.5, true);
-
-		uiGroup.cameras = [uiCamera];
 
 		currentLevel = new Level(AssetPaths.test__json);
 		// add(currentLevel.debugLayer);
@@ -90,9 +86,9 @@ class PlayState extends BaseState
 
 		player = new Player(this, new FlxPoint(FlxG.width/2, FlxG.height/2));
 
-		var shovelUpgrade = new upgrades.Shovel();
-		player.addUpgrade(shovelUpgrade);
-		uiGroup.add(shovelUpgrade);
+		// var shovelUpgrade = new upgrades.Shovel();
+		// player.addUpgrade(shovelUpgrade);
+		// uiGroup.add(shovelUpgrade);
 
 		worldGroup.add(player);
 
@@ -118,12 +114,12 @@ class PlayState extends BaseState
 
 		add(worldGroup);
 
-		Timer.delay(() -> {
-			trace("adding mod");
-			var speedClog = new upgrades.SpeedClog();
-			uiGroup.add(speedClog);
-			player.addUpgrade(speedClog);
-		}, 5000);
+		// Timer.delay(() -> {
+		// 	trace("adding mod");
+		// 	var speedClog = new upgrades.SpeedClog();
+		// 	uiGroup.add(speedClog);
+		// 	player.addUpgrade(speedClog);
+		// }, 5000);
 	}
 
 	private function setupLightShader() {

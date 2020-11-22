@@ -1,12 +1,17 @@
 package interactables;
 
+import upgrades.Upgrade;
 import flixel.math.FlxPoint;
 import entities.Player;
 
 class Shovel extends Interactable {
+
     public function new(_position:FlxPoint) {
         super(_position);
-        super.loadGraphic(AssetPaths.shovel__png, true, 16, 16);
+
+        containedUpgrade = new upgrades.Shovel();
+
+        this.frame = containedUpgrade.frame;
 
         name = "Shovel";
         cost = 5;

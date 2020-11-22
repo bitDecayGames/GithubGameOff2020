@@ -19,6 +19,8 @@ using extensions.FlxObjectExt;
 
 class Player extends Entity {
 
+    public static var state = new PlayerState();
+
     var controls:Actions;
     var areControlsActive = true;
     var canAttack = true;
@@ -31,18 +33,21 @@ class Player extends Entity {
 
     public var invincibilityTimeLeft:Float = 0;
 
-    public var upgrades:Array<Upgrade> = new Array<Upgrade>();
-
     public var shovel:FlxSprite;
 
 	public function new(_parentState:BaseState, _spawnPosition:FlxPoint) {
-        super();
+        super(_parentState);
         controls = new Actions();
 
-        baseStats.lightRadius = 100;
-        baseStats.maxHealth = 5;
-        baseStats.speed = 75;
-        refresh();
+        baseStats = state.baseStats;
+        for (up in state.upgrades) {
+            addModifier(up.modifier);
+        }
+        trace("player has " + state.upgrades.length + " upgrades on load");
+        for (up in state.upgrades) {
+            trace("   " + up.getDescription());
+        }
+        organizeUpgrades();
 
         // TODO: this will need to be updated somehow, somewhere based on the stats
         health = baseStats.maxHealth;
@@ -50,7 +55,6 @@ class Player extends Entity {
         size = new FlxPoint(16, 32);
         direction = 0;
         attacking = false;
-        parentState = _parentState;
         setPosition(_spawnPosition.x, _spawnPosition.y);
 
         super.loadGraphic(AssetPaths.Player__png, true, 16, 32);
@@ -357,15 +361,21 @@ class Player extends Entity {
     }
 
     public function addUpgrade(upgrade:Upgrade) {
-        upgrades.push(upgrade);
+        state.upgrades.push(upgrade);
         addModifier(upgrade.modifier);
         organizeUpgrades();
     }
 
     public function organizeUpgrades() {
-        for (i in 0...upgrades.length) {
-            upgrades[i].x = i * 16;
-            upgrades[i].y = FlxG.height - upgrades[i].height;
+        // TODO... WHY ARENT THESE RENDERING?
+        for (i in 0...state.upgrades.length) {
+            // state.upgrades[i].load();
+            parentState.addUIElement(state.upgrades[i]);
+            state.upgrades[i].x = i * 16 + 10;
+            state.upgrades[i].y = FlxG.height - state.upgrades[i].height;
+            trace("upgrade width: " + state.upgrades[i].width);
+            trace("upgrade height: " + state.upgrades[i].height);
+            trace("upgrade position: " + state.upgrades[i].getPosition());
         }
     }
 }

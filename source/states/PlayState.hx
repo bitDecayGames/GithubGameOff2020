@@ -76,8 +76,9 @@ class PlayState extends BaseState
 
 		uiGroup.cameras = [uiCamera];
 
-		currentLevel = new Level();
-		add(currentLevel.debugLayer);
+		currentLevel = new Level(AssetPaths.test__json);
+		// add(currentLevel.debugLayer);
+		add(currentLevel.groundLayer);
 		add(currentLevel.navigationLayer);
 		add(currentLevel.interactableLayer);
 

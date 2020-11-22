@@ -52,7 +52,7 @@ class OutsideTheMinesState extends BaseState
 	var uiGroup:FlxGroup;
 
 	var shovel:Interactable;
-	
+
 	var levelExit:FlxSprite;
 
 	var dialogManager:dialogbox.DialogManager;
@@ -84,15 +84,16 @@ class OutsideTheMinesState extends BaseState
 		FmodManager.StopSongImmediately();
 		FmodManager.PlaySong(FmodSongs.OutsideTheMines);
 
-		currentLevel = new Level();
-		add(currentLevel.debugLayer);
+		currentLevel = new Level(AssetPaths.outsideTheMines__json);
+		// add(currentLevel.debugLayer);
+		add(currentLevel.groundLayer);
 		add(currentLevel.navigationLayer);
 		add(currentLevel.interactableLayer);
 
 		var itemTiles = currentLevel.interactableLayer.getTileCoords(3, false);
 		shovel = new Shovel(itemTiles[0]);
 		addInteractable(shovel);
-		
+
 		var exitTiles = currentLevel.interactableLayer.getTileCoords(4, false);
 		levelExit = new Rope(exitTiles[0], new FlxPoint(16,16));
 		add(levelExit);
@@ -109,9 +110,9 @@ class OutsideTheMinesState extends BaseState
 		moneyText = new FlxText(1, 15, 1000, "Money: ", 10);
 		moneyText.cameras = [uiCamera];
 		add(moneyText);
-		
+
 		add(worldGroup);
-		
+
 		if (skipIntro){
 			camera.fade(FlxColor.BLACK, 1.5, true);
 			uiCamera.fade(FlxColor.BLACK, 1.5, true);
@@ -128,30 +129,30 @@ class OutsideTheMinesState extends BaseState
 
 			camera.alpha = 0;
 			uiCamera.alpha = 0;
-	
+
 			var fallSoundDelay = 2000;
 			var fadeInDelay = fallSoundDelay + 6000;
 			var standUpDelay = 2000;
-	
+
 			Timer.delay(() -> {
 				FmodManager.PlaySoundOneShot(FmodSFX.PlayerFall);
 			}, fallSoundDelay);
-	
+
 			Timer.delay(() -> {
-	
+
 				camera.fade(FlxColor.BLACK, 1.5, true);
 				uiCamera.fade(FlxColor.BLACK, 1.5, true);
-				
+
 				camera.alpha = 1;
 				uiCamera.alpha = 1;
-	
+
 				FlxTween.num(15, 1, 3, {}, function(v)
 					{
 						mosaicShaderManager.setStrength(v, v);
 					}).onComplete = (t) -> {
 						camera.setFilters([]);
 						uiCamera.setFilters([]);
-						
+
 						Timer.delay(() -> {
 							dialogManager = new DialogManager(this, uiCamera);
 							dialogManager.loadDialog(0);
@@ -159,17 +160,19 @@ class OutsideTheMinesState extends BaseState
 						}, standUpDelay);
 					};
 			}, fadeInDelay);
-		} 
+		}
 	}
 
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
 		FmodManager.Update();
 
+		FlxG.collide(currentLevel.navigationLayer, player);
+
 		if (dialogManager != null){
 			dialogManager.update();
 		}
-		
+
 		if(FlxG.keys.justPressed.N) {
 			FmodFlxUtilities.TransitionToState(new PlayState());
         	FmodManager.StopSoundImmediately("typewriterSoundId");
@@ -197,7 +200,7 @@ class OutsideTheMinesState extends BaseState
 		moneyText.text = "Money: " + money;
 		playerHealthText.text = "Health: " + player.health;
 
-		
+
 		FlxG.overlap(interactables, hitboxes, interactWithItem);
 		FlxG.collide(player, levelExit, playerExitTouch);
 	}

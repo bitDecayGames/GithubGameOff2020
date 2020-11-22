@@ -10,7 +10,7 @@ class PlayerAlive extends DecoratorNode {
         super(child);
     }
 
-    override public function process(delta:Float):NodeStatus {
+    override public function doProcess(delta:Float):NodeStatus {
         if (context.get("navBundle") != null) {
             if (cast(context.get("navBundle"), NavBundle).player.alive) {
                 return child.process(delta);

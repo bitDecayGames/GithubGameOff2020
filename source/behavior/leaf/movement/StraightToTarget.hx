@@ -26,7 +26,7 @@ class StraightToTarget extends LeafNode {
 		started = false;
 	}
 
-	override public function process(delta:Float):NodeStatus {
+	override public function doProcess(delta:Float):NodeStatus {
 		var self = cast(context.get("self"), FlxSprite);
 		var speed = cast(context.get("speed"), Float);
 
@@ -44,6 +44,7 @@ class StraightToTarget extends LeafNode {
 			self.path.start(points, speed);
 		} else {
 			if (self.path.finished || self.path.nodes.length == 0) {
+				context.set("target", null);
 				started = false;
 				return SUCCESS;
 			}

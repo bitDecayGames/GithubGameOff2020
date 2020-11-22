@@ -1,12 +1,13 @@
 package entities.enemies;
 
-import behavior.leaf.util.Fail;
 import behavior.tree.composite.Parallel;
 import behavior.leaf.util.StartMovementAnimation;
 import flixel.FlxG;
 import behavior.tree.BTContext;
 import behavior.tree.composite.Sequence;
 import behavior.tree.decorator.Repeater;
+import behavior.leaf.util.IfNoTarget;
+import behavior.leaf.util.Fail;
 import behavior.leaf.PlayerAlive;
 import behavior.leaf.util.Wait;
 import behavior.leaf.util.PickTargetInRange;
@@ -21,51 +22,52 @@ import flixel.math.FlxPoint;
 import flixel.FlxSprite;
 import states.PlayState;
 
-class Bat extends Enemy {
+class Blob extends Enemy {
     var behavior:BTree;
 
 	public function new(_parentState:PlayState, _player:Player, position:FlxPoint) {
         super(_parentState, _player, position);
         path = new FlxPath();
 
-        baseStats.speed = 15;
+        // frames persecond * move speed
+        baseStats.speed = Std.int(1.5 * 16);
         refresh();
 
         behavior = new BTree(
             new Repeater(
                 new Sequence([
                     new Wait(),
-                    new PickTargetInRange(),
+                    new IfNoTarget(new PickTargetInRange()),
                     new Parallel([
                         new Fail(new StartMovementAnimation()),
-                        new StraightToTarget(),
+                        new ManhattanPath(),
                     ]),
-                    new StartMovementAnimation(),
+                    new StartMovementAnimation()
                 ])
             )
         );
         var context = new BTContext();
         context.set("self", this);
         context.set("speed", baseStats.speed);
-        context.set("range", 100);
+        context.set("range", 16);
+        context.set("cardinalLock", true);
         context.set("minWait", 1);
-        context.set("maxWait", 2);
+        // context.set("maxWait", 1);
         context.set("navBundle", new NavBundle(parentState.currentLevel, player));
         behavior.init(context);
 
+        super.loadGraphic(AssetPaths.blob__png, true, 16, 16);
 
-        super.loadGraphic(AssetPaths.bat__png, true, 16, 16);
+        var animationSpeed:Int = 4;
 
-        var animationSpeed:Int = 15;
-
-        animation.add("walk_up", [1,2,3,4], animationSpeed);
-        animation.add("walk_right", [1,2,3,4], animationSpeed);
-        animation.add("walk_down", [1,2,3,4], animationSpeed);
-        animation.add("walk_left", [1,2,3,4], animationSpeed);
-        animation.add("stand_up", [0], animationSpeed);
-        animation.add("stand_right", [0], animationSpeed);
-        animation.add("stand_down", [0], animationSpeed);
-        animation.add("stand_left", [0], animationSpeed);
+        animation.add("walk_up", [1,2,3], animationSpeed, false);
+        animation.add("walk_right", [7,8,9], animationSpeed, false);
+        animation.add("walk_down", [13,14,15], animationSpeed, false);
+        animation.add("walk_left", [7,8,9], animationSpeed, false);
+        animation.add("stand_up", [4,5,0], animationSpeed, false);
+        animation.add("stand_right", [4,5,0], animationSpeed, false);
+        animation.add("stand_down", [4,5,0], animationSpeed, false);
+        animation.add("stand_left", [4,5,0], animationSpeed, false);
 
         animation.play("stand_down");
 

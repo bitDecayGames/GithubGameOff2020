@@ -5,7 +5,7 @@ class Parallel extends CompositeNode {
         super(children);
     }
 
-    override public function process(delta:Float):NodeStatus {
+    override public function doProcess(delta:Float):NodeStatus {
         var result:NodeStatus = FAIL;
         var innerResult:NodeStatus;
         for (child in children) {

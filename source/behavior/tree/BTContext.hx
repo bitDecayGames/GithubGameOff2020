@@ -14,4 +14,13 @@ class BTContext {
     public function set(key:String, value:Dynamic) {
         contents.set(key, value);
     }
+
+    public function dump():String {
+        var entries = new Array<String>();
+        for (key => value in contents) {
+            entries.push([key, value].join(":"));
+        }
+
+        return entries.join("\n");
+    }
 }

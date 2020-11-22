@@ -5,7 +5,7 @@ class Selector extends CompositeNode {
         super(children);
     }
 
-    override public function process(delta:Float):NodeStatus {
+    override public function doProcess(delta:Float):NodeStatus {
         var result:NodeStatus;
         for (child in children) {
             result = child.process(delta);

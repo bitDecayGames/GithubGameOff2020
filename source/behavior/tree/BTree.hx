@@ -23,7 +23,32 @@ class BTree implements Node {
         root.init(context);
     }
 
+    var current:String = "";
+    var last:String = "";
+
     public function process(delta:Float):NodeStatus {
-        return root.process(delta);
+        #if btree
+        context.set("debug_path", new Array<String>());
+        #end
+
+        var result = root.process(delta);
+
+        #if btree
+        var path:Array<String> = context.get("debug_path");
+        for (i in 0...path.length) {
+            path[i] = path[i].split(".").pop();
+        }
+        path.push(context.get("debug_result"));
+        current = path.join(" -> ");
+
+        if (current != last) {
+            trace(current);
+            last = current;
+        }
+
+        trace(context.dump());
+        #end
+
+        return result;
     }
 }

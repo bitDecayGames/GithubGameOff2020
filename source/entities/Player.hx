@@ -82,6 +82,8 @@ class Player extends Entity {
 
         setFacingFlip(FlxObject.LEFT, true, false);
         setFacingFlip(FlxObject.RIGHT, false, false);
+        setFacingFlip(FlxObject.DOWN, false, false);
+        setFacingFlip(FlxObject.UP, false, false);
     }
 
     public function animCallback(name:String, frameNumber:Int, frameIndex:Int):Void {
@@ -118,7 +120,6 @@ class Player extends Entity {
 
         var potentialDirection:FlxPoint = new FlxPoint(0, 0);
 		potentialDirection = readDirectionInput();
-        facing = determineFacing(potentialDirection);
 
         if (inKnockback){
             setPosition(x + knockbackDirection.x*delta*knockbackSpeed, y + knockbackDirection.y*delta*knockbackSpeed*-1);
@@ -129,6 +130,7 @@ class Player extends Entity {
                     FmodFlxUtilities.TransitionToState(new PlayState());
                 }
             }
+            facing = determineFacing(potentialDirection);
             playDamageAnimation(facing);
         } else if (areControlsActive && !parentState.isTransitioningStates) {
             if (controls.attack.check() && !attacking) {
@@ -138,16 +140,18 @@ class Player extends Entity {
                 Timer.delay(() -> {
                     attacking = false;
                 }, 200);
+                facing = determineFacing(potentialDirection);
+                playAnimation(facing, null, attacking);
             }
 
             var directionVector:FlxPoint = null;
             if (!attacking){
                 directionVector = MathHelpers.NormalizeVector(potentialDirection);
                 directionVector.scale(delta*activeStats.speed);
-                // y needs to be flipped to move character in the right direction
                 setPosition(x + directionVector.x, y + directionVector.y);
+                facing = determineFacing(potentialDirection);
+                playAnimation(facing, directionVector, attacking);
             }
-            playAnimation(facing, directionVector, attacking);
         }
 
         if (parentState.isTransitioningStates) {

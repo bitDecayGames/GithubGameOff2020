@@ -1,5 +1,6 @@
 package states;
 
+import interactables.Shovel;
 import interactables.Axe;
 import textpop.SlowFadeDown;
 import textpop.SlowFade;
@@ -50,7 +51,7 @@ class OutsideTheMinesState extends BaseState
 	var uiCamera:FlxCamera;
 	var uiGroup:FlxGroup;
 
-	var axe:Interactable;
+	var shovel:Interactable;
 	
 	var levelExit:FlxSprite;
 
@@ -89,8 +90,8 @@ class OutsideTheMinesState extends BaseState
 		add(currentLevel.interactableLayer);
 
 		var itemTiles = currentLevel.interactableLayer.getTileCoords(3, false);
-		axe = new Axe(itemTiles[0]);
-		addInteractable(axe);
+		shovel = new Shovel(itemTiles[0]);
+		addInteractable(shovel);
 		
 		var exitTiles = currentLevel.interactableLayer.getTileCoords(4, false);
 		levelExit = new Rope(exitTiles[0], new FlxPoint(16,16));
@@ -187,7 +188,7 @@ class OutsideTheMinesState extends BaseState
 		}
 
 		var shopVolumeRadius = 100;
-		var distanceFromShop = player.getPosition().distanceTo(axe.getPosition());
+		var distanceFromShop = player.getPosition().distanceTo(shovel.getPosition());
 		// Dynamic volume commented out for now
 		// var shopVolume = Math.max(0, 1-(distanceFromShop/shopVolumeRadius));
 		var shopVolume = 1;

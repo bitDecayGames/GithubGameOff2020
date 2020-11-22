@@ -27,7 +27,7 @@ class Player extends Entity {
     var movementRatio = new FlxPoint(1, 0.8);
 
     var playerHitboxOffsetX = 4;
-    var playerHitboxOffsetY = 8;
+    var playerHitboxOffsetY = 20;
 
     public var invincibilityTimeLeft:Float = 0;
 
@@ -56,7 +56,7 @@ class Player extends Entity {
         super.loadGraphic(AssetPaths.Player__png, true, 16, 32);
 
         // Update hitbox to be smaller than sprite
-        setSize(8, 16);
+        setSize(8, 4);
         offset.set(playerHitboxOffsetX, playerHitboxOffsetY);
 
         var animationSpeed:Int = 8;
@@ -80,6 +80,8 @@ class Player extends Entity {
 
         animation.add("faceplant", [54], animationSpeed);
         animation.add("faceplant_get_up", [55,56,57,58,59], animationSpeed, false);
+
+        animation.add("climb_down", [59,58,57,56,55,60], animationSpeed, false);
 
         animation.play("stand_down");
 
@@ -158,10 +160,6 @@ class Player extends Entity {
                 facing = determineFacing(potentialDirection);
                 playAnimation(facing, directionVector, attacking);
             }
-        }
-
-        if (parentState.isTransitioningStates) {
-            playAnimation(facing, null, attacking);
         }
     }
 
@@ -249,11 +247,11 @@ class Player extends Entity {
             case FlxObject.RIGHT:
                 attackLocation = new FlxPoint(x+size.x/2, y+(size.y/2)-(hitboxSize.y/2)-playerHitboxOffsetY);
             case FlxObject.DOWN:
-                attackLocation = new FlxPoint(x+(size.x/2)-(hitboxSize.x/2)-playerHitboxOffsetX, y+size.y/2);
+                attackLocation = new FlxPoint(x+(size.x/2)-(hitboxSize.x/2)-playerHitboxOffsetX, y+size.y/8);
             case FlxObject.LEFT:
                 attackLocation = new FlxPoint(x-hitboxSize.x, y+(size.y/2)-(hitboxSize.y/2)-playerHitboxOffsetY);
             case FlxObject.UP:
-                attackLocation = new FlxPoint(x+(size.x/2)-(hitboxSize.x/2)-playerHitboxOffsetX, y-hitboxSize.y);
+                attackLocation = new FlxPoint(x+(size.x/2)-(hitboxSize.x/2)-playerHitboxOffsetX, y-hitboxSize.y-playerHitboxOffsetY/2);
             default:
                 attackLocation = new FlxPoint(x, y);
         }

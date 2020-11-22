@@ -9,11 +9,16 @@ import flixel.tweens.FlxTween;
 
 class SlowFadeDown implements Style {
 
-	public function new() {}
+	var color:FlxColor;
+
+	public function new(?_color:FlxColor = FlxColor.WHITE) {
+		color = _color;
+	}
 
 	public function Stylize(obj:FlxObject):FlxTween {
 		var flxObj:FlxObject = obj;
-		var brokeText = cast(obj, FlxText);
+		var textObj = cast(obj, FlxText);
+		textObj.color = color;
 		var tween = FlxTween.tween(flxObj, { y: flxObj.y + 60, alpha: 0}, 3);
 		return tween;
 	}

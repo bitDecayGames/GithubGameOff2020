@@ -15,7 +15,7 @@ class Level {
 
 		debugLayer = loader.loadTilemap(AssetPaths.filler__png, "debug");
 		navigationLayer = loader.loadTilemap(AssetPaths.tiles__png, "navigation");
-		interactableLayer = loader.loadTilemap(AssetPaths.tiles__png, "interactable");
+		interactableLayer = loader.loadTilemap(AssetPaths.filler__png, "interactable");
 		groundLayer = loader.loadTilemap(AssetPaths.tiles__png, "ground");
 	}
 }

@@ -9,14 +9,16 @@ import flixel.tweens.FlxTween;
 
 class SlowFade implements Style {
 
-	public function new() {}
+	var color:FlxColor;
+
+	public function new(?_color:FlxColor = FlxColor.WHITE) {
+		color = _color;
+	}
 
 	public function Stylize(obj:FlxObject):FlxTween {
 		var flxObj:FlxObject = obj;
 		var textObj = cast(obj, FlxText);
-		if (textObj.text == "Not enough money") {
-			textObj.color = FlxColor.RED;
-		}
+		textObj.color = color;
 		var tween = FlxTween.tween(flxObj, { y: flxObj.y - 30, alpha: 0}, 2);
 		return tween;
 	}

@@ -18,6 +18,7 @@ import level.Level;
 import flixel.text.FlxText;
 import entities.Loot;
 import helpers.MathHelpers;
+import helpers.SortingHelpers;
 import flixel.math.FlxMath;
 import flixel.util.FlxColor;
 import flixel.util.FlxPath;
@@ -80,6 +81,7 @@ class PlayState extends BaseState
 		// add(currentLevel.debugLayer);
 		add(currentLevel.groundLayer);
 		add(currentLevel.navigationLayer);
+		currentLevel.interactableLayer.alpha = 0;
 		add(currentLevel.interactableLayer);
 
 		var exitTiles = currentLevel.interactableLayer.getTileCoords(4, false);
@@ -237,24 +239,7 @@ class PlayState extends BaseState
 		FlxG.overlap(player, projectiles, playerProjectileTouch);
 		FlxG.overlap(player, loots, playerLootTouch);
 
-		worldGroup.sort(sortByY, FlxSort.ASCENDING);
-	}
-
-	private function sortByY(Order:Int, basic1:FlxBasic, basic2:FlxBasic):Int {
-		var result:Int = 0;
-
-		var obj1:FlxObject = cast (basic1, FlxObject);
-		var obj2:FlxObject = cast (basic2, FlxObject);
-		if (obj1.y < obj2.y)
-		{
-			result = Order;
-		}
-		else if (obj1.y > obj2.y)
-		{
-			result = -Order;
-		}
-
-		return result;
+		worldGroup.sort(SortingHelpers.SortByY, FlxSort.ASCENDING);
 	}
 
 	public function determineKnockbackDirection(playerFacing:Int):FlxPoint {

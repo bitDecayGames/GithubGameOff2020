@@ -1,5 +1,7 @@
 package states;
 
+import flixel.util.FlxSort;
+import helpers.SortingHelpers;
 import interactables.Shovel;
 import interactables.Axe;
 import textpop.SlowFadeDown;
@@ -28,6 +30,7 @@ import entities.Hitbox;
 import flixel.FlxG;
 import entities.Player;
 import entities.Enemy;
+import entities.Shopkeep;
 import flixel.FlxState;
 import flixel.math.FlxPoint;
 import flixel.FlxObject;
@@ -88,6 +91,7 @@ class OutsideTheMinesState extends BaseState
 		// add(currentLevel.debugLayer);
 		add(currentLevel.groundLayer);
 		add(currentLevel.navigationLayer);
+		currentLevel.interactableLayer.alpha = 0;
 		add(currentLevel.interactableLayer);
 
 		var itemTiles = currentLevel.interactableLayer.getTileCoords(3, false);
@@ -96,7 +100,10 @@ class OutsideTheMinesState extends BaseState
 
 		var exitTiles = currentLevel.interactableLayer.getTileCoords(4, false);
 		levelExit = new Rope(exitTiles[0], new FlxPoint(16,16));
-		add(levelExit);
+		worldGroup.add(levelExit);
+
+		var shopkeepTiles = currentLevel.interactableLayer.getTileCoords(2, false);
+		new Shopkeep(shopkeepTiles[0]);
 
 		player = new Player(this, new FlxPoint(FlxG.width/2, FlxG.height/2));
 		worldGroup.add(player);
@@ -203,6 +210,8 @@ class OutsideTheMinesState extends BaseState
 
 		FlxG.overlap(interactables, hitboxes, interactWithItem);
 		FlxG.collide(player, levelExit, playerExitTouch);
+		
+		worldGroup.sort(SortingHelpers.SortByY, FlxSort.ASCENDING);
 	}
 
 	private function interactWithItem(interactable:Interactable, hitbox:Hitbox) {
@@ -210,7 +219,7 @@ class OutsideTheMinesState extends BaseState
 			if (money >= interactable.cost){
 				money -= interactable.cost;
 				interactable.onInteract(player);
-				TextPop.pop(Std.int(40), Std.int(30), "-$5", new SlowFadeDown(), 10);
+				TextPop.pop(Std.int(40), Std.int(30), "-$"+interactable.cost, new SlowFadeDown(FlxColor.RED), 10);
 				FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchase);
 			} else {
 				TextPop.pop(Std.int(player.x), Std.int(player.y), "Not enough money", new SlowFade(), 10);
@@ -224,9 +233,11 @@ class OutsideTheMinesState extends BaseState
 		if (!isTransitioningStates){
 			isTransitioningStates = true;
 			dialogManager.stopSounds();
+			player.animation.play("climb_down");
 			camera.fade(FlxColor.BLACK, 2, false, null, true);
 			uiCamera.fade(FlxColor.BLACK, 2, false, null, true);
 			FmodFlxUtilities.TransitionToStateAndStopMusic(new PlayState());
+			player.setPosition(r.x+4, r.y+4);
 		}
 	}
 }

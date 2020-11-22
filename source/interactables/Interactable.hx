@@ -1,5 +1,6 @@
 package interactables;
 
+import flixel.util.FlxColor;
 import entities.Hitbox;
 import textpop.SlowFade;
 import com.bitdecay.textpop.TextPop;
@@ -27,7 +28,7 @@ class Interactable extends FlxSprite {
         // Transfer general attributes to player/state
 
         // Display text
-        TextPop.pop(Std.int(_player.x), Std.int(_player.y), name, new SlowFade(), 10);
+        TextPop.pop(Std.int(_player.x), Std.int(_player.y), name, new SlowFade(new FlxColor(0xFF54f542)), 10);
     }
     
 

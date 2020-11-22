@@ -11,6 +11,5 @@ class Rope extends FlxSprite {
 
     public function new(_position:FlxPoint, _size:FlxPoint) {
         super(_position.x, _position.y);
-        makeGraphic(Std.int(_size.x), Std.int(_size.y), new FlxColor(0x882288FF));
     }
 }

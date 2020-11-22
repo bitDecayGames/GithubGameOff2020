@@ -2,7 +2,7 @@ package entities;
 
 import upgrades.Upgrade;
 
-class PlayerState {
+class GameState {
     public var baseStats:Stats;
     public var upgradeMakers:Array<() -> Upgrade>;
 

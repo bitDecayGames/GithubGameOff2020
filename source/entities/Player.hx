@@ -19,7 +19,7 @@ using extensions.FlxObjectExt;
 
 class Player extends Entity {
 
-    public static var state = new PlayerState();
+    public static var state = new GameState();
 
     var controls:Actions;
     var areControlsActive = true;

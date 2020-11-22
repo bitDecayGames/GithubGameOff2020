@@ -85,7 +85,7 @@ class PlayState extends BaseState
 		add(currentLevel.interactableLayer);
 
 		var exitTiles = currentLevel.interactableLayer.getTileCoords(4, false);
-		levelExit = new Rope(exitTiles[0], new FlxPoint(16,16));
+		levelExit = new Rope(exitTiles[0]);
 		add(levelExit);
 
 		player = new Player(this, new FlxPoint(FlxG.width/2, FlxG.height/2));
@@ -233,7 +233,6 @@ class PlayState extends BaseState
 		FlxG.collide(currentLevel.navigationLayer, enemies);
 		// TODO: For some reason colliding things on paths with the level doesn't work
 		FlxG.collide(currentLevel.navigationLayer, loots, levelLootTouch);
-		FlxG.collide(player, levelExit, playerExitTouch);
 		FlxG.overlap(enemies, hitboxes, enemyHitboxTouch);
 		FlxG.overlap(player, enemies, playerEnemyTouch);
 		FlxG.overlap(player, projectiles, playerProjectileTouch);

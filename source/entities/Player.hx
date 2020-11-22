@@ -21,7 +21,7 @@ class Player extends Entity {
 
     var controls:Actions;
     var areControlsActive = true;
-    var canAttack = true;
+    public var canAttack = true;
 
     var stepFXPlayed:Bool = false;
     var movementRatio = new FlxPoint(1, 0.8);
@@ -259,12 +259,19 @@ class Player extends Entity {
         // Hitboxes will always spawn to serve as the interact collision detection
         parentState.addHitbox(hitbox);
         if (canAttack) {
-            FmodManager.PlaySoundOneShot(FmodSFX.ShovelSwing);
+            FmodManager.PlaySoundAndAssignId(FmodSFX.ShovelSwing, "attack");
             spawnShovel(hitbox.getMidpoint(), facing);
         } else {
             // Hack to let the player always move when they cannot spawn a shovel
             attacking = false;
         }
+    }
+
+    public function stopAttack() {
+        if (shovel != null){
+            shovel.destroy();
+        }
+        FmodManager.StopSoundImmediately("attack");
     }
 
     function spawnShovel(position:FlxPoint, facing:Int) {

@@ -216,7 +216,10 @@ class OutsideTheMinesState extends BaseState
 	private function interactWithItem(interactable:Interactable, hitbox:Hitbox) {
 		if (!interactable.hasBeenHitByThisHitbox(hitbox)) {
 			if (interactable.name == "Rope") {
-				if (!isTransitioningStates){
+				if (!player.canAttack) {
+					TextPop.pop(Std.int(200), Std.int(140), "You aren't ready", new SlowFadeDown(FlxColor.RED), 10);
+					FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchaseFail);
+				} else if (!isTransitioningStates){
 					isTransitioningStates = true;
 					dialogManager.stopSounds();
 					player.animation.play("climb_down");

@@ -214,7 +214,6 @@ class OutsideTheMinesState extends BaseState
 	}
 
 	private function interactWithItem(interactable:Interactable, hitbox:Hitbox) {
-		trace("intreaCTED");
 		if (!interactable.hasBeenHitByThisHitbox(hitbox)) {
 			if (interactable.name == "Rope") {
 				if (!isTransitioningStates){

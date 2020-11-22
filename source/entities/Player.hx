@@ -56,7 +56,7 @@ class Player extends Entity {
         super.loadGraphic(AssetPaths.Player__png, true, 16, 32);
 
         // Update hitbox to be smaller than sprite
-        setSize(8, 4);
+        setSize(8, 8);
         offset.set(playerHitboxOffsetX, playerHitboxOffsetY);
 
         var animationSpeed:Int = 8;

@@ -113,13 +113,6 @@ class PlayState extends BaseState
 		uiGroup.add(playerHealthText);
 
 		add(worldGroup);
-
-		// Timer.delay(() -> {
-		// 	trace("adding mod");
-		// 	var speedClog = new upgrades.SpeedClog();
-		// 	uiGroup.add(speedClog);
-		// 	player.addUpgrade(speedClog);
-		// }, 5000);
 	}
 
 	private function setupLightShader() {

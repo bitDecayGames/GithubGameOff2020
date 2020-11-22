@@ -14,7 +14,7 @@ class Interactable extends FlxSprite {
     public var name:String;
     public var cost:Int;
 
-    var containedUpgrade:Upgrade;
+    var containedUpgrade:() -> Upgrade;
 
     var collidedHitboxes:Map<Hitbox, Bool> = new Map<Hitbox, Bool>();
 
@@ -30,7 +30,6 @@ class Interactable extends FlxSprite {
 
         // Transfer general attributes to player/state
         if (containedUpgrade != null) {
-            trace("adding upgrade to player");
             _player.addUpgrade(containedUpgrade);
         }
 

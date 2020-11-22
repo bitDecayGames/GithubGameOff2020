@@ -9,9 +9,12 @@ class Shovel extends Interactable {
     public function new(_position:FlxPoint) {
         super(_position);
 
-        containedUpgrade = new upgrades.Shovel();
+        containedUpgrade = () -> return new upgrades.Shovel();
 
-        this.frame = containedUpgrade.frame;
+        loadGraphic(AssetPaths.shovel__png, true, 16, 16);
+
+        animation.add("inventory", [0]);
+        animation.play("inventory");
 
         name = "Shovel";
         cost = 5;

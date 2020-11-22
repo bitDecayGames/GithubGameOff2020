@@ -4,7 +4,7 @@ import upgrades.Upgrade;
 
 class PlayerState {
     public var baseStats:Stats;
-    public var upgrades:Array<Upgrade>;
+    public var upgradeMakers:Array<() -> Upgrade>;
 
     public function new() {
         baseStats = new Stats();
@@ -12,6 +12,6 @@ class PlayerState {
         baseStats.maxHealth = 5;
         baseStats.speed = 75;
 
-        upgrades = new Array<Upgrade>();
+        upgradeMakers = new Array<() -> Upgrade>();
     }
 }

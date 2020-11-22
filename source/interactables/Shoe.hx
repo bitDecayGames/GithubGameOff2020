@@ -9,9 +9,9 @@ class Shoe extends Interactable {
     public function new(_position:FlxPoint) {
         super(_position);
 
-        containedUpgrade = new upgrades.SpeedClog();
+        containedUpgrade = () -> return new upgrades.SpeedClog();
 
-        this.frame = containedUpgrade.frame;
+        loadGraphic(AssetPaths.speedClog__png, 16, 16);
 
         name = "SpeedClog";
         cost = 5;

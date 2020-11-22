@@ -67,6 +67,7 @@ class OutsideTheMinesState extends BaseState
 	override public function create()
 	{
 		super.create();
+		FlxG.autoPause = false;
 
 		#if debug
 		FlxG.debugger.drawDebug = true;
@@ -219,6 +220,10 @@ class OutsideTheMinesState extends BaseState
 				if (!player.canAttack) {
 					TextPop.pop(Std.int(200), Std.int(140), "You aren't ready", new SlowFadeDown(FlxColor.RED), 10);
 					FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchaseFail);
+					trace("Dialgomanager is done: " + dialogManager.isDone);
+					if (dialogManager.isDone){
+						dialogManager.loadDialog(1);
+					}
 				} else if (!isTransitioningStates){
 					isTransitioningStates = true;
 					dialogManager.stopSounds();
@@ -236,6 +241,7 @@ class OutsideTheMinesState extends BaseState
 					interactable.onInteract(player);
 					TextPop.pop(Std.int(40), Std.int(30), "-$"+interactable.cost, new SlowFadeDown(FlxColor.RED), 10);
 					FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchase);
+					dialogManager.loadDialog(2);
 				} else {
 					TextPop.pop(Std.int(player.x), Std.int(player.y), "Not enough money", new SlowFade(), 10);
 					FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchaseFail);

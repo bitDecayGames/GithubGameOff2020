@@ -24,8 +24,10 @@ class Entity extends FlxSprite {
     public var statModifiers:Array<StatModifier>;
     public var activeStats:Stats;
 
-    public function new() {
+    public function new(_parentState:BaseState) {
         super();
+
+        parentState = _parentState;
 
         baseStats = new Stats();
         activeStats = new Stats();
@@ -34,13 +36,13 @@ class Entity extends FlxSprite {
 
     public function refresh() {
         baseStats.copyTo(activeStats);
-    }
-
-    public function addModifier(mod:StatModifier) {
-        refresh();
-        statModifiers.push(mod);
         for (mod in statModifiers) {
             mod(activeStats);
         }
+    }
+
+    public function addModifier(mod:StatModifier) {
+        statModifiers.push(mod);
+        refresh();
     }
 }

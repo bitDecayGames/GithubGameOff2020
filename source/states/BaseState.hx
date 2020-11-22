@@ -44,6 +44,7 @@ class BaseState extends FlxState
 	var interactables:FlxTypedGroup<Interactable> = new FlxTypedGroup<Interactable>();
 
 	var worldGroup:FlxGroup = new FlxGroup();
+	var uiGroup:FlxGroup = new FlxGroup();
 
 	public function addHitbox(hitbox:Hitbox) {
 		hitboxes.add(hitbox);
@@ -63,6 +64,10 @@ class BaseState extends FlxState
 	public function addInteractable(interactable:Interactable) {
 		interactables.add(interactable);
 		worldGroup.add(interactable);
+	}
+
+	public function addUIElement(elem:FlxSprite) {
+		uiGroup.add(elem);
 	}
 
 	// override public function onFocus() {

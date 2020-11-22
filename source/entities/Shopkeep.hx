@@ -20,8 +20,8 @@ using extensions.FlxObjectExt;
 class Shopkeep extends Entity {
 
 
-	public function new(_spawnPosition:FlxPoint) {
-        super();
+	public function new(_parentState:BaseState, _spawnPosition:FlxPoint) {
+        super(_parentState);
         setPosition(_spawnPosition.x, _spawnPosition.y);
         super.loadGraphic(AssetPaths.shopkeep__png, true, 16, 32);
 

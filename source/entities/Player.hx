@@ -19,6 +19,8 @@ using extensions.FlxObjectExt;
 
 class Player extends Entity {
 
+    public static var state = new PlayerState();
+
     var controls:Actions;
     var areControlsActive = true;
     public var canAttack = true;
@@ -31,18 +33,29 @@ class Player extends Entity {
 
     public var invincibilityTimeLeft:Float = 0;
 
+    public var shovel:FlxSprite;
     public var upgrades:Array<Upgrade> = new Array<Upgrade>();
 
-    public var shovel:FlxSprite;
-
 	public function new(_parentState:BaseState, _spawnPosition:FlxPoint) {
-        super();
+        super(_parentState);
         controls = new Actions();
 
-        baseStats.lightRadius = 100;
-        baseStats.maxHealth = 5;
-        baseStats.speed = 75;
-        refresh();
+        baseStats = state.baseStats;
+        for (upMkr in state.upgradeMakers) {
+            var up = upMkr();
+            upgrades.push(up);
+            parentState.addUIElement(up);
+            addModifier(up.modifier);
+        }
+
+        #if debug
+        trace("player has " + upgrades.length + " upgrades on load");
+        for (up in upgrades) {
+            trace("   " + up.getDescription());
+        }
+        #end
+
+        organizeUpgrades();
 
         // TODO: this will need to be updated somehow, somewhere based on the stats
         health = baseStats.maxHealth;
@@ -50,7 +63,6 @@ class Player extends Entity {
         size = new FlxPoint(16, 32);
         direction = 0;
         attacking = false;
-        parentState = _parentState;
         setPosition(_spawnPosition.x, _spawnPosition.y);
 
         super.loadGraphic(AssetPaths.Player__png, true, 16, 32);
@@ -363,15 +375,20 @@ class Player extends Entity {
         return facing;
     }
 
-    public function addUpgrade(upgrade:Upgrade) {
+    public function addUpgrade(upgradeMaker:() -> Upgrade) {
+        state.upgradeMakers.push(upgradeMaker);
+        var upgrade = upgradeMaker();
         upgrades.push(upgrade);
         addModifier(upgrade.modifier);
         organizeUpgrades();
     }
 
     public function organizeUpgrades() {
+        // TODO... WHY ARENT THESE RENDERING?
         for (i in 0...upgrades.length) {
-            upgrades[i].x = i * 16;
+            // state.upgrades[i].load();
+            parentState.addUIElement(upgrades[i]);
+            upgrades[i].x = i * 16 + 10;
             upgrades[i].y = FlxG.height - upgrades[i].height;
         }
     }

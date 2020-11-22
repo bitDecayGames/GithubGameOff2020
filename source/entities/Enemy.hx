@@ -27,7 +27,7 @@ class Enemy extends Entity {
     var level:Level;
 
 	public function new(_parentState:PlayState, _player:Player, position:FlxPoint) {
-        super();
+        super(_parentState);
         health = 3;
         player = _player;
         size = new FlxPoint(10, 10);
@@ -36,7 +36,6 @@ class Enemy extends Entity {
         refresh();
 
         direction = 0;
-        parentState = _parentState;
         attacking = false;
         makeGraphic(Std.int(size.x), Std.int(size.y), FlxColor.BLUE);
         setPosition(position.x, position.y);

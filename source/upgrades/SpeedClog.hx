@@ -5,11 +5,18 @@ import entities.Stats;
 class SpeedClog extends Upgrade {
     public function new() {
         super();
+        load();
+    }
 
+    override public function load() {
         loadGraphic(AssetPaths.speedClog__png, 16, 16);
     }
 
     override public function modifier(stats:Stats) {
-        stats.speed += 20;
+        stats.speed += 50;
+    }
+
+    override public function getDescription():String {
+        return "+50 speed";
     }
 }

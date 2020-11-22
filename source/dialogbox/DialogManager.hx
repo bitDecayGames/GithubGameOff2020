@@ -9,16 +9,19 @@ import flixel.FlxState;
 
 class DialogManager {
 
+    public var isDone:Bool;
+
     var typewriterSoundId:String = "typewriterSoundId";
     var typeText:Dialogbox;
     var parentState:FlxState;
     var renderCamera:FlxCamera;
     var disableSounds:Bool;
+
     
     public function new(_parentState:FlxState, _renderCamera:FlxCamera) {
         parentState = _parentState;
         renderCamera = _renderCamera;
-        typeText = new Dialogbox(parentState, Dialogs.DialogArray[0], FlxKey.SPACE, AssetPaths.joystix_monospace__ttf);
+        typeText = new Dialogbox(parentState, this, Dialogs.DialogArray[0], FlxKey.SPACE, AssetPaths.joystix_monospace__ttf);
         typeText.cameras = [renderCamera];
         parentState.add(typeText);
     }
@@ -49,7 +52,7 @@ class DialogManager {
         trace("index out of bounds for dialogs");
         return;
         }
-        typeText = new Dialogbox(parentState, Dialogs.DialogArray[index], FlxKey.SPACE, AssetPaths.joystix_monospace__ttf);
+        typeText = new Dialogbox(parentState, this, Dialogs.DialogArray[index], FlxKey.SPACE, AssetPaths.joystix_monospace__ttf);
         typeText.cameras = [renderCamera];
         parentState.add(typeText);
     }

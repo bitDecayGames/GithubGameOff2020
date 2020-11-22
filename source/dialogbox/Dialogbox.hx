@@ -10,7 +10,7 @@ import hx.concurrent.executor.Executor;
 
 class Dialogbox extends FlxBasic {
     // constants
-    static inline final CharactersPerTextBox = 91;
+    static inline final CharactersPerTextBox = 100;
     static inline final FontSize = 10;
 
     var nextPageDelayMs = 4000;
@@ -18,6 +18,7 @@ class Dialogbox extends FlxBasic {
 
     // caller's state so we can add our FlxTypeText to the game loop
     var parentState:FlxState;
+    var dialogManager:DialogManager;
 
     var isTyping:Bool;
     var canContinueToNextPage:Bool;
@@ -27,10 +28,12 @@ class Dialogbox extends FlxBasic {
     public var flxTypeText:FlxTypeText;
     var progressionKey:FlxKey;
 
-    public function new(parentState:FlxState, textList:Array<String>, progressionKey:FlxKey, monospacedFontAssetPath:Null<String>) {
+    public function new(parentState:FlxState, _dialogManager:DialogManager, textList:Array<String>, progressionKey:FlxKey, monospacedFontAssetPath:Null<String>) {
         super();
         this.progressionKey = progressionKey;
         pages = new Array<String>();
+
+        dialogManager = _dialogManager;
         
         var currentPageBuffer:StringBuf;
         for(text in textList){
@@ -77,6 +80,7 @@ class Dialogbox extends FlxBasic {
         
         currentPage++;
         if (currentPage >= pages.length){
+            dialogManager.isDone = true;
             flxTypeText.destroy();
             destroy();
         } else {

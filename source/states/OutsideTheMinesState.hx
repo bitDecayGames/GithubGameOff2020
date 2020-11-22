@@ -60,8 +60,7 @@ class OutsideTheMinesState extends BaseState
 	var uiCamera:FlxCamera;
 
 	var shovel:Interactable;
-
-	var levelExit:FlxSprite;
+	var levelExit:Interactable;
 
 	var dialogManager:dialogbox.DialogManager;
 
@@ -73,6 +72,7 @@ class OutsideTheMinesState extends BaseState
 	override public function create()
 	{
 		super.create();
+		FlxG.autoPause = false;
 
 		#if debug
 		FlxG.debugger.drawDebug = true;
@@ -108,11 +108,12 @@ class OutsideTheMinesState extends BaseState
 		addInteractable(shoe);
 
 		var exitTiles = currentLevel.interactableLayer.getTileCoords(rope_index, false);
-		levelExit = new Rope(exitTiles[0], new FlxPoint(16,16));
-		worldGroup.add(levelExit);
+		levelExit = new Rope(exitTiles[0]);
+		addInteractable(levelExit);
 
 		var shopkeepTiles = currentLevel.interactableLayer.getTileCoords(shopkeep_index, false);
-		new Shopkeep(this, shopkeepTiles[0]);
+		var shopkeep = new Shopkeep(this, shopkeepTiles[0]);
+		worldGroup.add(shopkeep);
 
 		player = new Player(this, new FlxPoint(FlxG.width/2, FlxG.height/2));
 		worldGroup.add(player);
@@ -219,35 +220,44 @@ class OutsideTheMinesState extends BaseState
 
 
 		FlxG.overlap(interactables, hitboxes, interactWithItem);
-		FlxG.collide(player, levelExit, playerExitTouch);
 
 		worldGroup.sort(SortingHelpers.SortByY, FlxSort.ASCENDING);
 	}
 
 	private function interactWithItem(interactable:Interactable, hitbox:Hitbox) {
 		if (!interactable.hasBeenHitByThisHitbox(hitbox)) {
-			if (money >= interactable.cost){
-				money -= interactable.cost;
-				interactable.onInteract(player);
-				TextPop.pop(Std.int(40), Std.int(30), "-$"+interactable.cost, new SlowFadeDown(FlxColor.RED), 10);
-				FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchase);
+			if (interactable.name == "Rope") {
+				if (!player.canAttack) {
+					TextPop.pop(Std.int(200), Std.int(140), "You aren't ready", new SlowFadeDown(FlxColor.RED), 10);
+					FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchaseFail);
+					trace("Dialgomanager is done: " + dialogManager.isDone);
+					if (dialogManager.isDone){
+						dialogManager.loadDialog(1);
+					}
+				} else if (!isTransitioningStates){
+					isTransitioningStates = true;
+					dialogManager.stopSounds();
+					player.animation.play("climb_down");
+					camera.fade(FlxColor.BLACK, 2, false, null, true);
+					uiCamera.fade(FlxColor.BLACK, 2, false, null, true);
+					FmodManager.StopSoundImmediately("attack");
+					player.stopAttack();
+					FmodFlxUtilities.TransitionToStateAndStopMusic(new PlayState());
+					player.setPosition(interactable.x+4, interactable.y+4);
+				}
 			} else {
-				TextPop.pop(Std.int(player.x), Std.int(player.y), "Not enough money", new SlowFade(), 10);
-				FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchaseFail);
+				if (money >= interactable.cost){
+					money -= interactable.cost;
+					interactable.onInteract(player);
+					TextPop.pop(Std.int(40), Std.int(30), "-$"+interactable.cost, new SlowFadeDown(FlxColor.RED), 10);
+					FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchase);
+					dialogManager.loadDialog(2);
+				} else {
+					TextPop.pop(Std.int(player.x), Std.int(player.y), "Not enough money", new SlowFade(), 10);
+					FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchaseFail);
+				}
 			}
 			interactable.trackHitbox(hitbox);
-		}
-	}
-
-	private function playerExitTouch(p:Player, r:Rope) {
-		if (!isTransitioningStates){
-			isTransitioningStates = true;
-			dialogManager.stopSounds();
-			player.animation.play("climb_down");
-			camera.fade(FlxColor.BLACK, 2, false, null, true);
-			uiCamera.fade(FlxColor.BLACK, 2, false, null, true);
-			FmodFlxUtilities.TransitionToStateAndStopMusic(new PlayState());
-			player.setPosition(r.x+4, r.y+4);
 		}
 	}
 

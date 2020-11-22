@@ -70,17 +70,17 @@ class BaseState extends FlxState
 		uiGroup.add(elem);
 	}
 
-	override public function onFocus() {
-		super.onFocus();
-		FmodManager.UnpauseSong();
-		// Hack to deal with the lack of global sound pausing
-		FmodManager.UnpauseSound("typewriterSoundId");
-	}
+	// override public function onFocus() {
+		// super.onFocus();
+		// FmodManager.UnpauseSong();
+		// // Hack to deal with the lack of global sound pausing
+		// FmodManager.UnpauseSound("typewriterSoundId");
+	// }
 
-	override public function onFocusLost() {
-		super.onFocusLost();
-		FmodManager.PauseSong();
-		// Hack to deal with the lack of global sound pausing
-		FmodManager.PauseSound("typewriterSoundId");
-	}
+	// override public function onFocusLost() {
+		// super.onFocusLost();
+		// FmodManager.PauseSong();
+		// // Hack to deal with the lack of global sound pausing
+		// FmodManager.PauseSound("typewriterSoundId");
+	// }
 }

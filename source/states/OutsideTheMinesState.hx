@@ -112,6 +112,8 @@ class OutsideTheMinesState extends BaseState
 		add(worldGroup);
 		
 		if (skipIntro){
+			camera.fade(FlxColor.BLACK, 1.5, true);
+			uiCamera.fade(FlxColor.BLACK, 1.5, true);
 			dialogManager = new DialogManager(this, uiCamera);
 			dialogManager.loadDialog(0);
 		} else {
@@ -159,6 +161,7 @@ class OutsideTheMinesState extends BaseState
 
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
+		FmodManager.Update();
 
 		if (dialogManager != null){
 			dialogManager.update();
@@ -213,6 +216,12 @@ class OutsideTheMinesState extends BaseState
 	}
 
 	private function playerExitTouch(p:Player, r:Rope) {
-		FmodFlxUtilities.TransitionToState(new PlayState());
+		if (!isTransitioningStates){
+			isTransitioningStates = true;
+			FmodManager.StopSoundImmediately("typewriterSoundId");
+			camera.fade(FlxColor.BLACK, 2, false, null, true);
+			uiCamera.fade(FlxColor.BLACK, 2, false, null, true);
+			FmodFlxUtilities.TransitionToStateAndStopMusic(new PlayState());
+		}
 	}
 }

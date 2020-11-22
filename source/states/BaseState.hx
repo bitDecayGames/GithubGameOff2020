@@ -35,6 +35,7 @@ import textpop.SlowFade;
 class BaseState extends FlxState
 {
 	public var currentLevel:Level;
+	public var isTransitioningStates:Bool;
 
 	var hitboxes:FlxTypedGroup<Hitbox> = new FlxTypedGroup<Hitbox>();
 	var loots:FlxTypedGroup<Loot> = new FlxTypedGroup<Loot>();

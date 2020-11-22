@@ -110,7 +110,7 @@ class Player extends Entity {
                 }
             }
             playDamageAnimation(facing);
-        } else if (areControlsActive) {
+        } else if (areControlsActive && !parentState.isTransitioningStates) {
             if (controls.attack.check() && !attacking) {
 
                 attacking = true;
@@ -128,6 +128,10 @@ class Player extends Entity {
                 setPosition(x + directionVector.x, y + directionVector.y);
             }
             playAnimation(facing, directionVector);
+        }
+
+        if (parentState.isTransitioningStates) {
+            playAnimation(facing, null);
         }
     }
 

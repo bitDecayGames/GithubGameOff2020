@@ -8,13 +8,13 @@ class LeafNode implements Node {
     }
 
     public function process(delta:Float):NodeStatus {
-        #if debug
+        #if btree
         cast(context.get("debug_path"), Array<Dynamic>).push(Type.getClassName(Type.getClass(this)));
         #end
 
         var result = doProcess(delta);
 
-        #if debug
+        #if btree
         context.set("debug_result", result);
         #end
 

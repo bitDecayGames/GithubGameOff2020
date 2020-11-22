@@ -44,6 +44,7 @@ class ManhattanPath extends LeafNode {
 			started = true;
 		} else {
 			if (self.path.finished || self.path.nodes.length == 0) {
+				context.set("target", null);
 				started = false;
 				return SUCCESS;
 			}

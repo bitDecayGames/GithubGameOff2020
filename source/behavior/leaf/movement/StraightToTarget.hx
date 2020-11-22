@@ -44,6 +44,7 @@ class StraightToTarget extends LeafNode {
 			self.path.start(points, speed);
 		} else {
 			if (self.path.finished || self.path.nodes.length == 0) {
+				context.set("target", null);
 				started = false;
 				return SUCCESS;
 			}

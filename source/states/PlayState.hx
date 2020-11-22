@@ -1,5 +1,6 @@
 package states;
 
+import entities.enemies.Blob;
 import entities.Stats;
 import haxe.Timer;
 import flixel.tile.FlxTilemap;
@@ -87,6 +88,9 @@ class PlayState extends BaseState
 		var enemy3 = new entities.enemies.Bat(this, player, new FlxPoint(100, 100));
 		enemies.add(enemy3);
 		worldGroup.add(enemy3);
+		var enemy4 = new entities.enemies.Blob(this, player, new FlxPoint(100, 100));
+		enemies.add(enemy4);
+		worldGroup.add(enemy4);
 
 		moneyText = new FlxText(1, 1, 1000, "Money: ", 10);
 		moneyText.cameras = [uiCamera];

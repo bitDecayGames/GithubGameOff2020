@@ -27,13 +27,13 @@ class BTree implements Node {
     var last:String = "";
 
     public function process(delta:Float):NodeStatus {
-        #if debug
+        #if btree
         context.set("debug_path", new Array<String>());
         #end
 
         var result = root.process(delta);
 
-        #if debug
+        #if btree
         var path:Array<String> = context.get("debug_path");
         for (i in 0...path.length) {
             path[i] = path[i].split(".").pop();
@@ -45,6 +45,8 @@ class BTree implements Node {
             trace(current);
             last = current;
         }
+
+        trace(context.dump());
         #end
 
         return result;

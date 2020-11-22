@@ -1,5 +1,6 @@
 package entities.enemies;
 
+import behavior.leaf.util.Fail;
 import behavior.tree.composite.Parallel;
 import behavior.leaf.util.StartMovementAnimation;
 import flixel.FlxG;
@@ -36,7 +37,7 @@ class Bat extends Enemy {
                     new Wait(),
                     new PickTargetInRange(),
                     new Parallel([
-                        new StartMovementAnimation(),
+                        new Fail(new StartMovementAnimation()),
                         new StraightToTarget(),
                     ]),
                     new StartMovementAnimation(),

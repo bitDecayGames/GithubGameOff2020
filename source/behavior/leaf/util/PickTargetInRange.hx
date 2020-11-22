@@ -17,9 +17,15 @@ class PickTargetInRange extends LeafNode {
             var start = cast(context.get("self"), FlxSprite);
 
             for (i in 0...10) {
-                var mod = FlxPoint.get(1, 0).scale(FlxG.random.float(range/4, range)).rotate(FlxPoint.weak(), FlxG.random.float(0, 360));
-                if (!nav.level.navigationLayer.overlapsPoint(start.getPosition().addPoint(mod))) {
-                    context.set("target", mod);
+                var rot = FlxG.random.int(0, 360);
+                if (context.get("cardinalLock") != null) {
+                    rot = FlxG.random.int(0, 3) * 90;
+                }
+                var pos = start.getMidpoint();
+                var mod = FlxPoint.get(1, 0).scale(FlxG.random.float(range/4, range)).rotate(FlxPoint.weak(), rot);
+                var dest = pos.addPoint(mod);
+                if (!nav.level.navigationLayer.overlapsPoint(dest)) {
+                    context.set("target", dest);
                     return SUCCESS;
                 }
             }

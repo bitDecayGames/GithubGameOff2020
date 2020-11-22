@@ -6,6 +6,8 @@ import flixel.FlxG;
 import behavior.tree.BTContext;
 import behavior.tree.composite.Sequence;
 import behavior.tree.decorator.Repeater;
+import behavior.leaf.util.IfNoTarget;
+import behavior.leaf.util.Fail;
 import behavior.leaf.PlayerAlive;
 import behavior.leaf.util.Wait;
 import behavior.leaf.util.PickTargetInRange;
@@ -28,44 +30,44 @@ class Blob extends Enemy {
         path = new FlxPath();
 
         // frames persecond * move speed
-        baseStats.speed = 15;
+        baseStats.speed = Std.int(1.5 * 16);
         refresh();
 
         behavior = new BTree(
             new Repeater(
                 new Sequence([
                     new Wait(),
-                    new PickTargetInRange(),
+                    new IfNoTarget(new PickTargetInRange()),
                     new Parallel([
-                        new StartMovementAnimation(),
+                        new Fail(new StartMovementAnimation()),
                         new ManhattanPath(),
                     ]),
-                    new StartMovementAnimation(),
+                    new StartMovementAnimation()
                 ])
             )
         );
         var context = new BTContext();
         context.set("self", this);
         context.set("speed", baseStats.speed);
-        context.set("range", 100);
-        context.set("minWait", 0.5);
-        context.set("maxWait", 1);
+        context.set("range", 16);
+        context.set("cardinalLock", true);
+        context.set("minWait", 1);
+        // context.set("maxWait", 1);
         context.set("navBundle", new NavBundle(parentState.currentLevel, player));
         behavior.init(context);
 
-
         super.loadGraphic(AssetPaths.blob__png, true, 16, 16);
 
-        var animationSpeed:Int = 15;
+        var animationSpeed:Int = 4;
 
-        animation.add("walk_up", [1,2,3,4,5], animationSpeed);
-        animation.add("walk_right", [7,8,9,10,11], animationSpeed);
-        animation.add("walk_down", [13,14,15,16,17], animationSpeed);
-        animation.add("walk_left", [7,8,9,10,11], animationSpeed);
-        animation.add("stand_up", [0], animationSpeed);
-        animation.add("stand_right", [0], animationSpeed);
-        animation.add("stand_down", [0], animationSpeed);
-        animation.add("stand_left", [0], animationSpeed);
+        animation.add("walk_up", [1,2,3], animationSpeed, false);
+        animation.add("walk_right", [7,8,9], animationSpeed, false);
+        animation.add("walk_down", [13,14,15], animationSpeed, false);
+        animation.add("walk_left", [7,8,9], animationSpeed, false);
+        animation.add("stand_up", [4,5,0], animationSpeed, false);
+        animation.add("stand_right", [4,5,0], animationSpeed, false);
+        animation.add("stand_down", [4,5,0], animationSpeed, false);
+        animation.add("stand_left", [4,5,0], animationSpeed, false);
 
         animation.play("stand_down");
 

@@ -218,7 +218,7 @@ class OutsideTheMinesState extends BaseState
 	private function playerExitTouch(p:Player, r:Rope) {
 		if (!isTransitioningStates){
 			isTransitioningStates = true;
-			FmodManager.StopSoundImmediately("typewriterSoundId");
+			dialogManager.stopSounds();
 			camera.fade(FlxColor.BLACK, 2, false, null, true);
 			uiCamera.fade(FlxColor.BLACK, 2, false, null, true);
 			FmodFlxUtilities.TransitionToStateAndStopMusic(new PlayState());

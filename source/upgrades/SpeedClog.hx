@@ -5,10 +5,6 @@ import entities.Stats;
 class SpeedClog extends Upgrade {
     public function new() {
         super();
-        load();
-    }
-
-    override public function load() {
         loadGraphic(AssetPaths.speedClog__png, 16, 16);
     }
 

@@ -384,9 +384,7 @@ class Player extends Entity {
     }
 
     public function organizeUpgrades() {
-        // TODO... WHY ARENT THESE RENDERING?
         for (i in 0...upgrades.length) {
-            // state.upgrades[i].load();
             parentState.addUIElement(upgrades[i]);
             upgrades[i].x = i * 16 + 10;
             upgrades[i].y = FlxG.height - upgrades[i].height;

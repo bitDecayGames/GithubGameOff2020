@@ -11,8 +11,4 @@ class Upgrade extends FlxSprite {
     public function getDescription():String {
         return "No description";
     }
-
-    public function load() {
-        // load graphics and stuff to get around bug
-    }
 }

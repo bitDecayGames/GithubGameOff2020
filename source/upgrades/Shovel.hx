@@ -5,10 +5,6 @@ import flixel.FlxSprite;
 class Shovel extends Upgrade {
     public function new() {
         super();
-        load();
-    }
-
-    override public function load() {
         loadGraphic(AssetPaths.shovel__png, true, 16, 16);
 
         animation.add("inventory", [0]);

@@ -40,7 +40,6 @@ class PlayState extends BaseState
 	var player:Player;
 
 	var moneyText:FlxText;
-	var money:Int = 0;
 	var playerHealthText:FlxText;
 
 	var shader:Lighten;
@@ -134,7 +133,7 @@ class PlayState extends BaseState
 	}
 
 	public function IncreaseMoney(_money:Int) {
-		money += _money;
+		Player.state.money += _money;
 	}
 
 	private function playerExitTouch(p:Player, r:Rope) {
@@ -221,7 +220,7 @@ class PlayState extends BaseState
 			addLoot(loot);
 		}
 
-		moneyText.text = "Money: " + money;
+		moneyText.text = "Money: " + Player.state.money;
 		playerHealthText.text = "Health: " + player.health;
 
 		FlxG.watch.addQuick("enemies: ", enemies.length);
@@ -251,7 +250,7 @@ class PlayState extends BaseState
 					FmodFlxUtilities.TransitionToStateAndStopMusic(new OutsideTheMinesState(OutsideTheMinesState.SkipIntro));
 					player.setPosition(interactable.x+4, interactable.y+4);
 				}
-			} 
+			}
 			if (interactable.name == "RopeUp") {
 				if (!isTransitioningStates){
 					isTransitioningStates = true;
@@ -263,7 +262,7 @@ class PlayState extends BaseState
 					FmodFlxUtilities.TransitionToStateAndStopMusic(new OutsideTheMinesState(OutsideTheMinesState.SkipIntro));
 					player.setPosition(interactable.x+4, interactable.y+4);
 				}
-			} 
+			}
 			interactable.trackHitbox(hitbox);
 		}
 	}

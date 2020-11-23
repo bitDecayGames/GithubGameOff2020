@@ -51,7 +51,6 @@ class OutsideTheMinesState extends BaseState
 	var player:Player;
 
 	var moneyText:FlxText;
-	var money:Int = 5;
 	var playerHealthText:FlxText;
 
 	var mosaicShaderManager:MosaicManager;
@@ -210,11 +209,11 @@ class OutsideTheMinesState extends BaseState
 		}
 
 		if (FlxG.keys.justPressed.MINUS) {
-			money--;
+			Player.state.money--;
 		}
 
 		if (FlxG.keys.justPressed.PLUS) {
-			money++;
+			Player.state.money++;
 		}
 
 		// var shopVolumeRadius = 100;
@@ -224,7 +223,7 @@ class OutsideTheMinesState extends BaseState
 		// var shopVolume = 1;
 		// FmodManager.SetEventParameterOnSong("ShopVolume", shopVolume);
 
-		moneyText.text = "Money: " + money;
+		moneyText.text = "Money: " + Player.state.money;
 		playerHealthText.text = "Health: " + player.health;
 
 
@@ -255,8 +254,8 @@ class OutsideTheMinesState extends BaseState
 					player.setPosition(interactable.x+4, interactable.y+4);
 				}
 			} else {
-				if (money >= interactable.cost){
-					money -= interactable.cost;
+				if (Player.state.money >= interactable.cost){
+					Player.state.money -= interactable.cost;
 					interactable.onInteract(player);
 					TextPop.pop(Std.int(36), Std.int(20), "-$"+interactable.cost, new SlowFadeDown(FlxColor.RED), 10);
 					FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchase);

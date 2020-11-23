@@ -123,8 +123,9 @@ class OutsideTheMinesState extends BaseState
 		var shopkeep = new Shopkeep(this, shopkeepTiles[0]);
 		worldGroup.add(shopkeep);
 
-		// This will be set in state eventually
-		player.setCanAttack(false);
+		if (!player.hasUpgrade("Shovel")){
+			player.setCanAttack(false);
+		}
 
 		playerHealthText = new FlxText(1, 1, 1000, "Health: ", 10);
 		playerHealthText.cameras = [uiCamera];

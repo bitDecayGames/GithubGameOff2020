@@ -1,5 +1,6 @@
 package states;
 
+import interactables.Interactable;
 import entities.enemies.Blob;
 import entities.Stats;
 import haxe.Timer;
@@ -47,7 +48,8 @@ class PlayState extends BaseState
 	// uiCamera to keep stuff locked to screen positions
 	var uiCamera:FlxCamera;
 
-	var levelExit:FlxSprite;
+	var levelExitUp:Interactable;
+	var levelExitDown:Interactable;
 
 	override public function create()
 	{
@@ -80,11 +82,15 @@ class PlayState extends BaseState
 		currentLevel.interactableLayer.alpha = 0;
 		add(currentLevel.interactableLayer);
 
-		var exitTiles = currentLevel.interactableLayer.getTileCoords(4, false);
-		levelExit = new Rope(exitTiles[0]);
-		add(levelExit);
+		var exitTilesDown = currentLevel.interactableLayer.getTileCoords(5, false);
+		levelExitDown = new Rope(exitTilesDown[0]);
+		addInteractable(levelExitDown);
 
-		player = new Player(this, new FlxPoint(FlxG.width/2, FlxG.height/2));
+		var exitTilesUp = currentLevel.interactableLayer.getTileCoords(6, false);
+		levelExitUp = new Rope(exitTilesUp[0]);
+		addInteractable(levelExitUp);
+
+		player = new Player(this, new FlxPoint(levelExitUp.x, levelExitUp.y+16));
 
 		// var shovelUpgrade = new upgrades.Shovel();
 		// player.addUpgrade(shovelUpgrade);
@@ -226,8 +232,26 @@ class PlayState extends BaseState
 		FlxG.overlap(player, enemies, playerEnemyTouch);
 		FlxG.overlap(player, projectiles, playerProjectileTouch);
 		FlxG.overlap(player, loots, playerLootTouch);
+		FlxG.overlap(interactables, hitboxes, interactWithItem);
 
 		worldGroup.sort(SortingHelpers.SortByY, FlxSort.ASCENDING);
+	}
+
+	private function interactWithItem(interactable:Interactable, hitbox:Hitbox) {
+		if (!interactable.hasBeenHitByThisHitbox(hitbox)) {
+			if (interactable.name == "Rope") {
+				if (!isTransitioningStates){
+					isTransitioningStates = true;
+					player.animation.play("climb_down");
+					camera.fade(FlxColor.BLACK, 2, false, null, true);
+					uiCamera.fade(FlxColor.BLACK, 2, false, null, true);
+					player.stopAttack();
+					FmodFlxUtilities.TransitionToStateAndStopMusic(new OutsideTheMinesState(OutsideTheMinesState.SkipIntro));
+					player.setPosition(interactable.x+4, interactable.y+4);
+				}
+			} 
+			interactable.trackHitbox(hitbox);
+		}
 	}
 
 	public function determineKnockbackDirection(playerFacing:Int):FlxPoint {

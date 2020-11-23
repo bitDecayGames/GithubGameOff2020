@@ -28,7 +28,7 @@ class LoadFmodState extends FlxState {
                 FlxG.switchState(new OutsideTheMinesState());
                 #end
             #else
-            FlxG.switchState(new PlayState());
+            FlxG.switchState(new OutsideTheMinesState());
             #end
         }
     }

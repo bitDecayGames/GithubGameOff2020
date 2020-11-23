@@ -99,13 +99,22 @@ class OutsideTheMinesState extends BaseState
 		currentLevel.interactableLayer.alpha = 0;
 		add(currentLevel.interactableLayer);
 
-		var itemTiles = currentLevel.interactableLayer.getTileCoords(shovel_index, false);
-		shovel = new Shovel(itemTiles[0]);
-		addInteractable(shovel);
+		player = new Player(this, new FlxPoint(FlxG.width/2, FlxG.height/2));
+		worldGroup.add(player);
 
-		itemTiles = currentLevel.interactableLayer.getTileCoords(shoe_index, false);
-		var shoe = new Shoe(itemTiles[0]);
-		addInteractable(shoe);
+		var itemTiles:Array<FlxPoint>;
+
+		if (!player.hasUpgrade("Shovel")){
+			itemTiles = currentLevel.interactableLayer.getTileCoords(shovel_index, false);
+			shovel = new Shovel(itemTiles[0]);
+			addInteractable(shovel);
+		}
+
+		if (!player.hasUpgrade("SpeedClog")){
+			itemTiles = currentLevel.interactableLayer.getTileCoords(shoe_index, false);
+			var shoe = new Shoe(itemTiles[0]);
+			addInteractable(shoe);
+		}
 
 		var exitTiles = currentLevel.interactableLayer.getTileCoords(rope_index, false);
 		levelExit = new Rope(exitTiles[0]);
@@ -114,9 +123,6 @@ class OutsideTheMinesState extends BaseState
 		var shopkeepTiles = currentLevel.interactableLayer.getTileCoords(shopkeep_index, false);
 		var shopkeep = new Shopkeep(this, shopkeepTiles[0]);
 		worldGroup.add(shopkeep);
-
-		player = new Player(this, new FlxPoint(FlxG.width/2, FlxG.height/2));
-		worldGroup.add(player);
 
 		// This will be set in state eventually
 		player.setCanAttack(false);
@@ -131,11 +137,15 @@ class OutsideTheMinesState extends BaseState
 		add(worldGroup);
 		add(uiGroup);
 
-		if (skipIntro){
+		dialogManager = new DialogManager(this, uiCamera);
+
+		if (skipIntro || player.hasUpgrade("Shovel")){
 			camera.fade(FlxColor.BLACK, 1.5, true);
 			uiCamera.fade(FlxColor.BLACK, 1.5, true);
-			dialogManager = new DialogManager(this, uiCamera);
-			dialogManager.loadDialog(0);
+
+			if (!player.hasUpgrade("Shovel")){
+				dialogManager.loadDialog(0);
+			}
 		} else {
 
 			player.setControlsActive(false);
@@ -172,7 +182,6 @@ class OutsideTheMinesState extends BaseState
 						uiCamera.setFilters([]);
 
 						Timer.delay(() -> {
-							dialogManager = new DialogManager(this, uiCamera);
 							dialogManager.loadDialog(0);
 							player.animation.play("faceplant_get_up");
 						}, standUpDelay);
@@ -208,12 +217,12 @@ class OutsideTheMinesState extends BaseState
 			money++;
 		}
 
-		var shopVolumeRadius = 100;
-		var distanceFromShop = player.getPosition().distanceTo(shovel.getPosition());
+		// var shopVolumeRadius = 100;
+		// var distanceFromShop = player.getPosition().distanceTo(shovel.getPosition());
 		// Dynamic volume commented out for now
 		// var shopVolume = Math.max(0, 1-(distanceFromShop/shopVolumeRadius));
-		var shopVolume = 1;
-		FmodManager.SetEventParameterOnSong("ShopVolume", shopVolume);
+		// var shopVolume = 1;
+		// FmodManager.SetEventParameterOnSong("ShopVolume", shopVolume);
 
 		moneyText.text = "Money: " + money;
 		playerHealthText.text = "Health: " + player.health;
@@ -227,7 +236,7 @@ class OutsideTheMinesState extends BaseState
 	private function interactWithItem(interactable:Interactable, hitbox:Hitbox) {
 		if (!interactable.hasBeenHitByThisHitbox(hitbox)) {
 			if (interactable.name == "Rope") {
-				if (!player.canAttack) {
+				if (!player.hasUpgrade("Shovel")) {
 					TextPop.pop(Std.int(200), Std.int(140), "You aren't ready", new SlowFadeDown(FlxColor.RED), 10);
 					FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchaseFail);
 					trace("Dialgomanager is done: " + dialogManager.isDone);
@@ -249,7 +258,7 @@ class OutsideTheMinesState extends BaseState
 				if (money >= interactable.cost){
 					money -= interactable.cost;
 					interactable.onInteract(player);
-					TextPop.pop(Std.int(40), Std.int(30), "-$"+interactable.cost, new SlowFadeDown(FlxColor.RED), 10);
+					TextPop.pop(Std.int(36), Std.int(20), "-$"+interactable.cost, new SlowFadeDown(FlxColor.RED), 10);
 					FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchase);
 					dialogManager.loadDialog(2);
 				} else {

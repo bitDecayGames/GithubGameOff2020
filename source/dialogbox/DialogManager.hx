@@ -21,13 +21,10 @@ class DialogManager {
     public function new(_parentState:FlxState, _renderCamera:FlxCamera) {
         parentState = _parentState;
         renderCamera = _renderCamera;
-        typeText = new Dialogbox(parentState, this, Dialogs.DialogArray[0], FlxKey.SPACE, AssetPaths.joystix_monospace__ttf);
-        typeText.cameras = [renderCamera];
-        parentState.add(typeText);
     }
 
     public function update() {
-        if (disableSounds){
+        if (disableSounds || typeText == null){
             return;
         }
 

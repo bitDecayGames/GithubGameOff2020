@@ -126,6 +126,17 @@ class Player extends Entity {
         }
     }
 
+    public function hasUpgrade(name:String){
+        var hasUpgrade = false;
+        for (upgrade in upgrades) {
+            if (upgrade.name == name) {
+                hasUpgrade = true;
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function setControlsActive(_areActive:Bool){
         areControlsActive = _areActive;
     }

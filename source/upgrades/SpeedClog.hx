@@ -5,6 +5,7 @@ import entities.Stats;
 class SpeedClog extends Upgrade {
     public function new() {
         super();
+        name = "SpeedClog";
         loadGraphic(AssetPaths.speedClog__png, 16, 16);
     }
 

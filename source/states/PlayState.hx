@@ -1,5 +1,6 @@
 package states;
 
+import entities.RopeUp;
 import interactables.Interactable;
 import entities.enemies.Blob;
 import entities.Stats;
@@ -81,13 +82,14 @@ class PlayState extends BaseState
 		add(currentLevel.navigationLayer);
 		currentLevel.interactableLayer.alpha = 0;
 		add(currentLevel.interactableLayer);
+		add(currentLevel.foregroundLayer);
 
 		var exitTilesDown = currentLevel.interactableLayer.getTileCoords(5, false);
 		levelExitDown = new Rope(exitTilesDown[0]);
 		addInteractable(levelExitDown);
 
 		var exitTilesUp = currentLevel.interactableLayer.getTileCoords(6, false);
-		levelExitUp = new Rope(exitTilesUp[0]);
+		levelExitUp = new RopeUp(exitTilesUp[0]);
 		addInteractable(levelExitUp);
 
 		player = new Player(this, new FlxPoint(levelExitUp.x, levelExitUp.y+16));
@@ -243,6 +245,18 @@ class PlayState extends BaseState
 				if (!isTransitioningStates){
 					isTransitioningStates = true;
 					player.animation.play("climb_down");
+					camera.fade(FlxColor.BLACK, 2, false, null, true);
+					uiCamera.fade(FlxColor.BLACK, 2, false, null, true);
+					player.stopAttack();
+					FmodFlxUtilities.TransitionToStateAndStopMusic(new OutsideTheMinesState(OutsideTheMinesState.SkipIntro));
+					player.setPosition(interactable.x+4, interactable.y+4);
+				}
+			} 
+			if (interactable.name == "RopeUp") {
+				if (!isTransitioningStates){
+					isTransitioningStates = true;
+					player.animation.play("climb_up");
+					player.climbRope();
 					camera.fade(FlxColor.BLACK, 2, false, null, true);
 					uiCamera.fade(FlxColor.BLACK, 2, false, null, true);
 					player.stopAttack();

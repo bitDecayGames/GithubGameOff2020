@@ -9,6 +9,7 @@ class Level {
 	public var navigationLayer:FlxTilemap;
 	public var interactableLayer:FlxTilemap;
 	public var groundLayer:FlxTilemap;
+	public var foregroundLayer:FlxTilemap;
 
 	public function new(level:String) {
 		var loader = new FlxOgmo3Loader(AssetPaths.levels__ogmo, level);
@@ -17,5 +18,6 @@ class Level {
 		navigationLayer = loader.loadTilemap(AssetPaths.tiles__png, "navigation");
 		interactableLayer = loader.loadTilemap(AssetPaths.interactables__png, "interactable");
 		groundLayer = loader.loadTilemap(AssetPaths.tiles__png, "ground");
+		foregroundLayer = loader.loadTilemap(AssetPaths.tiles__png, "foreground");
 	}
 }

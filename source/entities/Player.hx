@@ -31,6 +31,8 @@ class Player extends Entity {
     var playerHitboxOffsetX = 4;
     var playerHitboxOffsetY = 14;
 
+    var climbingRope = false;
+
     public var lightOffset = FlxPoint.get(0, -11);
 
     public var invincibilityTimeLeft:Float = 0;
@@ -96,6 +98,7 @@ class Player extends Entity {
         animation.add("faceplant_get_up", [55,56,57,58,59], animationSpeed, false);
 
         animation.add("climb_down", [59,58,57,56,55,60], animationSpeed, false);
+        animation.add("climb_up", [64,65,66,67,68], animationSpeed);
 
         animation.play("stand_down");
 
@@ -145,6 +148,10 @@ class Player extends Entity {
         canAttack = _canAttack;
     }
 
+    public function climbRope() {
+        climbingRope = true;
+    }
+
 	override public function update(delta:Float):Void {
         super.update(delta);
 
@@ -157,7 +164,10 @@ class Player extends Entity {
         var potentialDirection:FlxPoint = new FlxPoint(0, 0);
 		potentialDirection = readDirectionInput();
 
-        if (inKnockback){
+        if (climbingRope) {
+            var climbUpSpeed = 50;
+            setPosition(x, y + delta*climbUpSpeed*-1);
+        } else if (inKnockback){
             setPosition(x + knockbackDirection.x*delta*knockbackSpeed, y + knockbackDirection.y*delta*knockbackSpeed*-1);
             knockbackDuration -= delta;
             if (knockbackDuration <= 0) {

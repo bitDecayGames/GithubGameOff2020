@@ -113,11 +113,11 @@ class PlayState extends BaseState
 		enemies.add(enemy4);
 		worldGroup.add(enemy4);
 
-		moneyText = new FlxText(1, 1, 1000, "Money: ", 10);
-		uiGroup.add(moneyText);
-
-		playerHealthText = new FlxText(1, 15, 1000, "Health: ", 10);
+		playerHealthText = new FlxText(1, 1, 1000, "Health: ", 10);
 		uiGroup.add(playerHealthText);
+
+		moneyText = new FlxText(1, 15, 1000, "Money: ", 10);
+		uiGroup.add(moneyText);
 
 		add(worldGroup);
 	}

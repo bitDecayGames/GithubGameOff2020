@@ -344,6 +344,7 @@ class Player extends Entity {
                 shovel.angle = 90;
             case FlxObject.LEFT:
                 shovel.angle = 180;
+                shovel.flipY = true;
             case FlxObject.UP:
                 shovel.angle = 270;
             default:

@@ -60,11 +60,13 @@ class PlayState extends BaseState
 
 		FlxCamera.defaultCameras = [FlxG.camera];
 
-		uiCamera = new FlxCamera(0, 0, 320, 240);
+		uiCamera = new FlxCamera(0, 0, 320, 272);
 		uiCamera.bgColor = FlxColor.TRANSPARENT;
 		FlxG.cameras.add(uiCamera);
 		uiGroup.cameras = [uiCamera];
 		add(uiGroup);
+
+		setupHUD();
 
 		camera.pixelPerfectRender = true;
 
@@ -92,13 +94,7 @@ class PlayState extends BaseState
 		addInteractable(levelExitUp);
 
 		player = new Player(this, new FlxPoint(levelExitUp.x, levelExitUp.y+16));
-
-		// var shovelUpgrade = new upgrades.Shovel();
-		// player.addUpgrade(shovelUpgrade);
-		// uiGroup.add(shovelUpgrade);
-
 		worldGroup.add(player);
-
 
 		var enemy1 = new entities.enemies.Rat(this, player, new FlxPoint(250, 30));
 		enemies.add(enemy1);
@@ -113,13 +109,26 @@ class PlayState extends BaseState
 		enemies.add(enemy4);
 		worldGroup.add(enemy4);
 
-		playerHealthText = new FlxText(1, 1, 1000, "Health: ", 10);
+		add(worldGroup);
+	}
+
+	private function setupHUD() {
+		var hudBG = new FlxSprite(0, FlxG.height - 32);
+		hudBG.makeGraphic(FlxG.width, 32, FlxColor.BLUE);
+		uiGroup.add(hudBG);
+
+		var textVerticalOffset = 7;
+		var healthIcon = new FlxSprite(16 * 13, FlxG.height - 32);
+		healthIcon.makeGraphic(32, 32, FlxColor.PINK);
+		uiGroup.add(healthIcon);
+		playerHealthText = new FlxText(16 * 15, FlxG.height - 32 + textVerticalOffset, 1000, "", 10);
 		uiGroup.add(playerHealthText);
 
-		moneyText = new FlxText(1, 15, 1000, "Money: ", 10);
+		var moneyIcon = new FlxSprite(16 * 16, FlxG.height - 32);
+		moneyIcon.makeGraphic(32, 32, FlxColor.BROWN);
+		uiGroup.add(moneyIcon);
+		moneyText = new FlxText(16 * 18, FlxG.height - 32 + textVerticalOffset, 1000, "", 10);
 		uiGroup.add(moneyText);
-
-		add(worldGroup);
 	}
 
 	private function setupLightShader() {
@@ -220,8 +229,8 @@ class PlayState extends BaseState
 			addLoot(loot);
 		}
 
-		moneyText.text = "Money: " + Player.state.money;
-		playerHealthText.text = "Health: " + player.health;
+		moneyText.text = "" + Player.state.money;
+		playerHealthText.text = "" + player.health;
 
 		FlxG.watch.addQuick("enemies: ", enemies.length);
 

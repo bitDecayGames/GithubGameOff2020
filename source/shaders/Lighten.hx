@@ -17,7 +17,7 @@ class Lighten extends FlxShader
         void main()
         {
             // This should be available as a built in, but where?
-            vec2 ingameResolution = vec2(320, 240);
+            vec2 ingameResolution = vec2(320, 272);
             vec2 uv = openfl_TextureCoordv;
             vec4 pixel = texture2D(bitmap, openfl_TextureCoordv);
 

@@ -82,6 +82,8 @@ class OutsideTheMinesState extends BaseState
 		uiCamera = new FlxCamera(0, 0, 320, 240);
 		uiCamera.bgColor = FlxColor.TRANSPARENT;
 		FlxG.cameras.add(uiCamera);
+		add(uiGroup);
+		setupHUD();
 
 		camera.pixelPerfectRender = true;
 
@@ -125,13 +127,6 @@ class OutsideTheMinesState extends BaseState
 
 		// This will be set in state eventually
 		player.setCanAttack(false);
-
-		playerHealthText = new FlxText(1, 1, 1000, "Health: ", 10);
-		playerHealthText.cameras = [uiCamera];
-		add(playerHealthText);
-		moneyText = new FlxText(1, 15, 1000, "Money: ", 10);
-		moneyText.cameras = [uiCamera];
-		add(moneyText);
 
 		add(worldGroup);
 		add(uiGroup);
@@ -189,6 +184,25 @@ class OutsideTheMinesState extends BaseState
 		}
 	}
 
+	private function setupHUD() {
+		var hudBG = new FlxSprite(0, FlxG.height - 32);
+		hudBG.makeGraphic(FlxG.width, 32, FlxColor.BLUE);
+		uiGroup.add(hudBG);
+
+		var textVerticalOffset = 7;
+		var healthIcon = new FlxSprite(16 * 13, FlxG.height - 32);
+		healthIcon.makeGraphic(32, 32, FlxColor.PINK);
+		uiGroup.add(healthIcon);
+		playerHealthText = new FlxText(16 * 15, FlxG.height - 32 + textVerticalOffset, 1000, "", 10);
+		uiGroup.add(playerHealthText);
+
+		var moneyIcon = new FlxSprite(16 * 16, FlxG.height - 32);
+		moneyIcon.makeGraphic(32, 32, FlxColor.BROWN);
+		uiGroup.add(moneyIcon);
+		moneyText = new FlxText(16 * 18, FlxG.height - 32 + textVerticalOffset, 1000, "", 10);
+		uiGroup.add(moneyText);
+	}
+
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
 		FmodManager.Update();
@@ -223,8 +237,8 @@ class OutsideTheMinesState extends BaseState
 		// var shopVolume = 1;
 		// FmodManager.SetEventParameterOnSong("ShopVolume", shopVolume);
 
-		moneyText.text = "Money: " + Player.state.money;
-		playerHealthText.text = "Health: " + player.health;
+		moneyText.text = "" + Player.state.money;
+		playerHealthText.text = "" + player.health;
 
 
 		FlxG.overlap(interactables, hitboxes, interactWithItem);

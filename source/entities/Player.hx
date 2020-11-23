@@ -156,6 +156,7 @@ class Player extends Entity {
         super.update(delta);
 
         activeStats.lightRadius -= activeStats.lightDrainRate * delta;
+        activeStats.lightRadius = Math.max(activeStats.lightRadius, activeStats.minLightRadius);
 
         if (invincibilityTimeLeft > 0){
             invincibilityTimeLeft -= delta;
@@ -425,7 +426,7 @@ class Player extends Entity {
     public function organizeUpgrades() {
         for (i in 0...upgrades.length) {
             parentState.addUIElement(upgrades[i]);
-            upgrades[i].x = i * 16 + 10;
+            upgrades[i].x = i * 32 + 10;
             upgrades[i].y = FlxG.height - upgrades[i].height;
         }
     }

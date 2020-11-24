@@ -39,9 +39,6 @@ class PlayState extends BaseState
 {
 	var player:Player;
 
-	var moneyText:FlxText;
-	var playerHealthText:FlxText;
-
 	var shader:Lighten;
 	var lightFilter:ShaderFilter;
 
@@ -110,25 +107,6 @@ class PlayState extends BaseState
 		worldGroup.add(enemy4);
 
 		add(worldGroup);
-	}
-
-	private function setupHUD() {
-		var hudBG = new FlxSprite(0, FlxG.height - 32);
-		hudBG.makeGraphic(FlxG.width, 32, FlxColor.BLUE);
-		uiGroup.add(hudBG);
-
-		var textVerticalOffset = 7;
-		var healthIcon = new FlxSprite(16 * 13, FlxG.height - 32);
-		healthIcon.makeGraphic(32, 32, FlxColor.PINK);
-		uiGroup.add(healthIcon);
-		playerHealthText = new FlxText(16 * 15, FlxG.height - 32 + textVerticalOffset, 1000, "", 10);
-		uiGroup.add(playerHealthText);
-
-		var moneyIcon = new FlxSprite(16 * 16, FlxG.height - 32);
-		moneyIcon.makeGraphic(32, 32, FlxColor.BROWN);
-		uiGroup.add(moneyIcon);
-		moneyText = new FlxText(16 * 18, FlxG.height - 32 + textVerticalOffset, 1000, "", 10);
-		uiGroup.add(moneyText);
 	}
 
 	private function setupLightShader() {

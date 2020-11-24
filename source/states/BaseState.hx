@@ -46,6 +46,9 @@ class BaseState extends FlxState
 	var worldGroup:FlxGroup = new FlxGroup();
 	var uiGroup:FlxGroup = new FlxGroup();
 
+	var moneyText:FlxText;
+	var playerHealthText:FlxText;
+
 	public function addHitbox(hitbox:Hitbox) {
 		hitboxes.add(hitbox);
 		add(hitbox);
@@ -68,6 +71,31 @@ class BaseState extends FlxState
 
 	public function addUIElement(elem:FlxSprite) {
 		uiGroup.add(elem);
+	}
+
+	function setupHUD() {
+		var hudBG = new FlxSprite(0, FlxG.height - 32);
+		hudBG.makeGraphic(FlxG.width, 32, FlxColor.BLUE);
+		uiGroup.add(hudBG);
+
+		var textVerticalOffset = 9;
+		var healthIcon = new FlxSprite(16 * 13, FlxG.height - 32);
+		healthIcon.loadGraphic(AssetPaths.hudStuff__png, true, 32, 32);
+		healthIcon.animation.add("frame", [0]);
+		healthIcon.animation.play("frame");
+		uiGroup.add(healthIcon);
+
+		playerHealthText = new FlxText(16 * 15, FlxG.height - 32 + textVerticalOffset, 1000, "", 10);
+		uiGroup.add(playerHealthText);
+
+		var moneyIcon = new FlxSprite(16 * 16, FlxG.height - 32);
+		moneyIcon.loadGraphic(AssetPaths.hudStuff__png, true, 32, 32);
+		moneyIcon.animation.add("frame", [6]);
+		moneyIcon.animation.play("frame");
+		uiGroup.add(moneyIcon);
+
+		moneyText = new FlxText(16 * 18, FlxG.height - 32 + textVerticalOffset, 1000, "", 10);
+		uiGroup.add(moneyText);
 	}
 
 	// override public function onFocus() {

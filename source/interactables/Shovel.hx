@@ -7,13 +7,15 @@ import entities.Player;
 class Shovel extends Interactable {
 
     public function new(_position:FlxPoint) {
+        // going from a position for 16x16, so we need to adjust up one tile to line up
+        _position.y -= 16;
         super(_position);
 
         containedUpgrade = () -> return new upgrades.Shovel();
 
-        loadGraphic(AssetPaths.shovel__png, true, 16, 16);
+        loadGraphic(AssetPaths.interactables__png, true, 16, 32);
 
-        animation.add("inventory", [0]);
+        animation.add("inventory", [1]);
         animation.play("inventory");
 
         name = "Shovel";

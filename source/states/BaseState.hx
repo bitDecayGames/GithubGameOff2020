@@ -79,13 +79,19 @@ class BaseState extends FlxState
 		uiGroup.add(hudBG);
 
 		var textVerticalOffset = 9;
-		var healthIcon = new FlxSprite(16 * 13, FlxG.height - 32);
+		var healthIcon = new FlxSprite(16 * 12, FlxG.height - 32);
 		healthIcon.loadGraphic(AssetPaths.hudStuff__png, true, 32, 32);
 		healthIcon.animation.add("frame", [0]);
 		healthIcon.animation.play("frame");
 		uiGroup.add(healthIcon);
 
-		playerHealthText = new FlxText(16 * 15, FlxG.height - 32 + textVerticalOffset, 1000, "", 10);
+		var healthBorder = new FlxSprite(healthIcon.x + 32, FlxG.height - 32);
+		healthBorder.loadGraphic(AssetPaths.hudStuff__png, true, 32, 32);
+		healthBorder.animation.add("frame", [1]);
+		healthBorder.animation.play("frame");
+		uiGroup.add(healthBorder);
+
+		playerHealthText = new FlxText(16 * 14, FlxG.height - 32 + textVerticalOffset, 1000, "", 10);
 		uiGroup.add(playerHealthText);
 
 		var moneyIcon = new FlxSprite(16 * 16, FlxG.height - 32);
@@ -93,6 +99,12 @@ class BaseState extends FlxState
 		moneyIcon.animation.add("frame", [6]);
 		moneyIcon.animation.play("frame");
 		uiGroup.add(moneyIcon);
+
+		var moneyBorder = new FlxSprite(moneyIcon.x + 32, FlxG.height - 32);
+		moneyBorder.loadGraphic(AssetPaths.hudStuff__png, true, 32, 32);
+		moneyBorder.animation.add("frame", [1]);
+		moneyBorder.animation.play("frame");
+		uiGroup.add(moneyBorder);
 
 		moneyText = new FlxText(16 * 18, FlxG.height - 32 + textVerticalOffset, 1000, "", 10);
 		uiGroup.add(moneyText);

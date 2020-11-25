@@ -427,7 +427,7 @@ class Player extends Entity {
     public function organizeUpgrades() {
         for (i in 0...upgrades.length) {
             parentState.addUIElement(upgrades[i]);
-            upgrades[i].x = i * 32 + 10;
+            upgrades[i].x = i * 32;
             upgrades[i].y = FlxG.height - upgrades[i].height;
         }
     }

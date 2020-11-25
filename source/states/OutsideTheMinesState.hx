@@ -103,6 +103,9 @@ class OutsideTheMinesState extends BaseState
 		
 		if (skipIntro){
 			player = new Player(this, new FlxPoint(levelExit.x-16, levelExit.y));
+			if (!player.hasUpgrade("Shovel")){
+				player.addUpgrade(() -> return new upgrades.Shovel());
+			}
 		} else {
 			player = new Player(this, new FlxPoint(FlxG.width/2, FlxG.height/2));
 		}

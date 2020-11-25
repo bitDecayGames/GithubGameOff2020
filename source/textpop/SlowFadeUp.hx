@@ -7,7 +7,7 @@ import flixel.FlxObject;
 import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
 
-class SlowFadeDown implements Style {
+class SlowFadeUp implements Style {
 
 	var color:FlxColor;
 
@@ -19,7 +19,7 @@ class SlowFadeDown implements Style {
 		var flxObj:FlxObject = obj;
 		var textObj = cast(obj, FlxText);
 		textObj.color = color;
-		var tween = FlxTween.tween(flxObj, { y: flxObj.y + 60, alpha: 0}, 3);
+		var tween = FlxTween.tween(flxObj, { y: flxObj.y - 60, alpha: 0}, 3);
 		return tween;
 	}
 }

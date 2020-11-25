@@ -48,6 +48,13 @@ class Enemy extends Entity {
 	override public function update(delta:Float):Void {
         super.update(delta);
 
+        if (health <= -1) {
+            // if the player hits enemies in knockback, they can be killed immediately
+            dropLoot();
+            destroy();
+            return;
+        }
+
         if (inKnockback){
             setPosition(x + knockbackDirection.x*delta*knockbackSpeed, y + knockbackDirection.y*delta*knockbackSpeed*-1);
             knockbackDuration -= delta;
@@ -56,6 +63,7 @@ class Enemy extends Entity {
                 if (health <= 0) {
                     dropLoot();
                     destroy();
+                    return;
                 }
             }
         } else {

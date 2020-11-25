@@ -250,7 +250,7 @@ class OutsideTheMinesState extends BaseState
 				if (Player.state.money >= interactable.cost){
 					Player.state.money -= interactable.cost;
 					interactable.onInteract(player);
-					TextPop.pop(Std.int(36), Std.int(20), "-$"+interactable.cost, new SlowFadeDown(FlxColor.RED), 10);
+					TextPop.pop(Std.int(player.x), Std.int(player.y), "-$"+interactable.cost, new SlowFadeDown(FlxColor.RED), 10);
 					FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchase);
 					dialogManager.loadDialog(2);
 				} else {

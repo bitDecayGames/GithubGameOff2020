@@ -258,6 +258,7 @@ class PlayState extends BaseState
 					player.stopAttack();
 					FmodFlxUtilities.TransitionToStateAndStopMusic(new OutsideTheMinesState(OutsideTheMinesState.SkipIntro));
 					player.setPosition(interactable.x+4, interactable.y+4);
+					player.ID = SortingHelpers.SORT_TO_TOP;
 				}
 			}
 			interactable.trackHitbox(hitbox);

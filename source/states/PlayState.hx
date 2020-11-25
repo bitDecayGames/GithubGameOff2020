@@ -1,5 +1,6 @@
 package states;
 
+import flixel.addons.display.FlxTiledSprite;
 import entities.RopeUp;
 import interactables.Interactable;
 import entities.enemies.Blob;
@@ -87,8 +88,7 @@ class PlayState extends BaseState
 		addInteractable(levelExitDown);
 
 		var exitTilesUp = currentLevel.interactableLayer.getTileCoords(6, false);
-		levelExitUp = new RopeUp(exitTilesUp[0]);
-		addInteractable(levelExitUp);
+		setupEscapeRope(exitTilesUp[0]);
 
 		player = new Player(this, new FlxPoint(levelExitUp.x, levelExitUp.y+16));
 		worldGroup.add(player);
@@ -107,6 +107,16 @@ class PlayState extends BaseState
 		worldGroup.add(enemy4);
 
 		add(worldGroup);
+	}
+
+	private function setupEscapeRope(location:FlxPoint) {
+		levelExitUp = new RopeUp(location);
+		var restOfRope  = new FlxTiledSprite(AssetPaths.escapeRope__png, 16, levelExitUp.y, false, true);
+		restOfRope.setPosition(levelExitUp.x, 0);
+		// restOfRope.alpha = 0.2;
+		addInteractable(levelExitUp);
+		// a bit of a hack to make sure this renders on top of everything
+		worldGroup.add(restOfRope);
 	}
 
 	private function setupLightShader() {

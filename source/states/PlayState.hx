@@ -75,7 +75,7 @@ class PlayState extends BaseState
 		camera.fade(FlxColor.BLACK, 1.5, true);
 		uiCamera.fade(FlxColor.BLACK, 1.5, true);
 
-		currentLevel = new Level(AssetPaths.test__json);
+		currentLevel = new Level("assets/levels/caves" + Statics.CurrentLevel + ".json");
 		// add(currentLevel.debugLayer);
 		add(currentLevel.groundLayer);
 		add(currentLevel.navigationLayer);
@@ -90,7 +90,11 @@ class PlayState extends BaseState
 		var exitTilesUp = currentLevel.interactableLayer.getTileCoords(6, false);
 		setupEscapeRope(exitTilesUp[0]);
 
-		player = new Player(this, new FlxPoint(levelExitUp.x, levelExitUp.y+16));
+		if (Statics.GoingDown) {
+			player = new Player(this, new FlxPoint(levelExitUp.x, levelExitUp.y+16));
+		} else {
+			player = new Player(this, new FlxPoint(levelExitDown.x, levelExitDown.y+16));
+		}
 		worldGroup.add(player);
 
 		var enemy1 = new entities.enemies.Rat(this, player, new FlxPoint(250, 30));
@@ -244,7 +248,9 @@ class PlayState extends BaseState
 					camera.fade(FlxColor.BLACK, 2, false, null, true);
 					uiCamera.fade(FlxColor.BLACK, 2, false, null, true);
 					player.stopAttack();
-					FmodFlxUtilities.TransitionToStateAndStopMusic(new OutsideTheMinesState(OutsideTheMinesState.SkipIntro));
+					Statics.CurrentLevel++;
+					Statics.GoingDown = true;
+					FmodFlxUtilities.TransitionToStateAndStopMusic(new PlayState());
 					player.setPosition(interactable.x+4, interactable.y+4);
 				}
 			}
@@ -256,7 +262,13 @@ class PlayState extends BaseState
 					camera.fade(FlxColor.BLACK, 2, false, null, true);
 					uiCamera.fade(FlxColor.BLACK, 2, false, null, true);
 					player.stopAttack();
-					FmodFlxUtilities.TransitionToStateAndStopMusic(new OutsideTheMinesState(OutsideTheMinesState.SkipIntro));
+					Statics.CurrentLevel--;
+					Statics.GoingDown = false;
+					if (Statics.CurrentLevel > 0){
+						FmodFlxUtilities.TransitionToStateAndStopMusic(new PlayState());
+					} else {
+						FmodFlxUtilities.TransitionToStateAndStopMusic(new OutsideTheMinesState(OutsideTheMinesState.SkipIntro));
+					}
 					player.setPosition(interactable.x+4, interactable.y+4);
 					player.ID = SortingHelpers.SORT_TO_TOP;
 				}

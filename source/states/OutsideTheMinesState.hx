@@ -97,7 +97,16 @@ class OutsideTheMinesState extends BaseState
 		currentLevel.interactableLayer.alpha = 0;
 		add(currentLevel.interactableLayer);
 
-		player = new Player(this, new FlxPoint(FlxG.width/2, FlxG.height/2));
+		var exitTiles = currentLevel.interactableLayer.getTileCoords(rope_index, false);
+		levelExit = new Rope(exitTiles[0]);
+		addInteractable(levelExit);
+		
+		if (skipIntro){
+			player = new Player(this, new FlxPoint(levelExit.x-16, levelExit.y));
+		} else {
+			player = new Player(this, new FlxPoint(FlxG.width/2, FlxG.height/2));
+		}
+
 		worldGroup.add(player);
 
 		var itemTiles:Array<FlxPoint>;
@@ -113,10 +122,6 @@ class OutsideTheMinesState extends BaseState
 			var shoe = new Shoe(itemTiles[0]);
 			addInteractable(shoe);
 		}
-
-		var exitTiles = currentLevel.interactableLayer.getTileCoords(rope_index, false);
-		levelExit = new Rope(exitTiles[0]);
-		addInteractable(levelExit);
 
 		var shopkeepTiles = currentLevel.interactableLayer.getTileCoords(shopkeep_index, false);
 		var shopkeep = new Shopkeep(this, shopkeepTiles[0]);
@@ -243,21 +248,28 @@ class OutsideTheMinesState extends BaseState
 					uiCamera.fade(FlxColor.BLACK, 2, false, null, true);
 					FmodManager.StopSoundImmediately("attack");
 					player.stopAttack();
+					Statics.CurrentLevel = 1;
+					Statics.GoingDown = true;
 					FmodFlxUtilities.TransitionToStateAndStopMusic(new PlayState());
 					player.setPosition(interactable.x+4, interactable.y+4);
 				}
 			} else {
-				if (Player.state.money >= interactable.cost){
-					Player.state.money -= interactable.cost;
-					interactable.onInteract(player);
-					TextPop.pop(Std.int(FlxG.width-47), Std.int(FlxG.height-35), "-$"+interactable.cost, new SlowFadeUp(FlxColor.RED), 10);
-					FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchase);
-					if (interactable.name == "Shovel") {
-						dialogManager.loadDialog(2);
-					}
-				} else {
-					TextPop.pop(Std.int(player.x), Std.int(player.y), "Not enough money", new SlowFade(), 10);
+				if (interactable.name != "Shovel" && !player.hasUpgrade("Shovel")) {
+					TextPop.pop(Std.int(player.x), Std.int(player.y), "Not the shovel", new SlowFade(FlxColor.RED), 10);
 					FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchaseFail);
+				} else {
+					if (Player.state.money >= interactable.cost){
+						Player.state.money -= interactable.cost;
+						interactable.onInteract(player);
+						TextPop.pop(Std.int(FlxG.width-47), Std.int(FlxG.height-35), "-$"+interactable.cost, new SlowFadeUp(FlxColor.RED), 10);
+						FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchase);
+						if (interactable.name == "Shovel") {
+							dialogManager.loadDialog(2);
+						}
+					} else {
+						TextPop.pop(Std.int(player.x), Std.int(player.y), "Not enough money", new SlowFade(FlxColor.RED), 10);
+						FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchaseFail);
+					}
 				}
 			}
 			interactable.trackHitbox(hitbox);

@@ -14,6 +14,11 @@ class RopeUp extends Interactable {
         super(_position);
         super.makeGraphic(16, 16, FlxColor.TRANSPARENT);
 
+        loadGraphic(AssetPaths.interactables__png, true, 16, 16);
+
+        animation.add("inventory", [6]);
+        animation.play("inventory");
+
         name = "RopeUp";
         cost = 0;
     }

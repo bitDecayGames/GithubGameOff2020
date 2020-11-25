@@ -5,7 +5,7 @@ import flixel.util.FlxSort;
 import helpers.SortingHelpers;
 import interactables.Shovel;
 import interactables.Axe;
-import textpop.SlowFadeDown;
+import textpop.SlowFadeUp;
 import textpop.SlowFade;
 import com.bitdecay.textpop.TextPop;
 import haxe.Timer;
@@ -229,7 +229,7 @@ class OutsideTheMinesState extends BaseState
 		if (!interactable.hasBeenHitByThisHitbox(hitbox)) {
 			if (interactable.name == "Rope") {
 				if (!player.hasUpgrade("Shovel")) {
-					TextPop.pop(Std.int(200), Std.int(140), "You aren't ready", new SlowFadeDown(FlxColor.RED), 10);
+					TextPop.pop(Std.int(200), Std.int(140), "You aren't ready", new SlowFadeUp(FlxColor.RED), 10);
 					FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchaseFail);
 					trace("Dialgomanager is done: " + dialogManager.isDone);
 					if (dialogManager.isDone){
@@ -250,9 +250,11 @@ class OutsideTheMinesState extends BaseState
 				if (Player.state.money >= interactable.cost){
 					Player.state.money -= interactable.cost;
 					interactable.onInteract(player);
-					TextPop.pop(Std.int(player.x), Std.int(player.y), "-$"+interactable.cost, new SlowFadeDown(FlxColor.RED), 10);
+					TextPop.pop(Std.int(FlxG.width-47), Std.int(FlxG.height-35), "-$"+interactable.cost, new SlowFadeUp(FlxColor.RED), 10);
 					FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchase);
-					dialogManager.loadDialog(2);
+					if (interactable.name == "Shovel") {
+						dialogManager.loadDialog(2);
+					}
 				} else {
 					TextPop.pop(Std.int(player.x), Std.int(player.y), "Not enough money", new SlowFade(), 10);
 					FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchaseFail);

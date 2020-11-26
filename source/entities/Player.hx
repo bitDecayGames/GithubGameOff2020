@@ -1,5 +1,6 @@
 package entities;
 
+import states.OutsideTheMinesState;
 import upgrades.Upgrade;
 import states.BaseState;
 import entities.Stats.StatModifier;
@@ -20,6 +21,8 @@ using extensions.FlxObjectExt;
 class Player extends Entity {
 
     public static var state = new GameState();
+
+    public var isDead:Bool;
 
     var controls:Actions;
     var areControlsActive = true;
@@ -174,7 +177,15 @@ class Player extends Entity {
             if (knockbackDuration <= 0) {
                 inKnockback = false;
                 if (health <= 0) {
-                    FmodFlxUtilities.TransitionToState(new PlayState());
+                    isDead = true;
+                    active = false;
+                    FlxFlicker.stopFlickering(this);
+                    var playState = cast(parentState, PlayState);
+                    FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchaseFail);
+                    animation.play("faceplant");
+                    playState.playerHasDied();
+                    Statics.PlayerDied = true;
+                    return;
                 }
             }
             facing = determineFacing(potentialDirection);

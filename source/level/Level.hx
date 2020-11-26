@@ -15,9 +15,18 @@ class Level {
 		var loader = new FlxOgmo3Loader(AssetPaths.levels__ogmo, level);
 
 		debugLayer = loader.loadTilemap(AssetPaths.filler__png, "debug");
-		navigationLayer = loader.loadTilemap(AssetPaths.tiles__png, "navigation");
 		interactableLayer = loader.loadTilemap(AssetPaths.interactables__png, "interactable");
-		groundLayer = loader.loadTilemap(AssetPaths.tiles__png, "ground");
 		foregroundLayer = loader.loadTilemap(AssetPaths.tiles__png, "foreground");
+
+		trace("Loading level with set: " + Statics.CurrentSet);
+
+		switch (Statics.CurrentSet){
+			case 1:
+				navigationLayer = loader.loadTilemap(AssetPaths.tiles__png, "navigation");
+				groundLayer = loader.loadTilemap(AssetPaths.tiles__png, "ground");
+			case 2:
+				navigationLayer = loader.loadTilemap(AssetPaths.tiles2__png, "navigation");
+				groundLayer = loader.loadTilemap(AssetPaths.tiles2__png, "ground");
+		}
 	}
 }

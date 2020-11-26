@@ -158,8 +158,8 @@ class Player extends Entity {
 	override public function update(delta:Float):Void {
         super.update(delta);
 
-        activeStats.lightRadius -= activeStats.lightDrainRate * delta;
-        activeStats.lightRadius = Math.max(activeStats.lightRadius, activeStats.minLightRadius);
+        Statics.CurrentLightRadius -= Statics.lightDrainRate * delta;
+        Statics.CurrentLightRadius = Math.max(Statics.CurrentLightRadius, Statics.minLightRadius);
 
         if (invincibilityTimeLeft > 0){
             invincibilityTimeLeft -= delta;

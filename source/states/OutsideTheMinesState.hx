@@ -143,6 +143,9 @@ class OutsideTheMinesState extends BaseState
 			camera.fade(FlxColor.BLACK, 1.5, true);
 			uiCamera.fade(FlxColor.BLACK, 1.5, true);
 
+			TextPop.pop(Std.int(player.x-80), Std.int(player.y), "Headlamp regarged", new SlowFadeUp(), 10);
+			FmodManager.PlaySoundOneShot(FmodSFX.LightRecharge);
+
 			if (Statics.PlayerDied){
 				Statics.PlayerDied = false;
 				dialogManager.loadDialog(3);
@@ -150,6 +153,8 @@ class OutsideTheMinesState extends BaseState
 
 			} else if (!player.hasUpgrade("Shovel")){
 				dialogManager.loadDialog(0);
+			} else if (Statics.CurrentLightRadius <= Statics.minLightRadius) {
+				dialogManager.loadDialog(4);
 			}
 		} else {
 
@@ -260,6 +265,7 @@ class OutsideTheMinesState extends BaseState
 					Statics.CurrentLevel = 1;
 					Statics.CurrentSet = 1;
 					Statics.GoingDown = true;
+					Statics.CurrentLightRadius = Statics.MaxLightRadius;
 					Level.clearCache();
 					FmodFlxUtilities.TransitionToStateAndStopMusic(new PlayState());
 					player.setPosition(interactable.x+4, interactable.y+4);

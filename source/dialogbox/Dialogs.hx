@@ -7,5 +7,6 @@ class Dialogs {
         ["Going into the caves already? You really shouldn't go there without a shovel..."],
         ["Thanks! 'Z' is also how you swing your shovel. Go ahead, try it out.", "Also, the battery on your headlamp depletes over time. It automatically recharges up here.", "Good luck"],
         ["I knew you weren't tough enough...", "I wasn't actually going to let you die down there.", "Obviously, rescues come with a fee...", "Don't give up"],
+        ["Wow that light was just about drained.", "You certainly are brave."],
     ];
 }

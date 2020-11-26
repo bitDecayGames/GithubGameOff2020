@@ -189,7 +189,7 @@ class PlayState extends BaseState
 		shader.iTime.value[0] += elapsed;
 		shader.lightSourceX.value[0] = player.getMidpoint().x + player.lightOffset.x;
 		shader.lightSourceY.value[0] = player.getMidpoint().y + player.lightOffset.y;
-		shader.lightRadius.value = [player.activeStats.lightRadius];
+		shader.lightRadius.value = [Statics.CurrentLightRadius];
 
 		if(FlxG.keys.justPressed.P) {
 			shader.isShaderActive.value[0] = !shader.isShaderActive.value[0];

@@ -1,5 +1,6 @@
 package states;
 
+import flixel.addons.transition.FlxTransitionableState;
 import interactables.Interactable;
 import entities.Stats;
 import haxe.Timer;
@@ -32,7 +33,7 @@ import flixel.math.FlxPoint;
 import flixel.FlxObject;
 import textpop.SlowFade;
 
-class BaseState extends FlxState
+class BaseState extends FlxTransitionableState
 {
 	public var currentLevel:Level;
 	public var isTransitioningStates:Bool;

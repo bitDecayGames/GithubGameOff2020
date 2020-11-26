@@ -19,6 +19,7 @@ class FmodSFX {
     public static inline var MenuHover:String = "event:/SFX/Menu/MenuHover";
     public static inline var MenuSelect:String = "event:/SFX/Menu/MenuSelect";
     public static inline var CollectCoin:String = "event:/SFX/Player/Collect/CollectCoin";
+    public static inline var PlayerDeath:String = "event:/SFX/Player/Death/PlayerDeath";
     public static inline var PlayerFall:String = "event:/SFX/Player/Fall/PlayerFall";
     public static inline var FootstepRock:String = "event:/SFX/Player/Footsteps/FootstepRock";
     public static inline var PlayerPurchase:String = "event:/SFX/Player/Purchase/PlayerPurchase";

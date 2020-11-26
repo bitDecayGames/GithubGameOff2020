@@ -130,15 +130,6 @@ class PlayState extends BaseState
 		Player.state.money += _money;
 	}
 
-	private function playerExitTouch(p:Player, r:Rope) {
-		if (!isTransitioningStates){
-			isTransitioningStates = true;
-			camera.fade(FlxColor.BLACK, 2, false, null, true);
-			uiCamera.fade(FlxColor.BLACK, 2, false, null, true);
-			FmodFlxUtilities.TransitionToStateAndStopMusic(new OutsideTheMinesState(OutsideTheMinesState.SkipIntro));
-		}
-	}
-
 	private function enemyHitboxTouch(enemy:Enemy, hitbox:Hitbox) {
 		if (!enemy.hasBeenHitByThisHitbox(hitbox)){
 			FmodManager.PlaySoundOneShot(FmodSFX.ShovelEnemyImpact);
@@ -179,6 +170,16 @@ class PlayState extends BaseState
 		loot.path.cancel();
 		loot.color = FlxColor.BLUE;
 		loot.scale.set(5,5);
+	}
+
+	public function playerHasDied() {
+		Timer.delay(() -> {
+			camera.fade(FlxColor.BLACK, 2, false, null, true);
+			uiCamera.fade(FlxColor.BLACK, 2, false, null, true);
+			Statics.CurrentLevel = 0;
+			Statics.CurrentSet = 1;
+			FmodFlxUtilities.TransitionToStateAndStopMusic(new OutsideTheMinesState(OutsideTheMinesState.SkipIntro));
+		}, 3000);
 	}
 
 	override public function update(elapsed:Float) {
@@ -241,9 +242,11 @@ class PlayState extends BaseState
 					camera.fade(FlxColor.BLACK, 2, false, null, true);
 					uiCamera.fade(FlxColor.BLACK, 2, false, null, true);
 					player.stopAttack();
-					Statics.CurrentLevel++;
+					Statics.IncrementLevel();
 					Statics.GoingDown = true;
-					FmodFlxUtilities.TransitionToStateAndStopMusic(new PlayState());
+					Timer.delay(() -> {
+						FmodFlxUtilities.TransitionToState(new PlayState());
+					}, 1500);
 					player.setPosition(interactable.x+4, interactable.y+4);
 				}
 			}
@@ -255,10 +258,12 @@ class PlayState extends BaseState
 					camera.fade(FlxColor.BLACK, 2, false, null, true);
 					uiCamera.fade(FlxColor.BLACK, 2, false, null, true);
 					player.stopAttack();
-					Statics.CurrentLevel--;
+					Statics.DecrementLevel();
 					Statics.GoingDown = false;
 					if (Statics.CurrentLevel > 0){
-						FmodFlxUtilities.TransitionToStateAndStopMusic(new PlayState());
+						Timer.delay(() -> {
+							FmodFlxUtilities.TransitionToState(new PlayState());
+						}, 1500);
 					} else {
 						FmodFlxUtilities.TransitionToStateAndStopMusic(new OutsideTheMinesState(OutsideTheMinesState.SkipIntro));
 					}

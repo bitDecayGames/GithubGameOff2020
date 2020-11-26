@@ -143,7 +143,12 @@ class OutsideTheMinesState extends BaseState
 			camera.fade(FlxColor.BLACK, 1.5, true);
 			uiCamera.fade(FlxColor.BLACK, 1.5, true);
 
-			if (!player.hasUpgrade("Shovel")){
+			if (Statics.PlayerDied){
+				Statics.PlayerDied = false;
+				dialogManager.loadDialog(3);
+				// We need to subtract money here
+
+			} else if (!player.hasUpgrade("Shovel")){
 				dialogManager.loadDialog(0);
 			}
 		} else {
@@ -252,6 +257,7 @@ class OutsideTheMinesState extends BaseState
 					FmodManager.StopSoundImmediately("attack");
 					player.stopAttack();
 					Statics.CurrentLevel = 1;
+					Statics.CurrentSet = 1;
 					Statics.GoingDown = true;
 					Level.clearCache();
 					FmodFlxUtilities.TransitionToStateAndStopMusic(new PlayState());

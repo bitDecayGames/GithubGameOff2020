@@ -14,7 +14,7 @@ class Statics {
     public static var MaxLightRadius:Float = 100;
     public static var minLightRadius:Float = 15;
     public static var lightDrainRate:Float = 2; // units per second
-    public static var CurrentLightRadius:Float;
+    public static var CurrentLightRadius:Float = MaxLightRadius;
 
     public static function IncrementLevel() {
         CurrentLevel++;

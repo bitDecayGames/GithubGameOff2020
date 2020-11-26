@@ -1,5 +1,6 @@
 package entities.enemies;
 
+import level.EnemyCache;
 import js.html.TouchList;
 import flixel.FlxG;
 import flixel.math.FlxVector;
@@ -30,8 +31,8 @@ import entities.AcidShot;
 class Snake extends Enemy {
     var behavior:BTree;
 
-	public function new(_parentState:PlayState, _player:Player, position:FlxPoint) {
-        super(_parentState, _player, position);
+	public function new(_parentState:PlayState, _player:Player, position:FlxPoint, cache:EnemyCache) {
+        super(_parentState, _player, position, cache);
         path = new FlxPath();
 
         baseStats.speed = 30;

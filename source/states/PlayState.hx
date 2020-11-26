@@ -75,7 +75,7 @@ class PlayState extends BaseState
 		camera.fade(FlxColor.BLACK, 1.5, true);
 		uiCamera.fade(FlxColor.BLACK, 1.5, true);
 
-		currentLevel = new Level("assets/levels/caves" + Statics.CurrentLevel + ".json");
+		currentLevel = new Level("assets/levels/caves" + Statics.CurrentLevel + ".json", Statics.CurrentLevel);
 		// add(currentLevel.debugLayer);
 		add(currentLevel.groundLayer);
 		add(currentLevel.navigationLayer);
@@ -97,18 +97,11 @@ class PlayState extends BaseState
 		}
 		worldGroup.add(player);
 
-		var enemy1 = new entities.enemies.Rat(this, player, new FlxPoint(250, 30));
-		enemies.add(enemy1);
-		worldGroup.add(enemy1);
-		var enemy2 = new entities.enemies.Snake(this, player, new FlxPoint(100, 50));
-		enemies.add(enemy2);
-		worldGroup.add(enemy2);
-		var enemy3 = new entities.enemies.Bat(this, player, new FlxPoint(100, 100));
-		enemies.add(enemy3);
-		worldGroup.add(enemy3);
-		var enemy4 = new entities.enemies.Blob(this, player, new FlxPoint(100, 100));
-		enemies.add(enemy4);
-		worldGroup.add(enemy4);
+		for (enemyMaker in currentLevel.enemyMakers) {
+			var enemy = enemyMaker(this, player);
+			enemies.add(enemy);
+			worldGroup.add(enemy);
+		}
 
 		add(worldGroup);
 	}

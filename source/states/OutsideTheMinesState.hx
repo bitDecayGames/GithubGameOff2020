@@ -90,7 +90,7 @@ class OutsideTheMinesState extends BaseState
 		FmodManager.StopSongImmediately();
 		FmodManager.PlaySong(FmodSongs.OutsideTheMines);
 
-		currentLevel = new Level(AssetPaths.outsideTheMines__json);
+		currentLevel = new Level(AssetPaths.outsideTheMines__json, -1);
 		// add(currentLevel.debugLayer);
 		add(currentLevel.groundLayer);
 		add(currentLevel.navigationLayer);
@@ -100,7 +100,7 @@ class OutsideTheMinesState extends BaseState
 		var exitTiles = currentLevel.interactableLayer.getTileCoords(rope_index, false);
 		levelExit = new Rope(exitTiles[0]);
 		addInteractable(levelExit);
-		
+
 		if (skipIntro){
 			player = new Player(this, new FlxPoint(levelExit.x-16, levelExit.y));
 			if (!player.hasUpgrade("Shovel")){
@@ -253,6 +253,7 @@ class OutsideTheMinesState extends BaseState
 					player.stopAttack();
 					Statics.CurrentLevel = 1;
 					Statics.GoingDown = true;
+					Level.clearCache();
 					FmodFlxUtilities.TransitionToStateAndStopMusic(new PlayState());
 					player.setPosition(interactable.x+4, interactable.y+4);
 				}

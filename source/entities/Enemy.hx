@@ -1,5 +1,6 @@
 package entities;
 
+import level.EnemyCache;
 import level.Level;
 import flixel.math.FlxVector;
 import flixel.math.FlxMath;
@@ -25,11 +26,13 @@ class Enemy extends Entity {
     var directionVector:FlxVector;
 
     var level:Level;
+    var cacheEntry:EnemyCache;
 
-	public function new(_parentState:PlayState, _player:Player, position:FlxPoint) {
+	public function new(_parentState:PlayState, _player:Player, position:FlxPoint, cache:EnemyCache) {
         super(_parentState);
         health = 3;
         player = _player;
+        cacheEntry = cache;
         size = new FlxPoint(10, 10);
 
         baseStats.speed = 10;
@@ -48,8 +51,13 @@ class Enemy extends Entity {
 	override public function update(delta:Float):Void {
         super.update(delta);
 
+        // update our cache entry so that we respawn properly
+        cacheEntry.position.set(x, y);
+
         if (health <= -1) {
             // if the player hits enemies in knockback, they can be killed immediately
+            cacheEntry.dead = true;
+            cacheEntry.position = getPosition();
             dropLoot();
             destroy();
             return;
@@ -61,6 +69,8 @@ class Enemy extends Entity {
             if (knockbackDuration <= 0) {
                 inKnockback = false;
                 if (health <= 0) {
+                    cacheEntry.dead = true;
+                    cacheEntry.position = getPosition();
                     dropLoot();
                     destroy();
                     return;

@@ -1,5 +1,6 @@
 package entities.enemies;
 
+import level.EnemyCache;
 import behavior.tree.composite.Parallel;
 import behavior.leaf.util.StartMovementAnimation;
 import flixel.FlxG;
@@ -25,8 +26,8 @@ import states.PlayState;
 class Blob extends Enemy {
     var behavior:BTree;
 
-	public function new(_parentState:PlayState, _player:Player, position:FlxPoint) {
-        super(_parentState, _player, position);
+	public function new(_parentState:PlayState, _player:Player, position:FlxPoint, cache:EnemyCache) {
+        super(_parentState, _player, position, cache);
         path = new FlxPath();
 
         // frames persecond * move speed

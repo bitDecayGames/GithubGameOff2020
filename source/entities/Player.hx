@@ -181,7 +181,7 @@ class Player extends Entity {
                     active = false;
                     FlxFlicker.stopFlickering(this);
                     var playState = cast(parentState, PlayState);
-                    FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchaseFail);
+                    FmodManager.PlaySoundOneShot(FmodSFX.PlayerDeath);
                     animation.play("faceplant");
                     playState.playerHasDied();
                     Statics.PlayerDied = true;

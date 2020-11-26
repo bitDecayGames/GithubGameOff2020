@@ -342,7 +342,7 @@ class Player extends Entity {
         parentState.add(shovel);
         shovel.loadGraphic(AssetPaths.shovel__png, true, 16, 32);
         shovel.animation.add("swing", [0,1,2,3,4,5,6,7,8], 30, false);
-        shovel.animation.play("swing");
+        shovel.animation.add("swing_left", [17,16,15,14,13,12,11,10,9], 30, false);
         shovel.animation.finishCallback = (name) -> {
             shovel.destroy();
         }
@@ -352,15 +352,18 @@ class Player extends Entity {
         switch facing {
             case FlxObject.RIGHT:
                 shovel.angle = 0;
+                shovel.animation.play("swing");
             case FlxObject.DOWN:
                 shovel.angle = 90;
+                shovel.animation.play("swing");
             case FlxObject.LEFT:
-                shovel.angle = 180;
-                shovel.flipY = true;
+                shovel.animation.play("swing_left");
             case FlxObject.UP:
                 shovel.angle = 270;
+                shovel.animation.play("swing");
             default:
                 shovel.angle = 225;
+                shovel.animation.play("swing");
         }
     }
 

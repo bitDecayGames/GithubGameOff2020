@@ -183,6 +183,8 @@ class PlayState extends BaseState
 		Timer.delay(() -> {
 			camera.fade(FlxColor.BLACK, 2, false, null, true);
 			uiCamera.fade(FlxColor.BLACK, 2, false, null, true);
+			Statics.CurrentLevel = 0;
+			Statics.CurrentSet = 1;
 			FmodFlxUtilities.TransitionToStateAndStopMusic(new OutsideTheMinesState(OutsideTheMinesState.SkipIntro));
 		}, 3000);
 	}

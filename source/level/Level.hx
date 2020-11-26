@@ -55,7 +55,6 @@ class Level {
 		var cache = levelCache.get(depth);
 
 		loader.loadEntities((entityData) -> {
-			trace(entityData);
 			if (cache.exists(entityData.id)) {
 				// load type, deadness, and position here
 				var entry = cache.get(entityData.id);
@@ -64,7 +63,6 @@ class Level {
 					return;
 				}
 
-				trace('enemy ${entityData.id} already cached at loc: ${entry.position} and deadness: ${entry.dead}');
 				enemyMakers.push((playState, player) -> {
 					var enemy = entry.maker(playState, player);
 					if (entry.dead) {
@@ -77,9 +75,11 @@ class Level {
 					return enemy;
 				});
 			} else {
-				var spawnRate:Float = 80;
+				var spawnRate:Float = entityData.values.SpawnRate;
+				var roll = FlxG.random.float() * 100.0;
+
 				var pos = FlxPoint.get();
-				if ( FlxG.random.float() * 100.0 > spawnRate ) {
+				if (roll > spawnRate ) {
 					// we didn't roll high enough to spawn enemy, SKIP
 					trace('${entityData.name}:${entityData.id} skipped');
 					cache.set(entityData.id, new EnemyCache(depth, entityData.id, false, true, null, null));

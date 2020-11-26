@@ -21,7 +21,7 @@ class Rat extends Enemy {
     var behavior:BTree;
 
 	public function new(_parentState:PlayState, _player:Player, position:FlxPoint, cache:EnemyCache) {
-        super(_parentState, _player, position, cache);
+        super(_parentState, _player, position, cache, FmodSFX.RatDeath);
         path = new FlxPath();
 
         baseStats.speed = 30;
@@ -68,7 +68,6 @@ class Rat extends Enemy {
     }
 
     override public function destroy() {
-        FmodManager.PlaySoundOneShot(FmodSFX.RatDeath);
         kill();
     }
 

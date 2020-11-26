@@ -217,6 +217,8 @@ class PlayState extends BaseState
 
 		moneyText.text = "" + Player.state.money;
 		playerHealthText.text = "" + player.health;
+		var levelNumber = Statics.CurrentLevel + (Statics.CurrentSet-1) * Statics.SetDepth;
+		currentLevelText.text = "Level: " + levelNumber;
 
 		FlxG.watch.addQuick("enemies: ", enemies.length);
 

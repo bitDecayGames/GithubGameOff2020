@@ -49,6 +49,7 @@ class BaseState extends FlxTransitionableState
 
 	var moneyText:FlxText;
 	var playerHealthText:FlxText;
+	var currentLevelText:FlxText;
 
 	public function addHitbox(hitbox:Hitbox) {
 		hitboxes.add(hitbox);
@@ -94,6 +95,9 @@ class BaseState extends FlxTransitionableState
 
 		playerHealthText = new FlxText(16 * 14, FlxG.height - 32 + textVerticalOffset, 1000, "", 10);
 		uiGroup.add(playerHealthText);
+
+		currentLevelText = new FlxText(healthIcon.x - 64, FlxG.height - 32 + textVerticalOffset, 1000, "Floor: 0", 10);
+		uiGroup.add(currentLevelText);
 
 		var moneyIcon = new FlxSprite(16 * 16, FlxG.height - 32);
 		moneyIcon.loadGraphic(AssetPaths.hudStuff__png, true, 32, 32);

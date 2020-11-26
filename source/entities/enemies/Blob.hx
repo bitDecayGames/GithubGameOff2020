@@ -77,7 +77,6 @@ class Blob extends Enemy {
     }
 
     override public function destroy() {
-        FmodManager.PlaySoundOneShot(FmodSFX.RatDeath);
         kill();
     }
 

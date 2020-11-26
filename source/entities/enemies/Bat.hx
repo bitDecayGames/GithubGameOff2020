@@ -75,7 +75,6 @@ class Bat extends Enemy {
     }
 
     override public function destroy() {
-        FmodManager.PlaySoundOneShot(FmodSFX.RatDeath);
         kill();
     }
 

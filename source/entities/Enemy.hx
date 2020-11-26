@@ -28,12 +28,16 @@ class Enemy extends Entity {
     var level:Level;
     var cacheEntry:EnemyCache;
 
-	public function new(_parentState:PlayState, _player:Player, position:FlxPoint, cache:EnemyCache) {
+    //Sounds
+    var deathSound:String = FmodSFX.MenuSelect;
+
+	public function new(_parentState:PlayState, _player:Player, position:FlxPoint, cache:EnemyCache, ?_deathSound:String = null) {
         super(_parentState);
         health = 3;
         player = _player;
         cacheEntry = cache;
         size = new FlxPoint(10, 10);
+        deathSound = _deathSound;
 
         baseStats.speed = 10;
         refresh();
@@ -48,6 +52,12 @@ class Enemy extends Entity {
         kill();
     }
 
+    public function playDeathSound() {
+        if (deathSound != null){
+            FmodManager.PlaySoundOneShot(deathSound);
+        }
+    }
+
 	override public function update(delta:Float):Void {
         super.update(delta);
 
@@ -60,6 +70,7 @@ class Enemy extends Entity {
             cacheEntry.position = getPosition();
             dropLoot();
             destroy();
+            playDeathSound();
             return;
         }
 
@@ -73,6 +84,7 @@ class Enemy extends Entity {
                     cacheEntry.position = getPosition();
                     dropLoot();
                     destroy();
+                    playDeathSound();
                     return;
                 }
             }

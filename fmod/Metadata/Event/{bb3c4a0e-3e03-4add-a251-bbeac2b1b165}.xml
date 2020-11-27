@@ -95,7 +95,6 @@
 		<property name="timelockedOffset">
 			<value>0.2185960591133006</value>
 		</property>
-		<property name="name" />
 		<relationship name="audioFile">
 			<destination>{04082b5a-5115-41ed-9b02-64f0455b88b6}</destination>
 		</relationship>
@@ -120,6 +119,7 @@
 	<object class="MixerBusEffectChain" id="{544c7385-3c9a-4fc2-b9b2-25cabdf94161}">
 		<relationship name="effects">
 			<destination>{97b2e89f-7d85-42b3-a1e1-c4b33dd32c81}</destination>
+			<destination>{6aedae0a-c225-407b-b4ca-8712fdbf4e9e}</destination>
 			<destination>{02258bcf-93db-4b0d-9af2-4b29b686e2fb}</destination>
 		</relationship>
 	</object>
@@ -132,6 +132,20 @@
 	</object>
 	<object class="MixerBusPanner" id="{f6b2f73d-0cf7-4502-a20c-74116c120f7d}" />
 	<object class="MixerBusFader" id="{97b2e89f-7d85-42b3-a1e1-c4b33dd32c81}" />
+	<object class="MultibandEqEffect" id="{6aedae0a-c225-407b-b4ca-8712fdbf4e9e}">
+		<property name="filterTypeA">
+			<value>0</value>
+		</property>
+		<property name="filterTypeE">
+			<value>7</value>
+		</property>
+		<property name="frequencyE">
+			<value>149.229843</value>
+		</property>
+		<property name="gainE">
+			<value>-30</value>
+		</property>
+	</object>
 	<object class="SFXReverbEffect" id="{02258bcf-93db-4b0d-9af2-4b29b686e2fb}">
 		<property name="wetLevel">
 			<value>-7.5</value>

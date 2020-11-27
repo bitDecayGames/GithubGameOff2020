@@ -134,7 +134,7 @@ class PlayState extends BaseState
 		if (!enemy.hasBeenHitByThisHitbox(hitbox)){
 			FmodManager.PlaySoundOneShot(FmodSFX.ShovelEnemyImpact);
 			enemy.applyDamage(1);
-			enemy.setKnockback(determineKnockbackDirection(player.facing), 100, .5);
+			enemy.setKnockback(determineKnockbackDirection(player.facing), 100, .25);
 			enemy.trackHitbox(hitbox);
 		}
 	}

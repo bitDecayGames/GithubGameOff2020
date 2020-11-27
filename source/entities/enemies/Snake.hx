@@ -1,5 +1,6 @@
 package entities.enemies;
 
+import entities.Enemy.LootChance;
 import level.EnemyCache;
 import js.html.TouchList;
 import flixel.FlxG;
@@ -34,6 +35,11 @@ class Snake extends Enemy {
 	public function new(_parentState:PlayState, _player:Player, position:FlxPoint, cache:EnemyCache) {
         super(_parentState, _player, position, cache);
         path = new FlxPath();
+        
+        enemyName = "Snake";
+        lootChances = [
+            new LootChance(1, 2),
+        ];
 
         baseStats.speed = 30;
         refresh();

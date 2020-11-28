@@ -20,28 +20,30 @@ class AttackTarget extends LeafNode {
 
         var diff = self.getPosition(FlxPoint.get()).subtractPoint(target);
 
+        var attackAnimPrefix = "attack_";
         var attackAnimName = "attack_";
 
         if (Math.abs(diff.x) > Math.abs(diff.y)) {
             // left/right
             if (diff.x < 0) {
-                attackAnimName += "right";
+                attackAnimName = attackAnimPrefix + "right";
             } else {
-                attackAnimName += "left";
+                attackAnimName = attackAnimPrefix + "left";
             }
         } else {
             // up/down
             if (diff.y < 0) {
-                attackAnimName += "down";
+                attackAnimName = attackAnimPrefix + "down";
             } else {
-                attackAnimName += "up";
+                attackAnimName = attackAnimPrefix + "up";
             }
         }
 
         var attackAnimation = self.animation.getByName(attackAnimName);
 
         if (attackAnimation != null) {
-            if (self.animation.curAnim.name != attackAnimName) {
+            if (!StringTools.contains(self.animation.curAnim.name, attackAnimPrefix)) {
+                // Only start new animation if we aren't already in some attack animation
                 if (attackSound != null) {
                     FmodManager.PlaySoundOneShot(attackSound);
                 }

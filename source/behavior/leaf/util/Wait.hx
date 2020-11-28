@@ -20,6 +20,7 @@ class Wait extends LeafNode {
     override public function doProcess(delta:Float):NodeStatus {
         if (remaining <= 0) {
             if (started) {
+                started = false;
                 return SUCCESS;
             } else {
                 var min = cast(context.get("minWait"), Float);

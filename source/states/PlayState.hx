@@ -49,6 +49,17 @@ class PlayState extends BaseState
 	var levelExitUp:Interactable;
 	var levelExitDown:Interactable;
 
+	private static var levelOrder = [
+		AssetPaths.caves1__json,
+		AssetPaths.caves2__json,
+		AssetPaths.caves1__json,
+		AssetPaths.caves2__json,
+		AssetPaths.caves1__json,
+		AssetPaths.caves2__json,
+		AssetPaths.caves1__json,
+		AssetPaths.caves2__json,
+	];
+
 	override public function create()
 	{
 		super.create();
@@ -75,7 +86,7 @@ class PlayState extends BaseState
 		camera.fade(FlxColor.BLACK, 1.5, true);
 		uiCamera.fade(FlxColor.BLACK, 1.5, true);
 
-		currentLevel = new Level("assets/levels/caves" + Statics.CurrentLevel + ".json", Statics.CurrentLevel);
+		currentLevel = new Level(levelOrder[Statics.CurrentLevel], Statics.CurrentLevel);
 		// add(currentLevel.debugLayer);
 		add(currentLevel.groundLayer);
 		add(currentLevel.navigationLayer);
@@ -217,7 +228,7 @@ class PlayState extends BaseState
 
 		moneyText.text = "" + Player.state.money;
 		playerHealthText.text = "" + player.health;
-		var levelNumber = Statics.CurrentLevel + (Statics.CurrentSet-1) * Statics.SetDepth;
+		var levelNumber = Statics.CurrentLevel;
 		currentLevelText.text = "Level: " + levelNumber;
 
 		FlxG.watch.addQuick("enemies: ", enemies.length);

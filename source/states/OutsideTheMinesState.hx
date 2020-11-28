@@ -90,16 +90,20 @@ class OutsideTheMinesState extends BaseState
 		FmodManager.StopSongImmediately();
 		FmodManager.PlaySong(FmodSongs.OutsideTheMines);
 
-		currentLevel = new Level(AssetPaths.outsideTheMines__json, -1);
+		// Clear any previous run
+		Level.clearCache();
+
+		currentLevel = new Level(AssetPaths.outsideTheMines__json, 0);
 		// add(currentLevel.debugLayer);
 		add(currentLevel.groundLayer);
 		add(currentLevel.navigationLayer);
 		currentLevel.interactableLayer.alpha = 0;
 		add(currentLevel.interactableLayer);
 
-		var exitTiles = currentLevel.interactableLayer.getTileCoords(rope_index, false);
-		levelExit = new Rope(exitTiles[0]);
+		levelExit = currentLevel.downRope;
 		addInteractable(levelExit);
+		// This makes us collide with the tile that the downrope is at
+		currentLevel.navigationLayer.setTile(Std.int(levelExit.x / 16), Std.int(levelExit.y / 16), 1);
 
 		if (skipIntro){
 			player = new Player(this, new FlxPoint(levelExit.x-16, levelExit.y));
@@ -266,7 +270,6 @@ class OutsideTheMinesState extends BaseState
 					Statics.CurrentSet = 1;
 					Statics.GoingDown = true;
 					Statics.CurrentLightRadius = Statics.MaxLightRadius;
-					Level.clearCache();
 					FmodFlxUtilities.TransitionToStateAndStopMusic(new PlayState());
 					player.setPosition(interactable.x+4, interactable.y+4);
 				}

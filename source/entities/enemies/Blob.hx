@@ -1,5 +1,6 @@
 package entities.enemies;
 
+import entities.Enemy.LootChance;
 import level.EnemyCache;
 import behavior.tree.composite.Parallel;
 import behavior.leaf.util.StartMovementAnimation;
@@ -29,6 +30,13 @@ class Blob extends Enemy {
 	public function new(_parentState:PlayState, _player:Player, position:FlxPoint, cache:EnemyCache) {
         super(_parentState, _player, position, cache, FmodSFX.BlobDeath);
         path = new FlxPath();
+        
+        enemyName = "Blob";
+        lootChances = [
+            new LootChance(.3, 0),
+            new LootChance(.5, 1),
+            new LootChance(.2, 2),
+        ];
 
         // frames persecond * move speed
         baseStats.speed = Std.int(1.5 * 16);

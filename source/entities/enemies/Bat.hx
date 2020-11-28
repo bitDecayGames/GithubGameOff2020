@@ -1,5 +1,6 @@
 package entities.enemies;
 
+import entities.Enemy.LootChance;
 import level.EnemyCache;
 import behavior.leaf.util.Fail;
 import behavior.tree.composite.Parallel;
@@ -28,6 +29,11 @@ class Bat extends Enemy {
 	public function new(_parentState:PlayState, _player:Player, position:FlxPoint, cache:EnemyCache) {
         super(_parentState, _player, position, cache, FmodSFX.BatDeath);
         path = new FlxPath();
+
+        enemyName = "Bat";
+        lootChances = [
+            new LootChance(1, 1),
+        ];
 
         baseStats.speed = 15;
         refresh();

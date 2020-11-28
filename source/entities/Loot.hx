@@ -6,6 +6,7 @@ import flixel.util.FlxPath;
 import flixel.util.FlxColor;
 import flixel.math.FlxPoint;
 import flixel.FlxSprite;
+import flixel.FlxG;
 
 class Loot extends FlxSprite {
 
@@ -20,7 +21,7 @@ class Loot extends FlxSprite {
         super(_x + 4, _y + 4);
 
         var random = Math.random();
-        if (random < .5){
+        if (random < .8){
             coinType = "silver";
             coinValue = 1;
         } else {
@@ -33,10 +34,13 @@ class Loot extends FlxSprite {
         animation.play("spin");
 
 
+        var boundaryBuffer = 24;
+        var inventoryBuffer = 36;
+
         // Calculate final drop point
         var theta = Math.random() * 2 * Math.PI;
-        var finalX = _x + loopDropRadius * Math.cos(theta);
-        var finalY = _y + loopDropRadius * Math.sin(theta);
+        var finalX = Math.min(Math.max(boundaryBuffer, _x + loopDropRadius * Math.cos(theta)), FlxG.width-boundaryBuffer);
+        var finalY = Math.min(Math.max(boundaryBuffer, _y + loopDropRadius * Math.sin(theta)), FlxG.height-boundaryBuffer-inventoryBuffer);
         var randomPointAroundPlayer = new FlxPoint(finalX, finalY);
 
         // Create the path for it to follow

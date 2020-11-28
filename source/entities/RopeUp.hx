@@ -12,7 +12,6 @@ class RopeUp extends Interactable {
 
     public function new(_position:FlxPoint) {
         super(_position);
-        super.makeGraphic(16, 16, FlxColor.TRANSPARENT);
 
         loadGraphic(AssetPaths.interactables__png, true, 16, 16);
 

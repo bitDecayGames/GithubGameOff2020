@@ -4,7 +4,7 @@ package;
 class Statics {
     // How many levels per tileset
     public static var SetDepth:Int = 2;
-    
+
     public static var CurrentSet:Int = 1;
     public static var CurrentLevel:Int = 0;
     public static var GoingDown:Bool = false;
@@ -18,19 +18,9 @@ class Statics {
 
     public static function IncrementLevel() {
         CurrentLevel++;
-        if (CurrentLevel > SetDepth) {
-            CurrentLevel = 1;
-            CurrentSet++;
-        }
     }
 
     public static function DecrementLevel() {
         CurrentLevel--;
-        if (CurrentLevel == 0) {            
-            if (CurrentSet > 1){
-                CurrentSet--;
-                CurrentLevel = SetDepth;
-            }
-        }
     }
 }

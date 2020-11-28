@@ -1,5 +1,6 @@
 package entities.enemies;
 
+import entities.Enemy.LootChance;
 import level.EnemyCache;
 import flixel.FlxG;
 import behavior.tree.BTContext;
@@ -23,6 +24,12 @@ class Rat extends Enemy {
 	public function new(_parentState:PlayState, _player:Player, position:FlxPoint, cache:EnemyCache) {
         super(_parentState, _player, position, cache, FmodSFX.RatDeath);
         path = new FlxPath();
+        
+        enemyName = "Rat";
+        lootChances = [
+            new LootChance(.7, 1),
+            new LootChance(.3, 0),
+        ];
 
         baseStats.speed = 30;
         refresh();

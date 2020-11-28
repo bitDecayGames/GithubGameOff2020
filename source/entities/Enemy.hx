@@ -19,6 +19,16 @@ import flixel.math.FlxPoint;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 
+class LootChance {
+    public var chance:Float;
+    public var count:Int;
+
+    public function new (_chance:Float, _count:Int) {
+        chance = _chance;
+        count = _count;
+    }
+}
+
 class Enemy extends Entity {
 
     var player:Player;
@@ -28,11 +38,15 @@ class Enemy extends Entity {
     var level:Level;
     var cacheEntry:EnemyCache;
 
+    var enemyName:String = "Unset";
+    private var lootChances:Array<LootChance>;
+
     //Sounds
     var deathSound:String = FmodSFX.MenuSelect;
 
 	public function new(_parentState:PlayState, _player:Player, position:FlxPoint, cache:EnemyCache, ?_deathSound:String = null) {
         super(_parentState);
+
         health = 3;
         player = _player;
         cacheEntry = cache;
@@ -124,10 +138,40 @@ class Enemy extends Entity {
         return directionNormalized;
     }
 
+    private function verifyLootChance() {
+        if (lootChances == null) {
+            trace("Loot chance for " + enemyName + " not set!");
+            return;
+        } 
+
+        var totalLootPercentage:Float = 0;
+        for (lootChance in lootChances){
+            totalLootPercentage += lootChance.chance;
+        }
+
+        if (totalLootPercentage != 1.0) {
+            trace("Loot chance values for " + enemyName + " do not equal 100%. Total loot percentages added together should equal 1.0. Actual value: " + totalLootPercentage);
+        }
+    }
+
     function dropLoot() {
-        for (i in 0...5){
+        verifyLootChance();
+
+        var finalLootCount:Int = 0;
+
+        var lootSeed = Math.random();
+        for (lootChance in lootChances) {
+            lootSeed -= lootChance.chance;
+            if (lootSeed <= 0) {
+                finalLootCount = lootChance.count;
+                break;
+            }
+        }
+
+        while (finalLootCount > 0){
             var loot = new Loot(getMidpoint().x, getMidpoint().y);
             parentState.addLoot(loot);
+            finalLootCount--;
         }
     }
 

@@ -49,6 +49,17 @@ class PlayState extends BaseState
 	var levelExitUp:Interactable;
 	var levelExitDown:Interactable;
 
+	private static var levelOrder = [
+		AssetPaths.caves1__json,
+		AssetPaths.caves2__json,
+		AssetPaths.caves1__json,
+		AssetPaths.caves2__json,
+		AssetPaths.caves1__json,
+		AssetPaths.caves2__json,
+		AssetPaths.caves1__json,
+		AssetPaths.caves2__json,
+	];
+
 	override public function create()
 	{
 		super.create();
@@ -75,7 +86,7 @@ class PlayState extends BaseState
 		camera.fade(FlxColor.BLACK, 1.5, true);
 		uiCamera.fade(FlxColor.BLACK, 1.5, true);
 
-		currentLevel = new Level("assets/levels/caves" + Statics.CurrentLevel + ".json", Statics.CurrentLevel);
+		currentLevel = new Level(levelOrder[Statics.CurrentLevel], Statics.CurrentLevel);
 		// add(currentLevel.debugLayer);
 		add(currentLevel.groundLayer);
 		add(currentLevel.navigationLayer);
@@ -83,12 +94,12 @@ class PlayState extends BaseState
 		add(currentLevel.interactableLayer);
 		add(currentLevel.foregroundLayer);
 
-		var exitTilesDown = currentLevel.interactableLayer.getTileCoords(5, false);
-		levelExitDown = new Rope(exitTilesDown[0]);
+		levelExitDown = currentLevel.downRope;
 		addInteractable(levelExitDown);
+		// This makes us collide with the tile that the downrope is at
+		currentLevel.navigationLayer.setTile(Std.int(levelExitDown.x / 16), Std.int(levelExitDown.y / 16), 1);
 
-		var exitTilesUp = currentLevel.interactableLayer.getTileCoords(6, false);
-		setupEscapeRope(exitTilesUp[0]);
+		setupEscapeRope(currentLevel.upRope);
 
 		if (Statics.GoingDown) {
 			player = new Player(this, new FlxPoint(levelExitUp.x, levelExitUp.y+16));
@@ -106,8 +117,8 @@ class PlayState extends BaseState
 		add(worldGroup);
 	}
 
-	private function setupEscapeRope(location:FlxPoint) {
-		levelExitUp = new RopeUp(location);
+	private function setupEscapeRope(levelUpRope:RopeUp) {
+		levelExitUp = levelUpRope;
 		var restOfRope  = new FlxTiledSprite(AssetPaths.escapeRope__png, 16, levelExitUp.y, false, true);
 		restOfRope.setPosition(levelExitUp.x, 0);
 		// restOfRope.alpha = 0.2;
@@ -134,7 +145,7 @@ class PlayState extends BaseState
 		if (!enemy.hasBeenHitByThisHitbox(hitbox)){
 			FmodManager.PlaySoundOneShot(FmodSFX.ShovelEnemyImpact);
 			enemy.applyDamage(1);
-			enemy.setKnockback(determineKnockbackDirection(player.facing), 100, .5);
+			enemy.setKnockback(determineKnockbackDirection(player.facing), 100, .25);
 			enemy.trackHitbox(hitbox);
 		}
 	}
@@ -217,7 +228,7 @@ class PlayState extends BaseState
 
 		moneyText.text = "" + Player.state.money;
 		playerHealthText.text = "" + player.health;
-		var levelNumber = Statics.CurrentLevel + (Statics.CurrentSet-1) * Statics.SetDepth;
+		var levelNumber = Statics.CurrentLevel;
 		currentLevelText.text = "Level: " + levelNumber;
 
 		FlxG.watch.addQuick("enemies: ", enemies.length);

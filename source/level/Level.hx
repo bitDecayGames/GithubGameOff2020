@@ -1,5 +1,7 @@
 package level;
 
+import entities.RopeUp;
+import entities.Rope;
 import flixel.FlxG;
 import entities.Enemy;
 import entities.enemies.Blob;
@@ -15,13 +17,16 @@ import flixel.addons.editors.ogmo.FlxOgmo3Loader;
 
 class Level {
 
-	private static var levelCache = new Map<Int, Map<Int, EnemyCache>>();
+	private static var levelCache = new Map<Int, LevelCache>();
 
 	public var debugLayer:FlxTilemap;
 	public var navigationLayer:FlxTilemap;
 	public var interactableLayer:FlxTilemap;
 	public var groundLayer:FlxTilemap;
 	public var foregroundLayer:FlxTilemap;
+
+	public var upRope:RopeUp;
+	public var downRope:Rope;
 
 	public var enemyMakers = new Array<(PlayState) -> Player -> Enemy>();
 
@@ -32,7 +37,7 @@ class Level {
 	public function new(level:String, depth:Int) {
 
 		if (!levelCache.exists(depth)) {
-			levelCache.set(depth, new Map<Int, EnemyCache>());
+			levelCache.set(depth, new LevelCache(depth));
 		}
 
 		var loader = new FlxOgmo3Loader(AssetPaths.levels__ogmo, level);
@@ -41,7 +46,30 @@ class Level {
 		interactableLayer = loader.loadTilemap(AssetPaths.interactables__png, "interactable");
 		foregroundLayer = loader.loadTilemap(AssetPaths.tiles__png, "foreground");
 
-		trace("Loading level with set: " + Statics.CurrentSet);
+		var lCache = levelCache.get(depth);
+
+		loader.loadEntities((entityData) -> {
+			switch(entityData.name) {
+				case "downrope":
+					if (lCache.exit != null) {
+						downRope = new Rope(lCache.exit);
+					} else {
+						downRope = new Rope(selectRandomPosFromNodes(entityData));
+						lCache.exit = downRope.getPosition();
+					}
+				default:
+					throw 'Unknown object found on "ropes" layer: ${entityData.name}';
+			};
+		}, "rope");
+
+		if (levelCache.exists(depth-1)) {
+			// our entrance location is the previous dephs exit location
+			upRope = new RopeUp(levelCache.get(depth-1).exit);
+		} else {
+			upRope = new RopeUp(FlxPoint.get(100, 100));
+		}
+
+		trace("Loading level with tile set: " + Statics.CurrentSet);
 
 		switch (Statics.CurrentSet){
 			case 1:
@@ -52,7 +80,7 @@ class Level {
 				groundLayer = loader.loadTilemap(AssetPaths.tiles2__png, "ground");
 		}
 
-		var cache = levelCache.get(depth);
+		var cache = levelCache.get(depth).enemies;
 
 		loader.loadEntities((entityData) -> {
 			if (cache.exists(entityData.id)) {
@@ -84,17 +112,7 @@ class Level {
 					trace('${entityData.name}:${entityData.id} skipped');
 					cache.set(entityData.id, new EnemyCache(depth, entityData.id, false, true, null, null));
 				} else {
-					var nodeIndex = FlxG.random.int(0, entityData.nodes.length);
-					if (nodeIndex == entityData.nodes.length) {
-						// this is past the end of the list, use the entity's position here
-						// as it is NOT in the node list
-						pos.x = entityData.x;
-						pos.y = entityData.y;
-					} else {
-						var spawnNode = entityData.nodes[nodeIndex];
-						pos.x = spawnNode.x;
-						pos.y = spawnNode.y;
-					}
+					pos = selectRandomPosFromNodes(entityData);
 
 					var cacheEntry = new EnemyCache(depth, entityData.id, true, false, pos, null);
 					switch(entityData.name) {
@@ -122,5 +140,26 @@ class Level {
 				}
 			}
 		}, "spawners");
+	}
+
+	private function selectRandomPosFromNodes(entityData:EntityData):FlxPoint {
+		var pos = FlxPoint.get();
+		if (entityData.nodes == null) {
+			pos.set(entityData.x, entityData.y);
+			return pos;
+		}
+
+		var nodeIndex = FlxG.random.int(0, entityData.nodes.length);
+		if (nodeIndex == entityData.nodes.length) {
+			// this is past the end of the list, use the entity's position here
+			// as it is NOT in the node list
+			pos.x = entityData.x;
+			pos.y = entityData.y;
+		} else {
+			var spawnNode = entityData.nodes[nodeIndex];
+			pos.x = spawnNode.x;
+			pos.y = spawnNode.y;
+		}
+		return pos;
 	}
 }

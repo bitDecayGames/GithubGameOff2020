@@ -12,8 +12,11 @@ class Rope extends Interactable {
 
     public function new(_position:FlxPoint) {
         super(_position);
-        super.makeGraphic(16, 16, FlxColor.TRANSPARENT);
 
+        loadGraphic(AssetPaths.interactables__png, true, 16, 16);
+
+        animation.add("inventory", [5]);
+        animation.play("inventory");
         name = "Rope";
         cost = 0;
     }

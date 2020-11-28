@@ -59,7 +59,7 @@ class Level {
 					}
 				default:
 					throw 'Unknown object found on "ropes" layer: ${entityData.name}';
-			}
+			};
 		}, "rope");
 
 		if (levelCache.exists(depth-1)) {

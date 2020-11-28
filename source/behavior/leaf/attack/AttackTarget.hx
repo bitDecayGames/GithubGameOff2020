@@ -11,7 +11,7 @@ class AttackTarget extends LeafNode {
     var attackSound:String;
 
 	public function new(?_attackSound:String = null) {
-        _attackSound = attackSound;
+        attackSound = _attackSound;
     }
 
 	override public function doProcess(delta:Float):NodeStatus {

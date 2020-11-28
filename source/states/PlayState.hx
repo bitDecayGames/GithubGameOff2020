@@ -239,7 +239,7 @@ class PlayState extends BaseState
 		FlxG.overlap(player, enemies, playerEnemyTouch);
 		FlxG.overlap(player, projectiles, playerProjectileTouch);
 		FlxG.overlap(player, loots, playerLootTouch);
-		FlxG.overlap(interactables, hitboxes, interactWithItem);
+		FlxG.overlap(interactables, hitboxInteracts, interactWithItem);
 
 		worldGroup.sort(SortingHelpers.SortByY, FlxSort.ASCENDING);
 	}
@@ -249,10 +249,10 @@ class PlayState extends BaseState
 			if (interactable.name == "Rope") {
 				if (!isTransitioningStates){
 					isTransitioningStates = true;
+					player.stopAttack();
 					player.animation.play("climb_down");
 					camera.fade(FlxColor.BLACK, 2, false, null, true);
 					uiCamera.fade(FlxColor.BLACK, 2, false, null, true);
-					player.stopAttack();
 					Statics.IncrementLevel();
 					Statics.GoingDown = true;
 					Timer.delay(() -> {
@@ -264,11 +264,11 @@ class PlayState extends BaseState
 			if (interactable.name == "RopeUp") {
 				if (!isTransitioningStates){
 					isTransitioningStates = true;
+					player.stopAttack();
 					player.animation.play("climb_up");
 					player.climbRope();
 					camera.fade(FlxColor.BLACK, 2, false, null, true);
 					uiCamera.fade(FlxColor.BLACK, 2, false, null, true);
-					player.stopAttack();
 					Statics.DecrementLevel();
 					Statics.GoingDown = false;
 					if (Statics.CurrentLevel > 0){

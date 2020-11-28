@@ -2,6 +2,7 @@ package states;
 
 import interactables.HeartJar;
 import interactables.MatterConverter;
+import flixel.input.mouse.FlxMouse;
 import interactables.Shoe;
 import flixel.util.FlxSort;
 import helpers.SortingHelpers;
@@ -76,6 +77,7 @@ class OutsideTheMinesState extends BaseState
 	{
 		super.create();
 		FlxG.autoPause = false;
+		FlxG.mouse.visible = false;
 
 		#if debug
 		FlxG.debugger.drawDebug = true;
@@ -269,13 +271,15 @@ class OutsideTheMinesState extends BaseState
 		currentLevelText.text = "Level: 0";
 
 
-		FlxG.overlap(interactables, hitboxes, interactWithItem);
+		FlxG.overlap(interactables, hitboxInteracts, interactWithItem);
 
 		worldGroup.sort(SortingHelpers.SortByY, FlxSort.ASCENDING);
 	}
 
 	private function interactWithItem(interactable:Interactable, hitbox:Hitbox) {
 		if (!interactable.hasBeenHitByThisHitbox(hitbox)) {
+			FmodManager.StopSoundImmediately("attack");
+			player.stopAttack();
 			if (interactable.name == "Rope") {
 				if (!player.hasUpgrade("Shovel")) {
 					TextPop.pop(Std.int(200), Std.int(140), "You aren't ready", new SlowFadeUp(FlxColor.RED), 10);
@@ -290,8 +294,6 @@ class OutsideTheMinesState extends BaseState
 					player.animation.play("climb_down");
 					camera.fade(FlxColor.BLACK, 2, false, null, true);
 					uiCamera.fade(FlxColor.BLACK, 2, false, null, true);
-					FmodManager.StopSoundImmediately("attack");
-					player.stopAttack();
 					Statics.CurrentLevel = 1;
 					Statics.CurrentSet = 1;
 					Statics.GoingDown = true;

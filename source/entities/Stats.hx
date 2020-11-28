@@ -4,6 +4,8 @@ typedef StatModifier = Stats -> Void;
 
 class Stats {
     public var maxHealth = 5;
+    public var currentHealth = 5.0;
+
     public var speed:Float = 75;
 
     public function new() {}

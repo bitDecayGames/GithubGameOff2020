@@ -8,5 +8,13 @@ class Dialogs {
         ["Thanks! 'Z' is also how you swing your shovel. Go ahead, try it out.", "Also, the battery on your headlamp depletes over time. It automatically recharges up here.", "Good luck"],
         ["I knew you weren't tough enough...", "I wasn't actually going to let you die down there.", "Obviously, rescues come with a fee...", "Don't give up"],
         ["Wow that light was just about drained.", "You certainly are brave."],
+        ["The Matter Converter. This item will turn corpses into battery power for your light."],
+        ["Heart Jar. +2 to your max health."],
+        ["SpeedClog. Slight movement speed increase."],
+        ["Axe. More damage."],
+        ["Thanks! Interact with corpses in the caves to convert them into battery power.", "Every 3 corpses will give your light more charge!"],
+        ["Thanks! Your max health has increased by 2!"],
+        ["Thanks! You now move a little bit faster!"],
+        ["Thanks! You now can deal more damage!"],
     ];
 }

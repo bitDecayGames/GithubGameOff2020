@@ -58,6 +58,13 @@ class Dialogbox extends FlxBasic {
         startTyping();
     }
 
+    override public function kill() {
+        if (nextPageTimer != null){
+            nextPageTimer.stop();
+        }
+        super.kill();
+    }
+
 	override public function update(elapsed:Float) {
         super.update(elapsed);
     }

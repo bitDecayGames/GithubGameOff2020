@@ -1,6 +1,8 @@
 package states;
 
 import entities.HitboxTextInteract;
+import interactables.HeartJar;
+import interactables.MatterConverter;
 import flixel.input.mouse.FlxMouse;
 import interactables.Shoe;
 import flixel.util.FlxSort;
@@ -43,9 +45,14 @@ class OutsideTheMinesState extends BaseState
 {
 	public inline static var SkipIntro:Bool = true;
 
+	// some of these numbers are wacky because we are loading the tileset
+	// in Ogmo as a 16x16 tileset.
 	public static inline var shovel_index = 1;
 	public static inline var shoe_index = 3;
 	public static inline var rope_index = 5;
+	public static inline var heartjar_index = 20;
+	public static inline var matterconverter_index = 21;
+
 	public static inline var shopkeep_index = 4;
 
 	var skipIntro:Bool;
@@ -117,19 +124,38 @@ class OutsideTheMinesState extends BaseState
 			player = new Player(this, new FlxPoint(FlxG.width/2, FlxG.height/2));
 		}
 
+		player.rejuvenate();
+
 		worldGroup.add(player);
 
 		var itemTiles:Array<FlxPoint>;
 
 		if (!player.hasUpgrade("Shovel")){
 			itemTiles = currentLevel.interactableLayer.getTileCoords(shovel_index, false);
+			// offset by 16 since we are loading 16/32 tiles that in the editor are set one til
+			// above where we want the collider in-game
 			shovel = new Shovel(itemTiles[0]);
 			addInteractable(shovel);
 		}
 
 		if (!player.hasUpgrade("SpeedClog")){
 			itemTiles = currentLevel.interactableLayer.getTileCoords(shoe_index, false);
-			var shoe = new Shoe(itemTiles[0]);
+			var coords = itemTiles[0];
+			var shoe = new Shoe(coords);
+			addInteractable(shoe);
+		}
+
+		if (!player.hasUpgrade("Heart Jar")){
+			itemTiles = currentLevel.interactableLayer.getTileCoords(heartjar_index, false);
+			var coords = itemTiles[0];
+			var shoe = new HeartJar(coords);
+			addInteractable(shoe);
+		}
+
+		if (!player.hasUpgrade("Matter Converter")){
+			itemTiles = currentLevel.interactableLayer.getTileCoords(matterconverter_index, false);
+			var coords = itemTiles[0];
+			var shoe = new MatterConverter(coords);
 			addInteractable(shoe);
 		}
 
@@ -253,8 +279,41 @@ class OutsideTheMinesState extends BaseState
 	}
 
 	private function renderDialog(interactable:Interactable, hitboxTextInteract:HitboxTextInteract) {
-		if (dialogManager.getCurrentDialogIndex() != 2 || dialogManager.isDone) {
-			dialogManager.loadDialog(2);
+
+		var currentDialogIndex = dialogManager.getCurrentDialogIndex();
+
+
+		var matterConverterDialogIndex = 5;
+		var speedClogDialogIndex = 6;
+		var heartJarDialogIndex = 7;
+		var axeDialogIndex = 8;
+
+		trace("Current dialog index: " + currentDialogIndex);
+		trace("Is it done: " + dialogManager.isDone);
+
+		// Only render the shop text dialog if there is nothing else going on and the player is browsing for what to buy 
+		if ((currentDialogIndex != matterConverterDialogIndex && 
+			currentDialogIndex != speedClogDialogIndex && 
+			currentDialogIndex != heartJarDialogIndex && 
+			currentDialogIndex != axeDialogIndex) && !dialogManager.isDone) {
+				return;
+			}
+
+		switch(interactable.name){
+			case "Matter Converter":
+				loadDialogIfPossible(matterConverterDialogIndex);
+			case "Heart Jar":
+				loadDialogIfPossible(speedClogDialogIndex);
+			case "SpeedClog":
+				loadDialogIfPossible(heartJarDialogIndex);
+			case "Axe":
+				loadDialogIfPossible(axeDialogIndex);
+		}
+	}
+
+	private function loadDialogIfPossible(dialogIndex:Int) {
+		if (dialogManager.getCurrentDialogIndex() != dialogIndex || dialogManager.isDone) {
+			dialogManager.loadDialog(dialogIndex);
 		}
 	}
 
@@ -293,9 +352,24 @@ class OutsideTheMinesState extends BaseState
 						interactable.onInteract(player);
 						TextPop.pop(Std.int(FlxG.width-47), Std.int(FlxG.height-35), "-$"+interactable.cost, new SlowFadeUp(FlxColor.RED), 10);
 						FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchase);
+
+						var shovelBoughtIndex = 2;
+						var matterConverterBoughtIndex = 9;
+						var heartJarIndex = 10;
+						var speedClogIndex = 11;
+						var axeIndex = 12;
+
 						if (interactable.name == "Shovel") {
-							dialogManager.loadDialog(2);
-						}
+							dialogManager.loadDialog(shovelBoughtIndex);
+						} else if (interactable.name == "Matter Converter") {
+							dialogManager.loadDialog(matterConverterBoughtIndex);
+						}  else if (interactable.name == "Heart Jar") {
+							dialogManager.loadDialog(heartJarIndex);
+						}  else if (interactable.name == "SpeedClog") {
+							dialogManager.loadDialog(speedClogIndex);
+						}  else if (interactable.name == "Axe") {
+							dialogManager.loadDialog(axeIndex);
+						} 
 					} else {
 						TextPop.pop(Std.int(player.x), Std.int(player.y), "Not enough money", new SlowFade(FlxColor.RED), 10);
 						FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchaseFail);

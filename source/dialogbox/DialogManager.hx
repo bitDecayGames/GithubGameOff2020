@@ -9,14 +9,14 @@ import flixel.FlxState;
 
 class DialogManager {
 
-    public var isDone:Bool;
+    public var isDone:Bool = true;
+    var currentDialogIndex:Int = -1;
 
     var typewriterSoundId:String = "typewriterSoundId";
     var typeText:Dialogbox;
     var parentState:FlxState;
     var renderCamera:FlxCamera;
     var disableSounds:Bool;
-    var currentDialogIndex:Int;
 
     
     public function new(_parentState:FlxState, _renderCamera:FlxCamera) {

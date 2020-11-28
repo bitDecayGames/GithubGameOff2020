@@ -18,6 +18,22 @@
   "entityTags": [],
   "layers": [
     {
+      "definition": "entity",
+      "name": "rope",
+      "gridSize": {"x": 16, "y": 16},
+      "exportID": "58580481",
+      "requiredTags": [],
+      "excludedTags": []
+    },
+    {
+      "definition": "entity",
+      "name": "spawners",
+      "gridSize": {"x": 16, "y": 16},
+      "exportID": "36024563",
+      "requiredTags": [],
+      "excludedTags": []
+    },
+    {
       "definition": "tile",
       "name": "navigation",
       "gridSize": {"x": 16, "y": 16},
@@ -70,14 +86,6 @@
       "exportMode": 0,
       "arrayMode": 0,
       "defaultTileset": "debug"
-    },
-    {
-      "definition": "entity",
-      "name": "spawners",
-      "gridSize": {"x": 16, "y": 16},
-      "exportID": "36024563",
-      "requiredTags": [],
-      "excludedTags": []
     }
   ],
   "entities": [
@@ -160,6 +168,44 @@
       ],
       "texture": "levels/icons/enemies_2.png",
       "textureImage": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAe0lEQVR42tWS0QnAMAhE3SIDdJWSLbJF1umsae/jRJJQ9adQQTzUewiJyCZKKeMpA9VqSYQaJ+0Hl3vvCqB2r8ACllktwM5CgNaaAqDDACzXWhcAe98AcCoMfEZo9EIAa5yTsxDgOk41UruAtytCZgvZZeYrizWkzf+KG1pEniepR3ajAAAAAElFTkSuQmCC"
+    },
+    {
+      "exportID": "58580043",
+      "name": "downrope",
+      "limit": -1,
+      "size": {"x": 16, "y": 16},
+      "origin": {"x": 0, "y": 0},
+      "originAnchored": true,
+      "shape": {
+        "label": "Rectangle",
+        "points": [
+          {"x": -1, "y": -1},
+          {"x": 1, "y": -1},
+          {"x": -1, "y": 1},
+          {"x": 1, "y": -1},
+          {"x": -1, "y": 1},
+          {"x": 1, "y": 1}
+        ]
+      },
+      "color": "#ff0000ff",
+      "tileX": false,
+      "tileY": false,
+      "tileSize": {"x": 16, "y": 16},
+      "resizeableX": false,
+      "resizeableY": false,
+      "rotatable": false,
+      "rotationDegrees": 360,
+      "canFlipX": false,
+      "canFlipY": false,
+      "canSetColor": false,
+      "hasNodes": true,
+      "nodeLimit": 0,
+      "nodeDisplay": 2,
+      "nodeGhost": true,
+      "tags": [],
+      "values": [],
+      "texture": "levels/icons/enemies_5.png",
+      "textureImage": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA0UlEQVR42pWSOw7CMBBEV0icwTUSBVVEwRl8Ac5ASZcLhdPQuuI4QWMYa7JZB1GMsp/Zl7VlG4ZhVpVSqny9J9Pk9dzP4zhWIf4bMD12dRDf291W5mu+bAMgDEIAQSmlpp8bqJkgbHM6pKoIZDpMI808itbZawCeSwGIzazdh4crxKK/YxjipSLuQYwNNRDAO2CuXuTVq4VW/MbH8weigJXXF30MCPOobznnhUHlNwhVb7LTjDYIAb0tMIze1pbtIamJQ1DUV9/iKfshLwVDeIRvaIRvXugKXcAAAAAASUVORK5CYII="
     }
   ],
   "tilesets": [

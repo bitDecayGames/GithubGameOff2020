@@ -83,12 +83,12 @@ class PlayState extends BaseState
 		add(currentLevel.interactableLayer);
 		add(currentLevel.foregroundLayer);
 
-		var exitTilesDown = currentLevel.interactableLayer.getTileCoords(5, false);
-		levelExitDown = new Rope(exitTilesDown[0]);
+		levelExitDown = currentLevel.downRope;
 		addInteractable(levelExitDown);
+		// This makes us collide with the tile that the downrope is at
+		currentLevel.navigationLayer.setTile(Std.int(levelExitDown.x / 16), Std.int(levelExitDown.y / 16), 1);
 
-		var exitTilesUp = currentLevel.interactableLayer.getTileCoords(6, false);
-		setupEscapeRope(exitTilesUp[0]);
+		setupEscapeRope(currentLevel.upRope);
 
 		if (Statics.GoingDown) {
 			player = new Player(this, new FlxPoint(levelExitUp.x, levelExitUp.y+16));
@@ -106,8 +106,8 @@ class PlayState extends BaseState
 		add(worldGroup);
 	}
 
-	private function setupEscapeRope(location:FlxPoint) {
-		levelExitUp = new RopeUp(location);
+	private function setupEscapeRope(levelUpRope:RopeUp) {
+		levelExitUp = levelUpRope;
 		var restOfRope  = new FlxTiledSprite(AssetPaths.escapeRope__png, 16, levelExitUp.y, false, true);
 		restOfRope.setPosition(levelExitUp.x, 0);
 		// restOfRope.alpha = 0.2;

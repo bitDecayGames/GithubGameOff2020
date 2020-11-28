@@ -1,5 +1,6 @@
 package states;
 
+import entities.HitboxTextInteract;
 import flixel.input.mouse.FlxMouse;
 import interactables.Shoe;
 import flixel.util.FlxSort;
@@ -246,8 +247,15 @@ class OutsideTheMinesState extends BaseState
 
 
 		FlxG.overlap(interactables, hitboxInteracts, interactWithItem);
+		FlxG.overlap(interactables, hitboxTextInteracts, renderDialog);
 
 		worldGroup.sort(SortingHelpers.SortByY, FlxSort.ASCENDING);
+	}
+
+	private function renderDialog(interactable:Interactable, hitboxTextInteract:HitboxTextInteract) {
+		if (dialogManager.getCurrentDialogIndex() != 2 || dialogManager.isDone) {
+			dialogManager.loadDialog(2);
+		}
 	}
 
 	private function interactWithItem(interactable:Interactable, hitbox:Hitbox) {

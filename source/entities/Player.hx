@@ -43,6 +43,8 @@ class Player extends Entity {
     public var shovel:FlxSprite;
     public var upgrades:Array<Upgrade> = new Array<Upgrade>();
 
+    var hitboxTextInteract:HitboxTextInteract;
+
 	public function new(_parentState:BaseState, _spawnPosition:FlxPoint) {
         super(_parentState);
         controls = new Actions();
@@ -112,6 +114,23 @@ class Player extends Entity {
         setFacingFlip(FlxObject.RIGHT, false, false);
         setFacingFlip(FlxObject.DOWN, false, false);
         setFacingFlip(FlxObject.UP, false, false);
+        
+        var textInteractionLocation:FlxPoint;
+        var hitboxTextInteractSize = new FlxPoint(5, 5);
+        switch facing {
+            case FlxObject.RIGHT:
+                textInteractionLocation = new FlxPoint(x+8, y);
+            case FlxObject.DOWN:
+                textInteractionLocation = new FlxPoint(x+2, y+10);
+            case FlxObject.LEFT:
+                textInteractionLocation = new FlxPoint(x-5, y);
+            case FlxObject.UP:
+                textInteractionLocation = new FlxPoint(x, y-10);
+            default:
+                textInteractionLocation = new FlxPoint(x, y);
+        }
+        hitboxTextInteract = new HitboxTextInteract(textInteractionLocation, hitboxTextInteractSize);
+        parentState.addHitboxTextInteract(hitboxTextInteract);
     }
 
     public function animCallback(name:String, frameNumber:Int, frameIndex:Int):Void {
@@ -157,6 +176,22 @@ class Player extends Entity {
 
 	override public function update(delta:Float):Void {
         super.update(delta);
+
+        
+        var interactTextLocation:FlxPoint;
+        switch facing {
+            case FlxObject.RIGHT:
+                interactTextLocation = new FlxPoint(x+8, y);
+            case FlxObject.DOWN:
+                interactTextLocation = new FlxPoint(x+2, y+10);
+            case FlxObject.LEFT:
+                interactTextLocation = new FlxPoint(x-5, y);
+            case FlxObject.UP:
+                interactTextLocation = new FlxPoint(x, y-10);
+            default:
+                interactTextLocation = new FlxPoint(x, y);
+        }
+        hitboxTextInteract.updatePostion(interactTextLocation);
 
         Statics.CurrentLightRadius -= Statics.lightDrainRate * delta;
         Statics.CurrentLightRadius = Math.max(Statics.CurrentLightRadius, Statics.minLightRadius);

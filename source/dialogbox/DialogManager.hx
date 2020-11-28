@@ -16,6 +16,7 @@ class DialogManager {
     var parentState:FlxState;
     var renderCamera:FlxCamera;
     var disableSounds:Bool;
+    var currentDialogIndex:Int;
 
     
     public function new(_parentState:FlxState, _renderCamera:FlxCamera) {
@@ -41,6 +42,7 @@ class DialogManager {
     }
 
     public function loadDialog(index:Int){
+        isDone = false;
         if (typeText != null) {
             typeText.flxTypeText.kill();
             typeText.kill();
@@ -52,7 +54,12 @@ class DialogManager {
         typeText = new Dialogbox(parentState, this, Dialogs.DialogArray[index], FlxKey.SPACE, AssetPaths.joystix_monospace__ttf);
         typeText.cameras = [renderCamera];
         parentState.add(typeText);
+        currentDialogIndex = index;
     }
+
+	public function getCurrentDialogIndex():Int {
+        return currentDialogIndex;
+	}
 
     public function stopSounds() {
         FmodManager.StopSoundImmediately(typewriterSoundId);

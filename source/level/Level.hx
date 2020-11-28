@@ -125,8 +125,9 @@ class Level {
 								return new Bat(playState, player, FlxPoint.get(entityData.x, entityData.y), cacheEntry);
 							};
 						case "snake":
+							var vertical:Bool = entityData.values.Vertical;
 							cacheEntry.maker = (playState, player) -> {
-								return new Snake(playState, player, FlxPoint.get(entityData.x, entityData.y), cacheEntry);
+								return new Snake(playState, player, vertical, FlxPoint.get(entityData.x, entityData.y), cacheEntry);
 							};
 						case "blob":
 							cacheEntry.maker = (playState, player) -> {

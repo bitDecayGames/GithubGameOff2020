@@ -206,6 +206,87 @@
       "values": [],
       "texture": "levels/icons/enemies_5.png",
       "textureImage": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA0UlEQVR42pWSOw7CMBBEV0icwTUSBVVEwRl8Ac5ASZcLhdPQuuI4QWMYa7JZB1GMsp/Zl7VlG4ZhVpVSqny9J9Pk9dzP4zhWIf4bMD12dRDf291W5mu+bAMgDEIAQSmlpp8bqJkgbHM6pKoIZDpMI808itbZawCeSwGIzazdh4crxKK/YxjipSLuQYwNNRDAO2CuXuTVq4VW/MbH8weigJXXF30MCPOobznnhUHlNwhVb7LTjDYIAb0tMIze1pbtIamJQ1DUV9/iKfshLwVDeIRvaIRvXugKXcAAAAAASUVORK5CYII="
+    },
+    {
+      "exportID": "59427175",
+      "name": "blob",
+      "limit": -1,
+      "size": {"x": 16, "y": 16},
+      "origin": {"x": 0, "y": 0},
+      "originAnchored": true,
+      "shape": {
+        "label": "Rectangle",
+        "points": [
+          {"x": -1, "y": -1},
+          {"x": 1, "y": -1},
+          {"x": -1, "y": 1},
+          {"x": 1, "y": -1},
+          {"x": -1, "y": 1},
+          {"x": 1, "y": 1}
+        ]
+      },
+      "color": "#ff0000ff",
+      "tileX": false,
+      "tileY": false,
+      "tileSize": {"x": 16, "y": 16},
+      "resizeableX": false,
+      "resizeableY": false,
+      "rotatable": false,
+      "rotationDegrees": 360,
+      "canFlipX": false,
+      "canFlipY": false,
+      "canSetColor": false,
+      "hasNodes": true,
+      "nodeLimit": 0,
+      "nodeDisplay": 2,
+      "nodeGhost": true,
+      "tags": [],
+      "values": [
+        {"name": "SpawnRate", "definition": "Float", "defaults": 100, "bounded": false, "min": 0, "max": 100}
+      ],
+      "texture": "levels/icons/enemies_4.png",
+      "textureImage": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAaUlEQVR42mNgGJbgPwFMQLOxH36MxxC4IqHNhzAwQ0UXBOMxBCIJVQjS5HH1JgqGG4TFAAzNMIzVEDRXwDVjczpO7yAZgmI7NleghAGWsEANZXSF2DRiiRHC0UdEdP4nIR38p1lKpD8AAJ5j7rTwk10HAAAAAElFTkSuQmCC"
+    },
+    {
+      "exportID": "59422403",
+      "name": "snake",
+      "limit": -1,
+      "size": {"x": 16, "y": 16},
+      "origin": {"x": 0, "y": 0},
+      "originAnchored": true,
+      "shape": {
+        "label": "Rectangle",
+        "points": [
+          {"x": -1, "y": -1},
+          {"x": 1, "y": -1},
+          {"x": -1, "y": 1},
+          {"x": 1, "y": -1},
+          {"x": -1, "y": 1},
+          {"x": 1, "y": 1}
+        ]
+      },
+      "color": "#ff0000ff",
+      "tileX": false,
+      "tileY": false,
+      "tileSize": {"x": 16, "y": 16},
+      "resizeableX": false,
+      "resizeableY": false,
+      "rotatable": false,
+      "rotationDegrees": 360,
+      "canFlipX": false,
+      "canFlipY": false,
+      "canSetColor": false,
+      "hasNodes": true,
+      "nodeLimit": 0,
+      "nodeDisplay": 2,
+      "nodeGhost": true,
+      "tags": [],
+      "values": [
+        {"name": "SpawnRate", "definition": "Float", "defaults": 100, "bounded": false, "min": 0, "max": 100},
+        {"name": "Vertical", "definition": "Boolean", "defaults": true}
+      ],
+      "texture": "levels/icons/enemies_3.png",
+      "textureImage": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAArElEQVR42mNgGJRAXFz8Py5MlObqnND/cyfWYGCQOF5DQJIgEMcgjNUAkDgI4DQEJAFSBMLorgDxYXI4vYPP+ejewPAOzNRgNxOwJDYXgDBIHqQOJAY3ANlmmCG4MMwiuAtgpoEwuiJsGCYPo+G2IzsZJHawiRsrxmoAzGaYQSCxZ2vVUTTC+MguhPsfJoFsEEgDOkY2ACP6kJ0IwiQZgJ7+YQphTieomZLMBAAt51CrDmi+fgAAAABJRU5ErkJggg=="
     }
   ],
   "tilesets": [

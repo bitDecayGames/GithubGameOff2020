@@ -32,10 +32,10 @@ import entities.AcidShot;
 class Snake extends Enemy {
     var behavior:BTree;
 
-	public function new(_parentState:PlayState, _player:Player, position:FlxPoint, cache:EnemyCache) {
+	public function new(_parentState:PlayState, _player:Player, vertical:Bool, position:FlxPoint, cache:EnemyCache) {
         super(_parentState, _player, position, cache, FmodSFX.SnakeDeath);
         path = new FlxPath();
-        
+
         enemyName = "Snake";
         lootChances = [
             new LootChance(1, 2),
@@ -67,7 +67,12 @@ class Snake extends Enemy {
         context.set("self", this);
         context.set("speed", baseStats.speed);
         context.set("navBundle", new NavBundle(parentState.currentLevel, player));
-        context.set("direction", FlxVector.get(0, -1).normalize());
+
+        var initialDirection = FlxVector.get(0, -1);
+        if (!vertical) {
+            initialDirection.rotate(FlxPoint.weak(), 90);
+        }
+        context.set("direction", initialDirection.normalize());
         behavior.init(context);
 
 

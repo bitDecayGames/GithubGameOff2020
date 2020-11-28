@@ -50,14 +50,12 @@ class PlayState extends BaseState
 	var levelExitDown:Interactable;
 
 	private static var levelOrder = [
+		AssetPaths.outsideTheMines__json,
 		AssetPaths.caves1__json,
 		AssetPaths.caves2__json,
-		AssetPaths.caves1__json,
-		AssetPaths.caves2__json,
-		AssetPaths.caves1__json,
-		AssetPaths.caves2__json,
-		AssetPaths.caves1__json,
-		AssetPaths.caves2__json,
+		AssetPaths.caves3__json,
+		AssetPaths.caves4__json,
+		AssetPaths.caves5__json,
 	];
 
 	override public function create()

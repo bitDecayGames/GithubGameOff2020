@@ -49,7 +49,7 @@ class Level {
 		var lCache = levelCache.get(depth);
 
 		loader.loadEntities((entityData) -> {
-			switch(entityData.name) {
+			var _ = switch(entityData.name) {
 				case "downrope":
 					if (lCache.exit != null) {
 						downRope = new Rope(lCache.exit);

@@ -305,6 +305,7 @@ class Player extends Entity {
 
         var attackLocation:FlxPoint;
         var hitboxSize = new FlxPoint(20, 20);
+        var hitboxInteractSize = new FlxPoint(5, 5);
 
         switch facing {
             case FlxObject.RIGHT:
@@ -319,8 +320,23 @@ class Player extends Entity {
                 attackLocation = new FlxPoint(x, y);
         }
         var hitbox = new Hitbox(.2, attackLocation, hitboxSize);
-        // Hitboxes will always spawn to serve as the interact collision detection
         parentState.addHitbox(hitbox);
+        
+        var interactLocation:FlxPoint;
+        switch facing {
+            case FlxObject.RIGHT:
+                interactLocation = new FlxPoint(x+8, y);
+            case FlxObject.DOWN:
+                interactLocation = new FlxPoint(x+2, y+10);
+            case FlxObject.LEFT:
+                interactLocation = new FlxPoint(x-5, y);
+            case FlxObject.UP:
+                interactLocation = new FlxPoint(x, y-10);
+            default:
+                interactLocation = new FlxPoint(x, y);
+        }
+        var hitboxInteract = new HitboxInteract(.2, interactLocation, hitboxInteractSize);
+        parentState.addHitboxInteract(hitboxInteract);
         if (canAttack) {
             FmodManager.PlaySoundAndAssignId(FmodSFX.ShovelSwing, "attack");
             spawnShovel(hitbox.getMidpoint(), facing);
@@ -334,6 +350,7 @@ class Player extends Entity {
         if (shovel != null){
             shovel.destroy();
         }
+        playAnimation(facing, null, false);
         FmodManager.StopSoundImmediately("attack");
     }
 

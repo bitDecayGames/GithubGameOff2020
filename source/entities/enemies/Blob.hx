@@ -27,7 +27,7 @@ class Blob extends Enemy {
     var behavior:BTree;
 
 	public function new(_parentState:PlayState, _player:Player, position:FlxPoint, cache:EnemyCache) {
-        super(_parentState, _player, position, cache);
+        super(_parentState, _player, position, cache, FmodSFX.BlobDeath);
         path = new FlxPath();
 
         // frames persecond * move speed

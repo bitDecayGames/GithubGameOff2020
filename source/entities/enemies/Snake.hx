@@ -32,7 +32,7 @@ class Snake extends Enemy {
     var behavior:BTree;
 
 	public function new(_parentState:PlayState, _player:Player, position:FlxPoint, cache:EnemyCache) {
-        super(_parentState, _player, position, cache);
+        super(_parentState, _player, position, cache, FmodSFX.SnakeDeath);
         path = new FlxPath();
 
         baseStats.speed = 30;
@@ -46,7 +46,7 @@ class Snake extends Enemy {
                             new Sequence([
                                 new InlineWithTarget(new Succeed()),
                                 new StopMovement(),
-                                new AttackTarget()
+                                new AttackTarget(FmodSFX.SnakeVenom)
                             ])
                         )
                     ),

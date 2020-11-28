@@ -11,8 +11,13 @@ class FmodSongs {
 }
 
 class FmodSFX {
+    public static inline var BatDeath:String = "event:/SFX/Enemy/Bat/BatDeath";
+    public static inline var BlobDeath:String = "event:/SFX/Enemy/Blob/BlobDeath";
+    public static inline var BlobMove:String = "event:/SFX/Enemy/Blob/BlobMove";
     public static inline var RatDamage:String = "event:/SFX/Enemy/Rat/RatDamage";
     public static inline var RatDeath:String = "event:/SFX/Enemy/Rat/RatDeath";
+    public static inline var SnakeDeath:String = "event:/SFX/Enemy/Snake/SnakeDeath";
+    public static inline var SnakeVenom:String = "event:/SFX/Enemy/Snake/SnakeVenom";
     public static inline var Crumble:String = "event:/SFX/Environment/Crumble";
     public static inline var Type:String = "event:/SFX/Hud/Type";
     public static inline var Typewriter:String = "event:/SFX/Hud/Typewriter";

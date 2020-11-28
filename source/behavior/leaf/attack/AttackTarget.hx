@@ -8,7 +8,11 @@ import behavior.tree.LeafNode;
 
 class AttackTarget extends LeafNode {
 
-	public function new() {}
+    var attackSound:String;
+
+	public function new(?_attackSound:String = null) {
+        _attackSound = attackSound;
+    }
 
 	override public function doProcess(delta:Float):NodeStatus {
 		var self = cast(context.get("self"), FlxSprite);
@@ -38,6 +42,9 @@ class AttackTarget extends LeafNode {
 
         if (attackAnimation != null) {
             if (self.animation.curAnim.name != attackAnimName) {
+                if (attackSound != null) {
+                    FmodManager.PlaySoundOneShot(attackSound);
+                }
                 self.animation.play(attackAnimName);
                 return RUNNING;
             } else {

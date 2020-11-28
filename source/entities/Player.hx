@@ -64,8 +64,7 @@ class Player extends Entity {
 
         organizeUpgrades();
 
-        // TODO: this will need to be updated somehow, somewhere based on the stats
-        health = baseStats.maxHealth;
+        health = Player.state.activeStats.currentHealth;
 
         size = new FlxPoint(16, 32);
         direction = 0;
@@ -157,6 +156,9 @@ class Player extends Entity {
 
 	override public function update(delta:Float):Void {
         super.update(delta);
+
+        Player.state.activeStats.currentHealth = health;
+
 
         Statics.CurrentLightRadius -= Statics.lightDrainRate * delta;
         Statics.CurrentLightRadius = Math.max(Statics.CurrentLightRadius, Statics.minLightRadius);
@@ -444,5 +446,11 @@ class Player extends Entity {
             upgrades[i].x = i * 32;
             upgrades[i].y = FlxG.height - upgrades[i].height;
         }
+    }
+
+    public function rejuvenate() {
+        refresh();
+        Player.state.activeStats.currentHealth = Player.state.baseStats.maxHealth;
+        health = Player.state.activeStats.currentHealth;
     }
 }

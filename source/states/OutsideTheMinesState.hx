@@ -1,5 +1,7 @@
 package states;
 
+import interactables.HeartJar;
+import interactables.MatterConverter;
 import interactables.Shoe;
 import flixel.util.FlxSort;
 import helpers.SortingHelpers;
@@ -41,9 +43,14 @@ class OutsideTheMinesState extends BaseState
 {
 	public inline static var SkipIntro:Bool = true;
 
+	// some of these numbers are wacky because we are loading the tileset
+	// in Ogmo as a 16x16 tileset.
 	public static inline var shovel_index = 1;
 	public static inline var shoe_index = 3;
 	public static inline var rope_index = 5;
+	public static inline var heartjar_index = 20;
+	public static inline var matterconverter_index = 21;
+
 	public static inline var shopkeep_index = 4;
 
 	var skipIntro:Bool;
@@ -114,19 +121,38 @@ class OutsideTheMinesState extends BaseState
 			player = new Player(this, new FlxPoint(FlxG.width/2, FlxG.height/2));
 		}
 
+		player.rejuvenate();
+
 		worldGroup.add(player);
 
 		var itemTiles:Array<FlxPoint>;
 
 		if (!player.hasUpgrade("Shovel")){
 			itemTiles = currentLevel.interactableLayer.getTileCoords(shovel_index, false);
+			// offset by 16 since we are loading 16/32 tiles that in the editor are set one til
+			// above where we want the collider in-game
 			shovel = new Shovel(itemTiles[0]);
 			addInteractable(shovel);
 		}
 
 		if (!player.hasUpgrade("SpeedClog")){
 			itemTiles = currentLevel.interactableLayer.getTileCoords(shoe_index, false);
-			var shoe = new Shoe(itemTiles[0]);
+			var coords = itemTiles[0];
+			var shoe = new Shoe(coords);
+			addInteractable(shoe);
+		}
+
+		if (!player.hasUpgrade("Heart Jar")){
+			itemTiles = currentLevel.interactableLayer.getTileCoords(heartjar_index, false);
+			var coords = itemTiles[0];
+			var shoe = new HeartJar(coords);
+			addInteractable(shoe);
+		}
+
+		if (!player.hasUpgrade("Matter Converter")){
+			itemTiles = currentLevel.interactableLayer.getTileCoords(matterconverter_index, false);
+			var coords = itemTiles[0];
+			var shoe = new MatterConverter(coords);
 			addInteractable(shoe);
 		}
 

@@ -69,7 +69,7 @@ class Level {
 			upRope = new RopeUp(FlxPoint.get(100, 100));
 		}
 
-		trace("Loading level with set: " + Statics.CurrentSet);
+		trace("Loading level with tile set: " + Statics.CurrentSet);
 
 		switch (Statics.CurrentSet){
 			case 1:

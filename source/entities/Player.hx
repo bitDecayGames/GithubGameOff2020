@@ -249,6 +249,10 @@ class Player extends Entity {
                 playAnimation(facing, null, attacking);
             }
 
+            if (FlxG.keys.justPressed.H){
+                attacking = false;
+            }
+
             var directionVector:FlxPoint = null;
             if (!attacking){
                 directionVector = MathHelpers.NormalizeVector(potentialDirection);
@@ -351,19 +355,24 @@ class Player extends Entity {
         }
 
         var attackLocation:FlxPoint;
-        var hitboxSize = new FlxPoint(20, 20);
+        var hitboxSize:FlxPoint;
         var hitboxInteractSize = new FlxPoint(5, 5);
 
         switch facing {
             case FlxObject.RIGHT:
+                hitboxSize = new FlxPoint(20, 30);
                 attackLocation = new FlxPoint(x+size.x/2, y+(size.y/2)-(hitboxSize.y/2)-playerHitboxOffsetY);
             case FlxObject.DOWN:
+                hitboxSize = new FlxPoint(30, 20);
                 attackLocation = new FlxPoint(x+(size.x/2)-(hitboxSize.x/2)-playerHitboxOffsetX, y+size.y/8);
             case FlxObject.LEFT:
+                hitboxSize = new FlxPoint(20, 30);
                 attackLocation = new FlxPoint(x-hitboxSize.x, y+(size.y/2)-(hitboxSize.y/2)-playerHitboxOffsetY);
             case FlxObject.UP:
+                hitboxSize = new FlxPoint(30, 20);
                 attackLocation = new FlxPoint(x+(size.x/2)-(hitboxSize.x/2)-playerHitboxOffsetX, y-hitboxSize.y-playerHitboxOffsetY/2);
             default:
+                hitboxSize = new FlxPoint(20, 20);
                 attackLocation = new FlxPoint(x, y);
         }
         var hitbox = new Hitbox(.2, attackLocation, hitboxSize);
@@ -405,8 +414,10 @@ class Player extends Entity {
         shovel = new FlxSprite();
         parentState.add(shovel);
         shovel.loadGraphic(AssetPaths.shovel__png, true, 16, 32);
-        shovel.animation.add("swing", [0,1,2,3,4,5,6,7,8], 30, false);
-        shovel.animation.add("swing_left", [17,16,15,14,13,12,11,10,9], 30, false);
+        // 30 originally
+        var animationSpeed = 30;
+        shovel.animation.add("swing", [0,1,2,3,4,5,6,7,8], animationSpeed, false);
+        shovel.animation.add("swing_left", [17,16,15,14,13,12,11,10,9], animationSpeed, false);
         shovel.animation.finishCallback = (name) -> {
             shovel.destroy();
         }
@@ -436,6 +447,38 @@ class Player extends Entity {
             if (frameNumber == 8) {
                 shovel.destroy();
             }
+        }
+
+        switch facing {
+            case FlxObject.RIGHT:
+                if (frameNumber == 0){
+                    shovel.y-=4;
+                    shovel.x-=4;
+                } else {
+                    shovel.y+=1;
+                }
+            case FlxObject.DOWN:
+                if (frameNumber == 0){
+                    shovel.x+=4;
+                } else {
+                    shovel.x-=1;
+                }
+            case FlxObject.LEFT:
+                if (frameNumber == 0){
+                    shovel.y-=4;
+                    shovel.x+=4;
+                } else {
+                    shovel.y+=1;
+                }
+            case FlxObject.UP:
+                if (frameNumber == 0){
+                    shovel.y+=4;
+                    shovel.x-=4;
+                } else {
+                    shovel.x+=1;
+                }
+            default:
+                
         }
 	}
 

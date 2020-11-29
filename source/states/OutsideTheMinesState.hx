@@ -287,6 +287,7 @@ class OutsideTheMinesState extends BaseState
 		var speedClogDialogIndex = 6;
 		var heartJarDialogIndex = 7;
 		var axeDialogIndex = 8;
+		var shovelDialogIndex = 13;
 
 		trace("Current dialog index: " + currentDialogIndex);
 		trace("Is it done: " + dialogManager.isDone);
@@ -295,7 +296,9 @@ class OutsideTheMinesState extends BaseState
 		if ((currentDialogIndex != matterConverterDialogIndex && 
 			currentDialogIndex != speedClogDialogIndex && 
 			currentDialogIndex != heartJarDialogIndex && 
-			currentDialogIndex != axeDialogIndex) && !dialogManager.isDone) {
+			currentDialogIndex != axeDialogIndex &&
+			currentDialogIndex != shovelDialogIndex) 
+				&& !dialogManager.isDone) {
 				return;
 			}
 
@@ -308,6 +311,8 @@ class OutsideTheMinesState extends BaseState
 				loadDialogIfPossible(heartJarDialogIndex);
 			case "Axe":
 				loadDialogIfPossible(axeDialogIndex);
+			case "Shovel":
+				loadDialogIfPossible(shovelDialogIndex);
 		}
 	}
 

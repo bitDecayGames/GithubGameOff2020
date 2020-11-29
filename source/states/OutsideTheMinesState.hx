@@ -197,6 +197,7 @@ class OutsideTheMinesState extends BaseState
 				dialogManager.loadDialog(0);
 			} else if (Statics.CurrentLightRadius <= Statics.minLightRadius) {
 				dialogManager.loadDialog(4);
+				Statics.CurrentLightRadius = Statics.MaxLightRadius;
 			}
 		} else {
 

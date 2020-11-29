@@ -34,17 +34,17 @@ class Dialogbox extends FlxBasic {
         pages = new Array<String>();
 
         dialogManager = _dialogManager;
-
+        
         var currentPageBuffer:StringBuf;
         for(text in textList){
             currentPageBuffer = new StringBuf();
             for (i in 0...text.length) {
-                if (i % CharactersPerTextBox == 0 && i != 0){
+                if (i % CharactersPerTextBox == 0 && i != 0){ 
                     pages.push(currentPageBuffer.toString());
                     currentPageBuffer = new StringBuf();
                 }
                 currentPageBuffer.add(text.charAt(i));
-
+    
                 if (i == text.length-1){
                     pages.push(currentPageBuffer.toString());
                 }
@@ -70,7 +70,7 @@ class Dialogbox extends FlxBasic {
     }
 
     public function startTyping():Void {
-
+        
         isTyping = true;
 
         // Callbacks cannot be set outside of the start() function...
@@ -84,7 +84,7 @@ class Dialogbox extends FlxBasic {
     public function continueToNextPage():Void {
         nextPageTimer.stop();
         canContinueToNextPage = false;
-
+        
         currentPage++;
         if (currentPage >= pages.length){
             dialogManager.isDone = true;
@@ -101,12 +101,8 @@ class Dialogbox extends FlxBasic {
         var executor = Executor.create(1);
         var allowNextPage=function():Void {
             canContinueToNextPage = true;
-
-            var timer = nextPageDelayMs;
-            if (pages[currentPage].length < 10) {
-                timer = Std.int(nextPageDelayMs / 4);
-            }
-            nextPageTimer = new Timer(timer);
+            
+            nextPageTimer = new Timer(nextPageDelayMs);
             nextPageTimer.run = continueToNextPage;
         }
         executor.submit(allowNextPage, ONCE(10));

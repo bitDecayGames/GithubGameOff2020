@@ -315,30 +315,27 @@ class OutsideTheMinesState extends BaseState
 			currentDialogIndex != shovelDialogIndex)
 				&& !dialogManager.isDone) {
 				return;
-		}
+			}
 
-		var index = -1;
 		switch(interactable.name){
 			case "Matter Converter":
-				index = matterConverterDialogIndex;
+				loadDialogIfPossible(matterConverterDialogIndex);
 			case "Heart Jar":
-				index = speedClogDialogIndex;
+				loadDialogIfPossible(speedClogDialogIndex);
 			case "SpeedClog":
-				index = heartJarDialogIndex;
+				loadDialogIfPossible(heartJarDialogIndex);
 			case "Axe":
-				index = axeDialogIndex;
+				loadDialogIfPossible(axeDialogIndex);
 			case "Shovel":
-				index = shovelDialogIndex;
+				loadDialogIfPossible(shovelDialogIndex);
 			case "LED Bulb":
-				index = bulbDialogIndex;
+				loadDialogIfPossible(bulbDialogIndex);
 		}
-
-		loadDialogIfPossible(interactable.cost, index);
 	}
 
-	private function loadDialogIfPossible(cost:Int, dialogIndex:Int) {
+	private function loadDialogIfPossible(dialogIndex:Int) {
 		if (dialogManager.getCurrentDialogIndex() != dialogIndex || dialogManager.isDone) {
-			dialogManager.loadDialog(dialogIndex, cost);
+			dialogManager.loadDialog(dialogIndex);
 		}
 	}
 

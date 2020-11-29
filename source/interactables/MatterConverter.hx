@@ -19,7 +19,7 @@ class MatterConverter extends Interactable {
         animation.play("inventory");
 
         name = "Matter Converter";
-        cost = 50;
+        cost = 5;
     }
 
     override public function onInteract(_player:Player) {

@@ -19,7 +19,7 @@ class HeartJar extends Interactable {
         animation.play("inventory");
 
         name = "Heart Jar";
-        cost = 25;
+        cost = 5;
     }
 
     override public function onInteract(_player:Player) {

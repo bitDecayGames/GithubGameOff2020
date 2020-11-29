@@ -16,5 +16,6 @@ class Dialogs {
         ["Thanks! Your max health has increased by 2!"],
         ["Thanks! You now move a little bit faster!"],
         ["Thanks! You now can deal more damage!"],
+        ["Shovel. You are going to need this."],
     ];
 }

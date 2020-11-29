@@ -71,13 +71,19 @@ class Level {
 
 		trace("Loading level with tile set: " + Statics.CurrentSet);
 
+		var tileset = AssetPaths.tiles__png;
+
+		if (depth > 5) {
+			tileset = AssetPaths.tiles2__png;
+		}
+
 		switch (Statics.CurrentSet){
 			case 1:
-				navigationLayer = loader.loadTilemap(AssetPaths.tiles__png, "navigation");
-				groundLayer = loader.loadTilemap(AssetPaths.tiles__png, "ground");
+				navigationLayer = loader.loadTilemap(tileset, "navigation");
+				groundLayer = loader.loadTilemap(tileset, "ground");
 			case 2:
-				navigationLayer = loader.loadTilemap(AssetPaths.tiles2__png, "navigation");
-				groundLayer = loader.loadTilemap(AssetPaths.tiles2__png, "ground");
+				navigationLayer = loader.loadTilemap(tileset, "navigation");
+				groundLayer = loader.loadTilemap(tileset, "ground");
 		}
 
 		var cache = levelCache.get(depth).enemies;

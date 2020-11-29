@@ -8,6 +8,7 @@ import interactables.Shoe;
 import flixel.util.FlxSort;
 import helpers.SortingHelpers;
 import interactables.Shovel;
+import interactables.Light;
 import interactables.Axe;
 import textpop.SlowFadeUp;
 import textpop.SlowFade;
@@ -50,6 +51,7 @@ class OutsideTheMinesState extends BaseState
 	public static inline var shovel_index = 1;
 	public static inline var shoe_index = 3;
 	public static inline var rope_index = 5;
+	public static inline var bulb_index = 8;
 	public static inline var heartjar_index = 20;
 	public static inline var matterconverter_index = 21;
 
@@ -156,6 +158,13 @@ class OutsideTheMinesState extends BaseState
 			itemTiles = currentLevel.interactableLayer.getTileCoords(matterconverter_index, false);
 			var coords = itemTiles[0];
 			var shoe = new MatterConverter(coords);
+			addInteractable(shoe);
+		}
+
+		if (!player.hasUpgrade("LED Bulb")){
+			itemTiles = currentLevel.interactableLayer.getTileCoords(bulb_index, false);
+			var coords = itemTiles[0];
+			var shoe = new Light(coords);
 			addInteractable(shoe);
 		}
 
@@ -269,7 +278,7 @@ class OutsideTheMinesState extends BaseState
 
 		moneyText.text = "" + Player.state.money;
 		playerHealthText.text = "" + player.health;
-		currentLevelText.text = "Level: 0";
+		currentLevelText.text = "";
 
 
 		FlxG.overlap(interactables, hitboxInteracts, interactWithItem);
@@ -288,16 +297,18 @@ class OutsideTheMinesState extends BaseState
 		var heartJarDialogIndex = 7;
 		var axeDialogIndex = 8;
 		var shovelDialogIndex = 13;
+		var bulbDialogIndex = 14;
 
 		trace("Current dialog index: " + currentDialogIndex);
 		trace("Is it done: " + dialogManager.isDone);
 
-		// Only render the shop text dialog if there is nothing else going on and the player is browsing for what to buy 
-		if ((currentDialogIndex != matterConverterDialogIndex && 
-			currentDialogIndex != speedClogDialogIndex && 
-			currentDialogIndex != heartJarDialogIndex && 
+		// Only render the shop text dialog if there is nothing else going on and the player is browsing for what to buy
+		if ((currentDialogIndex != matterConverterDialogIndex &&
+			currentDialogIndex != speedClogDialogIndex &&
+			currentDialogIndex != heartJarDialogIndex &&
 			currentDialogIndex != axeDialogIndex &&
-			currentDialogIndex != shovelDialogIndex) 
+			currentDialogIndex != bulbDialogIndex &&
+			currentDialogIndex != shovelDialogIndex)
 				&& !dialogManager.isDone) {
 				return;
 			}
@@ -313,6 +324,8 @@ class OutsideTheMinesState extends BaseState
 				loadDialogIfPossible(axeDialogIndex);
 			case "Shovel":
 				loadDialogIfPossible(shovelDialogIndex);
+			case "LED Bulb":
+				loadDialogIfPossible(bulbDialogIndex);
 		}
 	}
 
@@ -374,7 +387,7 @@ class OutsideTheMinesState extends BaseState
 							dialogManager.loadDialog(speedClogIndex);
 						}  else if (interactable.name == "Axe") {
 							dialogManager.loadDialog(axeIndex);
-						} 
+						}
 					} else {
 						TextPop.pop(Std.int(player.x), Std.int(player.y), "Not enough money", new SlowFade(FlxColor.RED), 10);
 						FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchaseFail);

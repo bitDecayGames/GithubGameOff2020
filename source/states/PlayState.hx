@@ -238,7 +238,10 @@ class PlayState extends BaseState
 		moneyText.text = "" + Player.state.money;
 		playerHealthText.text = "" + player.health;
 		var levelNumber = Statics.CurrentLevel;
-		currentLevelText.text = "Level: " + levelNumber;
+		currentLevelText.text = "";
+		if (levelNumber > 0) {
+			currentLevelText.text += levelNumber;
+		}
 
 		FlxG.watch.addQuick("enemies: ", enemies.length);
 
@@ -302,9 +305,9 @@ class PlayState extends BaseState
 					player.animation.play("climb_down");
 					camera.fade(FlxColor.BLACK, 2, false, null, true);
 					uiCamera.fade(FlxColor.BLACK, 2, false, null, true);
-					Statics.IncrementLevel();
 					Statics.GoingDown = true;
 					Timer.delay(() -> {
+						Statics.IncrementLevel();
 						FmodFlxUtilities.TransitionToState(new PlayState());
 					}, 1500);
 					player.setPosition(interactable.x+4, interactable.y+4);
@@ -318,13 +321,14 @@ class PlayState extends BaseState
 					player.climbRope();
 					camera.fade(FlxColor.BLACK, 2, false, null, true);
 					uiCamera.fade(FlxColor.BLACK, 2, false, null, true);
-					Statics.DecrementLevel();
 					Statics.GoingDown = false;
-					if (Statics.CurrentLevel > 0){
+					if (Statics.CurrentLevel > 1){
 						Timer.delay(() -> {
+							Statics.DecrementLevel();
 							FmodFlxUtilities.TransitionToState(new PlayState());
 						}, 1500);
 					} else {
+						Statics.DecrementLevel();
 						FmodFlxUtilities.TransitionToStateAndStopMusic(new OutsideTheMinesState(OutsideTheMinesState.SkipIntro));
 					}
 					player.setPosition(interactable.x+4, interactable.y+4);

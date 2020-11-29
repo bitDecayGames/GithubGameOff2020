@@ -1,16 +1,16 @@
 package upgrades;
 
-class HeartJar extends Upgrade {
+class Light extends Upgrade {
     public function new() {
         super();
-        name = "Heart Jar";
+        name = "LED Bulb";
         loadGraphic(AssetPaths.hudStuff__png, true, 32, 32);
 
-        animation.add("inventory", [13]);
+        animation.add("inventory", [8]);
         animation.play("inventory");
     }
 
     override public function getDescription():String {
-        return "A jar with two hearts";
+        return "Super bright light bulb";
     }
 }

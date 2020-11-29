@@ -240,15 +240,18 @@ class PlayState extends BaseState
 
 		FlxG.watch.addQuick("enemies: ", enemies.length);
 
-		FlxG.collide(currentLevel.navigationLayer, player);
 		FlxG.collide(currentLevel.navigationLayer, enemies);
-		// TODO: For some reason colliding things on paths with the level doesn't work
 		FlxG.collide(currentLevel.navigationLayer, loots, levelLootTouch);
-		FlxG.overlap(enemies, hitboxes, enemyHitboxTouch);
-		FlxG.overlap(player, enemies, playerEnemyTouch);
-		FlxG.overlap(player, projectiles, playerProjectileTouch);
-		FlxG.overlap(player, loots, playerLootTouch);
-		FlxG.overlap(interactables, hitboxInteracts, interactWithItem);
+
+		if (!isTransitioningStates) {
+			FlxG.collide(currentLevel.navigationLayer, player);
+			// TODO: For some reason colliding things on paths with the level doesn't work
+			FlxG.overlap(enemies, hitboxes, enemyHitboxTouch);
+			FlxG.overlap(player, enemies, playerEnemyTouch);
+			FlxG.overlap(player, projectiles, playerProjectileTouch);
+			FlxG.overlap(player, loots, playerLootTouch);
+			FlxG.overlap(interactables, hitboxInteracts, interactWithItem);
+		}
 
 		worldGroup.sort(SortingHelpers.SortByY, FlxSort.ASCENDING);
 	}

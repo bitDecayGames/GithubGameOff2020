@@ -6,7 +6,7 @@ class HeartJar extends Upgrade {
         name = "Heart Jar";
         loadGraphic(AssetPaths.hudStuff__png, true, 32, 32);
 
-        animation.add("inventory", [16]);
+        animation.add("inventory", [13]);
         animation.play("inventory");
     }
 

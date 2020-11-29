@@ -161,7 +161,7 @@ class OutsideTheMinesState extends BaseState
 			addInteractable(shoe);
 		}
 
-		if (!player.hasUpgrade("LED Bulb")){
+		if (!player.hasUp==grade("LED Bulb")){
 			itemTiles = currentLevel.interactableLayer.getTileCoords(bulb_index, false);
 			var coords = itemTiles[0];
 			var shoe = new Light(coords);
@@ -278,7 +278,7 @@ class OutsideTheMinesState extends BaseState
 
 		moneyText.text = "" + Player.state.money;
 		playerHealthText.text = "" + player.health;
-		currentLevelText.text = "Level: 0";
+		currentLevelText.text = "";
 
 
 		FlxG.overlap(interactables, hitboxInteracts, interactWithItem);

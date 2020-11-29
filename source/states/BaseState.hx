@@ -111,7 +111,13 @@ class BaseState extends FlxTransitionableState
 		playerHealthText = new FlxText(16 * 14 + 16, FlxG.height - 32 + textVerticalOffset, 1000, "", 10);
 		uiGroup.add(playerHealthText);
 
-		currentLevelText = new FlxText(healthIcon.x - 64, FlxG.height - 32 + textVerticalOffset, 1000, "Floor: 0", 10);
+		var levelIcon = new FlxSprite(16 * 12 - 28, FlxG.height - 32);
+		levelIcon.loadGraphic(AssetPaths.hudStuff__png, true, 32, 32);
+		levelIcon.animation.add("frame", [16]);
+		levelIcon.animation.play("frame");
+		uiGroup.add(levelIcon);
+
+		currentLevelText = new FlxText(levelIcon.x + 24, FlxG.height - 32 + textVerticalOffset, 1000, "0", 10);
 		uiGroup.add(currentLevelText);
 
 		var moneyIcon = new FlxSprite(16 * 16, FlxG.height - 32);

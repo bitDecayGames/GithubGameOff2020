@@ -18,7 +18,7 @@ class DialogManager {
     var renderCamera:FlxCamera;
     var disableSounds:Bool;
 
-    
+
     public function new(_parentState:FlxState, _renderCamera:FlxCamera) {
         parentState = _parentState;
         renderCamera = _renderCamera;
@@ -33,7 +33,7 @@ class DialogManager {
             if (!FmodManager.IsSoundPlaying(typewriterSoundId)){
                 FmodManager.PlaySoundAndAssignId(FmodSFX.Typewriter, typewriterSoundId);
             }
-        } 
+        }
         if (typeText == null || !typeText.getIsTyping()) {
             if (FmodManager.IsSoundPlaying(typewriterSoundId)){
                 FmodManager.StopSound(typewriterSoundId);
@@ -41,7 +41,7 @@ class DialogManager {
         }
     }
 
-    public function loadDialog(index:Int){
+    public function loadDialog(index:Int, cost:Int = -1){
         isDone = false;
         if (typeText != null) {
             typeText.flxTypeText.kill();
@@ -51,7 +51,12 @@ class DialogManager {
         trace("index out of bounds for dialogs");
         return;
         }
-        typeText = new Dialogbox(parentState, this, Dialogs.DialogArray[index], FlxKey.SPACE, AssetPaths.joystix_monospace__ttf);
+        var textLines = Dialogs.DialogArray[index].copy();
+        if (cost != -1) {
+            var costText = "$" + cost;
+            textLines.insert(0, costText);
+        }
+        typeText = new Dialogbox(parentState, this, textLines, FlxKey.SPACE, AssetPaths.joystix_monospace__ttf);
         typeText.cameras = [renderCamera];
         parentState.add(typeText);
         currentDialogIndex = index;

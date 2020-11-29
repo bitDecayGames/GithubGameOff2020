@@ -19,7 +19,7 @@ class Light extends Interactable {
         animation.play("inventory");
 
         name = "LED Bulb";
-        cost = 5;
+        cost = 50;
     }
 
     override public function onInteract(_player:Player) {

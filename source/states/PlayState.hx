@@ -44,6 +44,7 @@ class PlayState extends BaseState
 
 	var shader:Lighten;
 	var lightFilter:ShaderFilter;
+	var flickerCounter:Int;
 
 	// uiCamera to keep stuff locked to screen positions
 	var uiCamera:FlxCamera;
@@ -210,6 +211,16 @@ class PlayState extends BaseState
 		shader.lightSourceX.value[0] = player.getMidpoint().x + player.lightOffset.x;
 		shader.lightSourceY.value[0] = player.getMidpoint().y + player.lightOffset.y;
 		shader.lightRadius.value = [Statics.CurrentLightRadius];
+		if (Statics.CurrentLightRadius < Statics.minLightRadius + 2 && !isTransitioningStates && !player.isDead){
+			if (flickerCounter == 0){
+				FmodManager.PlaySoundOneShot(FmodSFX.LightFlickering);
+			}
+			if (flickerCounter <= 8){
+				shader.lightSourceX.value[0] = 10000;
+				shader.lightSourceY.value[0] = 10000;
+			}
+			flickerCounter = (flickerCounter+1) % 10;
+		}
 
 		if(FlxG.keys.justPressed.P) {
 			shader.isShaderActive.value[0] = !shader.isShaderActive.value[0];
@@ -217,6 +228,14 @@ class PlayState extends BaseState
 
 		if(FlxG.keys.justPressed.N) {
 			FmodFlxUtilities.TransitionToState(new OutsideTheMinesState(OutsideTheMinesState.SkipIntro));
+		}
+
+		if (FlxG.keys.justPressed.MINUS) {
+			Statics.CurrentLightRadius -= 5;
+		}
+
+		if (FlxG.keys.justPressed.PLUS) {
+			Statics.CurrentLightRadius += 5;
 		}
 
 		if(FlxG.keys.justPressed.G) {

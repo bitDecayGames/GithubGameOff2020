@@ -1,5 +1,6 @@
 package states;
 
+import entities.GameState;
 import entities.HitboxTextInteract;
 import interactables.HeartJar;
 import interactables.MatterConverter;
@@ -191,14 +192,14 @@ class OutsideTheMinesState extends BaseState
 			if (Statics.PlayerDied){
 				Statics.PlayerDied = false;
 				dialogManager.loadDialog(3);
-				// We need to subtract money here
-
+				Player.state.money = Std.int(Player.state.money / 2);
 			} else if (!player.hasUpgrade("Shovel")){
 				dialogManager.loadDialog(0);
 			} else if (Statics.CurrentLightRadius > Statics.minLightRadius && Statics.CurrentLightRadius <= Statics.minLightRadius+20) {
 				dialogManager.loadDialog(4);
 			} else if (Statics.CurrentLightRadius <= Statics.minLightRadius) {
 				dialogManager.loadDialog(15);
+				Player.state.money = Std.int(Player.state.money / 2);
 			}
 		} else {
 

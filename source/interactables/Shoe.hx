@@ -19,6 +19,6 @@ class Shoe extends Interactable {
         animation.play("inventory");
 
         name = "SpeedClog";
-        cost = 5;
+        cost = 15;
     }
 }

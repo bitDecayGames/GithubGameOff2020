@@ -195,12 +195,8 @@ class OutsideTheMinesState extends BaseState
 
 			} else if (!player.hasUpgrade("Shovel")){
 				dialogManager.loadDialog(0);
-			} else if (Statics.CurrentLightRadius > Statics.minLightRadius && Statics.CurrentLightRadius <= Statics.minLightRadius+20) {
-				dialogManager.loadDialog(4);
-				Statics.CurrentLightRadius = Statics.MaxLightRadius;
 			} else if (Statics.CurrentLightRadius <= Statics.minLightRadius) {
-				dialogManager.loadDialog(15);
-				Statics.CurrentLightRadius = Statics.MaxLightRadius;
+				dialogManager.loadDialog(4);
 			}
 		} else {
 
@@ -315,27 +311,33 @@ class OutsideTheMinesState extends BaseState
 			currentDialogIndex != shovelDialogIndex)
 				&& !dialogManager.isDone) {
 				return;
-			}
+		}
 
+		var index = -1;
 		switch(interactable.name){
 			case "Matter Converter":
-				loadDialogIfPossible(matterConverterDialogIndex);
+				index = matterConverterDialogIndex;
 			case "Heart Jar":
-				loadDialogIfPossible(speedClogDialogIndex);
+				index = speedClogDialogIndex;
 			case "SpeedClog":
-				loadDialogIfPossible(heartJarDialogIndex);
+				index = heartJarDialogIndex;
 			case "Axe":
-				loadDialogIfPossible(axeDialogIndex);
+				index = axeDialogIndex;
 			case "Shovel":
-				loadDialogIfPossible(shovelDialogIndex);
+				index = shovelDialogIndex;
 			case "LED Bulb":
-				loadDialogIfPossible(bulbDialogIndex);
+				index = bulbDialogIndex;
+			default:
+		}
+
+		if (index != -1) {
+			loadDialogIfPossible(interactable.cost, index);
 		}
 	}
 
-	private function loadDialogIfPossible(dialogIndex:Int) {
+	private function loadDialogIfPossible(cost:Int, dialogIndex:Int) {
 		if (dialogManager.getCurrentDialogIndex() != dialogIndex || dialogManager.isDone) {
-			dialogManager.loadDialog(dialogIndex);
+			dialogManager.loadDialog(dialogIndex, cost);
 		}
 	}
 

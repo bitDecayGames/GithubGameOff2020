@@ -92,6 +92,11 @@ class Enemy extends Entity {
         if (health <= 0 && dead){
             animation.play("dead");
             ID = 998;
+            if (enemyName == "Blob"){
+                kill();
+                cacheEntry.dead = true;
+                cacheEntry.consumed = true;
+            }
             return;
         }
 

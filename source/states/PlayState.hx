@@ -56,6 +56,11 @@ class PlayState extends BaseState
 		AssetPaths.caves3__json,
 		AssetPaths.caves4__json,
 		AssetPaths.caves5__json,
+		AssetPaths.caves6__json,
+		AssetPaths.caves7__json,
+		AssetPaths.caves8__json,
+		AssetPaths.caves9__json,
+		AssetPaths.caves10__json,
 	];
 
 	override public function create()

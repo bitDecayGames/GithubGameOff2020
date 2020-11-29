@@ -91,6 +91,10 @@ class Blob extends Enemy {
 	override public function update(delta:Float):Void {
         super.update(delta);
 
+        if (dead){
+            return;
+        }
+
         if (inKnockback) {
             path.cancel();
         }

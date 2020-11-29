@@ -102,7 +102,8 @@ class Level {
 					if (entry.dead) {
 						// TODO: instead of KILL, we want  to disable collisions and
 						//       play the "dead" animation
-						enemy.kill();
+						enemy.health = 0;
+						enemy.dead = true;
 					}
 					enemy.x = entry.position.x;
 					enemy.y = entry.position.y;

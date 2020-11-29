@@ -67,6 +67,7 @@ class Rat extends Enemy {
         animation.add("stand_right", [3], animationSpeed);
         animation.add("stand_down", [0], animationSpeed);
         animation.add("stand_left", [3], animationSpeed);
+        animation.add("dead", [9], animationSpeed);
 
         animation.play("stand_down");
 
@@ -80,6 +81,10 @@ class Rat extends Enemy {
 
 	override public function update(delta:Float):Void {
         super.update(delta);
+
+        if (dead){
+            return;
+        }
 
         if (inKnockback) {
             path.cancel();

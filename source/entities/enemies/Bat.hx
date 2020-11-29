@@ -73,6 +73,7 @@ class Bat extends Enemy {
         animation.add("stand_right", [0], animationSpeed);
         animation.add("stand_down", [0], animationSpeed);
         animation.add("stand_left", [0], animationSpeed);
+        animation.add("dead", [5], animationSpeed);
 
         animation.play("stand_down");
 
@@ -86,6 +87,10 @@ class Bat extends Enemy {
 
 	override public function update(delta:Float):Void {
         super.update(delta);
+
+        if (dead){
+            return;
+        }
 
         if (inKnockback) {
             path.cancel();

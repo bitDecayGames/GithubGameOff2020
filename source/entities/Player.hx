@@ -214,6 +214,7 @@ class Player extends Entity {
                 inKnockback = false;
                 if (health <= 0) {
                     isDead = true;
+                    ID = 998;
                     active = false;
                     FlxFlicker.stopFlickering(this);
                     var playState = cast(parentState, PlayState);

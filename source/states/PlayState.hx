@@ -189,9 +189,9 @@ class PlayState extends BaseState
 		// TODO: The goal here is to have the loot stay on the map.
 		// However, collisions don't seem to behave properly.
 		// This function will make it obvious when things START working
-		loot.path.cancel();
-		loot.color = FlxColor.BLUE;
-		loot.scale.set(5,5);
+		// loot.path.cancel();
+		// loot.color = FlxColor.BLUE;
+		// loot.scale.set(5,5);
 	}
 
 	public function playerHasDied() {

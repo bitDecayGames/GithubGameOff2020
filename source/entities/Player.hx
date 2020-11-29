@@ -360,16 +360,16 @@ class Player extends Entity {
 
         switch facing {
             case FlxObject.RIGHT:
-                hitboxSize = new FlxPoint(20, 30);
+                hitboxSize = new FlxPoint(12, 30);
                 attackLocation = new FlxPoint(x+size.x/2, y+(size.y/2)-(hitboxSize.y/2)-playerHitboxOffsetY);
             case FlxObject.DOWN:
                 hitboxSize = new FlxPoint(30, 20);
                 attackLocation = new FlxPoint(x+(size.x/2)-(hitboxSize.x/2)-playerHitboxOffsetX, y+size.y/8);
             case FlxObject.LEFT:
-                hitboxSize = new FlxPoint(20, 30);
+                hitboxSize = new FlxPoint(12, 30);
                 attackLocation = new FlxPoint(x-hitboxSize.x, y+(size.y/2)-(hitboxSize.y/2)-playerHitboxOffsetY);
             case FlxObject.UP:
-                hitboxSize = new FlxPoint(30, 20);
+                hitboxSize = new FlxPoint(30, 12);
                 attackLocation = new FlxPoint(x+(size.x/2)-(hitboxSize.x/2)-playerHitboxOffsetX, y-hitboxSize.y-playerHitboxOffsetY/2);
             default:
                 hitboxSize = new FlxPoint(20, 20);
@@ -412,7 +412,7 @@ class Player extends Entity {
 
     function spawnShovel(position:FlxPoint, facing:Int) {
         shovel = new FlxSprite();
-        parentState.add(shovel);
+        parentState.addToWorld(shovel);
         shovel.loadGraphic(AssetPaths.shovel__png, true, 16, 32);
         // 30 originally
         var animationSpeed = 30;
@@ -436,6 +436,7 @@ class Player extends Entity {
             case FlxObject.UP:
                 shovel.angle = 270;
                 shovel.animation.play("swing");
+                shovel.ID = 998;
             default:
                 shovel.angle = 225;
                 shovel.animation.play("swing");
@@ -453,7 +454,6 @@ class Player extends Entity {
             case FlxObject.RIGHT:
                 if (frameNumber == 0){
                     shovel.y-=4;
-                    shovel.x-=4;
                 } else {
                     shovel.y+=1;
                 }
@@ -466,7 +466,6 @@ class Player extends Entity {
             case FlxObject.LEFT:
                 if (frameNumber == 0){
                     shovel.y-=4;
-                    shovel.x+=4;
                 } else {
                     shovel.y+=1;
                 }

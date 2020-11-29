@@ -197,6 +197,15 @@ class Player extends Entity {
         Statics.CurrentLightRadius -= Statics.lightDrainRate * delta;
         Statics.CurrentLightRadius = Math.max(Statics.CurrentLightRadius, Statics.minLightRadius);
 
+        if (Statics.CurrentLightRadius <= Statics.minLightRadius && !isDead){
+            FmodManager.PlaySoundOneShot(FmodSFX.PlayerDeath);
+            isDead = true;
+            active = false;
+            var playState = cast(parentState, PlayState);
+            playState.playerHasDied();
+            Statics.CurrentLightRadius = 0;
+        }
+
         if (invincibilityTimeLeft > 0){
             invincibilityTimeLeft -= delta;
         }

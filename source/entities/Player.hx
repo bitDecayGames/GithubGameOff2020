@@ -193,8 +193,9 @@ class Player extends Entity {
         }
         hitboxTextInteract.updatePostion(interactTextLocation);
 
-
-        Statics.CurrentLightRadius -= Statics.lightDrainRate * delta;
+        if (!parentState.isTransitioningStates){
+            Statics.CurrentLightRadius -= Statics.lightDrainRate * delta;
+        }
         Statics.CurrentLightRadius = Math.max(Statics.CurrentLightRadius, Statics.minLightRadius);
 
         if (Statics.CurrentLightRadius <= Statics.minLightRadius && !isDead){

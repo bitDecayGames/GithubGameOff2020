@@ -195,8 +195,11 @@ class OutsideTheMinesState extends BaseState
 
 			} else if (!player.hasUpgrade("Shovel")){
 				dialogManager.loadDialog(0);
-			} else if (Statics.CurrentLightRadius <= Statics.minLightRadius) {
+			} else if (Statics.CurrentLightRadius > Statics.minLightRadius && Statics.CurrentLightRadius <= Statics.minLightRadius+20) {
 				dialogManager.loadDialog(4);
+				Statics.CurrentLightRadius = Statics.MaxLightRadius;
+			} else if (Statics.CurrentLightRadius <= Statics.minLightRadius) {
+				dialogManager.loadDialog(15);
 				Statics.CurrentLightRadius = Statics.MaxLightRadius;
 			}
 		} else {

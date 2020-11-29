@@ -161,7 +161,7 @@ class OutsideTheMinesState extends BaseState
 			addInteractable(shoe);
 		}
 
-		if (!player.hasUp==grade("LED Bulb")){
+		if (!player.hasUpgrade("LED Bulb")){
 			itemTiles = currentLevel.interactableLayer.getTileCoords(bulb_index, false);
 			var coords = itemTiles[0];
 			var shoe = new Light(coords);

@@ -6,6 +6,7 @@ import flixel.FlxBasic;
 
 class SortingHelpers {
     public static inline var SORT_TO_TOP = 999;
+    public static inline var SORT_TO_BOTTOM = 998;
 
     public static function SortByY(Order:Int, basic1:FlxBasic, basic2:FlxBasic):Int {
         var result:Int = 0;
@@ -16,6 +17,15 @@ class SortingHelpers {
 
         if (basic2.ID == SORT_TO_TOP) {
             return Order;
+        }
+
+
+        if (basic1.ID == SORT_TO_BOTTOM) {
+            return Order;
+        }
+
+        if (basic2.ID == SORT_TO_BOTTOM) {
+            return -Order;
         }
 
         // XXX: This is mostly just to sort the escape rope on top of everything

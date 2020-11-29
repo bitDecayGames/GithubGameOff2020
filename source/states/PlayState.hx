@@ -146,18 +146,22 @@ class PlayState extends BaseState
 
 	private function enemyHitboxTouch(enemy:Enemy, hitbox:Hitbox) {
 		if (!enemy.hasBeenHitByThisHitbox(hitbox)){
-			FmodManager.PlaySoundOneShot(FmodSFX.ShovelEnemyImpact);
-			enemy.applyDamage(1);
-			enemy.setKnockback(determineKnockbackDirection(player.facing), 100, .25);
-			enemy.trackHitbox(hitbox);
+			if (!enemy.dead){
+				FmodManager.PlaySoundOneShot(FmodSFX.ShovelEnemyImpact);
+				enemy.applyDamage(1);
+				enemy.setKnockback(determineKnockbackDirection(player.facing), 100, .25);
+				enemy.trackHitbox(hitbox);
+			}
 		}
 	}
 
 	private function playerEnemyTouch(player:Player, enemy:Enemy) {
-		if (player.invincibilityTimeLeft <= 0){
-			FmodManager.PlaySoundOneShot(FmodSFX.PlayerTakeDamage);
-			player.applyDamage(1);
-			player.setKnockback(determineKnockbackDirectionForPlayer(player, enemy), 100, .25);
+		if (!enemy.dead){
+			if (player.invincibilityTimeLeft <= 0){
+				FmodManager.PlaySoundOneShot(FmodSFX.PlayerTakeDamage);
+				player.applyDamage(1);
+				player.setKnockback(determineKnockbackDirectionForPlayer(player, enemy), 100, .25);
+			}
 		}
 	}
 

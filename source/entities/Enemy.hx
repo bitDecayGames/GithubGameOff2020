@@ -34,6 +34,7 @@ class Enemy extends Entity {
     var player:Player;
     var collidedHitboxes:Map<Hitbox, Bool> = new Map<Hitbox, Bool>();
     var directionVector:FlxVector;
+    public var dead:Bool = false;
 
     var level:Level;
     var cacheEntry:EnemyCache;
@@ -78,12 +79,19 @@ class Enemy extends Entity {
         // update our cache entry so that we respawn properly
         cacheEntry.position.set(x, y);
 
+        if (health <= 0 && dead){
+            animation.play("dead");
+            ID = 998;
+            return;
+        }
+
         if (health <= -1) {
             // if the player hits enemies in knockback, they can be killed immediately
             cacheEntry.dead = true;
             cacheEntry.position = getPosition();
             dropLoot();
-            destroy();
+            animation.play("dead");
+            dead = true;
             playDeathSound();
             return;
         }
@@ -97,7 +105,8 @@ class Enemy extends Entity {
                     cacheEntry.dead = true;
                     cacheEntry.position = getPosition();
                     dropLoot();
-                    destroy();
+                    animation.play("dead");
+                    dead = true;
                     playDeathSound();
                     return;
                 }

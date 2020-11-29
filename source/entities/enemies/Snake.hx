@@ -99,6 +99,7 @@ class Snake extends Enemy {
         animation.add("attack_down", [for (i in 0...5) famesPerRow * 3], animationSpeed, false);
         animation.add("attack_left", [for (i in 0...5) famesPerRow * 3 + 1], animationSpeed, false, true); // why do I need to flip this here?
         animation.add("attack_right", [for (i in 0...5) famesPerRow * 3 + 1], animationSpeed, false);
+        animation.add("dead", [44], animationSpeed);
 
         animation.play("stand_down");
 
@@ -131,6 +132,10 @@ class Snake extends Enemy {
 
 	override public function update(delta:Float):Void {
         super.update(delta);
+
+        if (dead){
+            return;
+        }
 
         if (inKnockback) {
             path.cancel();

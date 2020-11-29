@@ -263,20 +263,20 @@ class PlayState extends BaseState
 	}
 
 	private function interactWithDeadEnemy(hitboxInteract:HitboxInteract, enemy:Enemy) {
-		if (enemy.dead){
+		if (enemy.dead && player.hasUpgrade("Matter Converter")){
 			enemy.kill();
 			player.stopAttack();
 			enemy.cacheEntry.consumed = true;
 			Statics.MatterConverterCharges += 1;
 			FmodManager.PlaySoundOneShot(FmodSFX.Pop);
 			Timer.delay(() -> {
-				if (Statics.MatterConverterCharges == 4) {
+				if (Statics.MatterConverterCharges == 1) {
 					FmodManager.PlaySoundOneShot(FmodSFX.MatterConverterCharge1);
 				}
-				else if (Statics.MatterConverterCharges == 5) {
+				else if (Statics.MatterConverterCharges == 2) {
 					FmodManager.PlaySoundOneShot(FmodSFX.MatterConverterCharge2);
 				}
-				else if (Statics.MatterConverterCharges == 1) {
+				else if (Statics.MatterConverterCharges == 3) {
 					FmodManager.PlaySoundOneShot(FmodSFX.MatterConverterCharge3);
 					Statics.MatterConverterCharges = 0;
 					Timer.delay(() -> {

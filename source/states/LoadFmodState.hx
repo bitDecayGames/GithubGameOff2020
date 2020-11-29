@@ -12,6 +12,10 @@ import flixel.FlxState;
 class LoadFmodState extends FlxState {
     override public function create():Void {
         FmodManager.Initialize();
+        
+		FlxG.sound.muteKeys = null;
+		FlxG.sound.volumeUpKeys = null;
+		FlxG.sound.volumeDownKeys = null;
 
         var loadingText = new FlxText(0, 0, "Loading...");
         loadingText.setFormat(null, 20, FlxColor.WHITE, FlxTextAlign.CENTER, NONE, FlxColor.BLACK);

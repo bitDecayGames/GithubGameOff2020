@@ -1,5 +1,7 @@
 package states;
 
+import flixel.tweens.FlxTween;
+import entities.HitboxInteract;
 import flixel.addons.display.FlxTiledSprite;
 import entities.RopeUp;
 import interactables.Interactable;
@@ -251,11 +253,46 @@ class PlayState extends BaseState
 			FlxG.overlap(player, projectiles, playerProjectileTouch);
 			FlxG.overlap(player, loots, playerLootTouch);
 			FlxG.overlap(interactables, hitboxInteracts, interactWithItem);
+			FlxG.overlap(hitboxInteracts, enemies, interactWithDeadEnemy);
 		}
 
 		worldGroup.sort(SortingHelpers.SortByY, FlxSort.ASCENDING);
 	}
 
+	private function interactWithDeadEnemy(hitboxInteract:HitboxInteract, enemy:Enemy) {
+		if (enemy.dead){
+			enemy.kill();
+			player.stopAttack();
+			enemy.cacheEntry.consumed = true;
+			Statics.MatterConverterCharges += 1;
+			FmodManager.PlaySoundOneShot(FmodSFX.Pop);
+			Timer.delay(() -> {
+				if (Statics.MatterConverterCharges == 4) {
+					FmodManager.PlaySoundOneShot(FmodSFX.MatterConverterCharge1);
+				}
+				else if (Statics.MatterConverterCharges == 5) {
+					FmodManager.PlaySoundOneShot(FmodSFX.MatterConverterCharge2);
+				}
+				else if (Statics.MatterConverterCharges == 1) {
+					FmodManager.PlaySoundOneShot(FmodSFX.MatterConverterCharge3);
+					Statics.MatterConverterCharges = 0;
+					Timer.delay(() -> {
+						FmodManager.PlaySoundOneShot(FmodSFX.MatterConverterGears);
+						Timer.delay(() -> {
+							FmodManager.PlaySoundOneShot(FmodSFX.LightRecharge);
+							Timer.delay(() -> {
+								FlxTween.num(Statics.CurrentLightRadius, Statics.MaxLightRadius, 2, {}, function(v)
+									{
+										Statics.CurrentLightRadius = v;
+									});
+							}, 1000);
+						}, 2500);
+					}, 750);
+				}
+			}, 200);
+		}
+	}
+	
 	private function interactWithItem(interactable:Interactable, hitbox:Hitbox) {
 		if (!interactable.hasBeenHitByThisHitbox(hitbox)) {
 			if (interactable.name == "Rope") {

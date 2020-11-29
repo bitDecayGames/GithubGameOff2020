@@ -99,9 +99,10 @@ class Level {
 
 				enemyMakers.push((playState, player) -> {
 					var enemy = entry.maker(playState, player);
+					if (entry.consumed){
+						enemy.kill();
+					}
 					if (entry.dead) {
-						// TODO: instead of KILL, we want  to disable collisions and
-						//       play the "dead" animation
 						enemy.health = 0;
 						enemy.dead = true;
 					}

@@ -28,6 +28,13 @@ class FmodSFX {
     public static inline var PlayerFall:String = "event:/SFX/Player/Fall/PlayerFall";
     public static inline var FootstepRock:String = "event:/SFX/Player/Footsteps/FootstepRock";
     public static inline var LightRecharge:String = "event:/SFX/Player/Light/LightRecharge";
+    public static inline var MatterConverterClick:String = "event:/SFX/Player/Light/MatterConverterClick";
+    public static inline var MatterConverterBlend:String = "event:/SFX/Player/MatterConverter/MatterConverterBlend";
+    public static inline var MatterConverterCharge1:String = "event:/SFX/Player/MatterConverter/MatterConverterCharge1";
+    public static inline var MatterConverterCharge2:String = "event:/SFX/Player/MatterConverter/MatterConverterCharge2";
+    public static inline var MatterConverterCharge3:String = "event:/SFX/Player/MatterConverter/MatterConverterCharge3";
+    public static inline var MatterConverterGears:String = "event:/SFX/Player/MatterConverter/MatterConverterGears";
+    public static inline var Pop:String = "event:/SFX/Player/MatterConverter/Pop";
     public static inline var PlayerPurchase:String = "event:/SFX/Player/Purchase/PlayerPurchase";
     public static inline var PlayerPurchaseFail:String = "event:/SFX/Player/Purchase/PlayerPurchaseFail";
     public static inline var ShovelEnemyImpact:String = "event:/SFX/Player/Shovel/ShovelEnemyImpact";

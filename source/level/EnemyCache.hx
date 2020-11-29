@@ -10,6 +10,7 @@ class EnemyCache {
     public var id = -1;
     public var spawned:Bool;
     public var dead:Bool;
+    public var consumed:Bool;
     public var position:FlxPoint;
     public var maker:(PlayState) -> Player -> Enemy;
 

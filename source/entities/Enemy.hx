@@ -37,7 +37,7 @@ class Enemy extends Entity {
     public var dead:Bool = false;
 
     var level:Level;
-    var cacheEntry:EnemyCache;
+    public var cacheEntry:EnemyCache;
 
     var enemyName:String = "Unset";
     private var lootChances:Array<LootChance>;

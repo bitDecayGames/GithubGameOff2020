@@ -17,5 +17,6 @@ class Dialogs {
         ["Thanks! You now move a little bit faster!"],
         ["Thanks! You now can deal more damage!"],
         ["Shovel. You are going to need this."],
+        ["LED Bulb. Incredibly bright and efficient light bulb."]
     ];
 }

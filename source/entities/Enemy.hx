@@ -151,7 +151,7 @@ class Enemy extends Entity {
         if (lootChances == null) {
             trace("Loot chance for " + enemyName + " not set!");
             return;
-        } 
+        }
 
         var totalLootPercentage:Float = 0;
         for (lootChance in lootChances){

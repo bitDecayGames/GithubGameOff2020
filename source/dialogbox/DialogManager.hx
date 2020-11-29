@@ -71,4 +71,10 @@ class DialogManager {
         disableSounds = true;
     }
 
+    public function isTyping():Bool {
+        if (typeText != null) {
+            return typeText.getIsTyping();
+        }
+        return false;
+    }
 }

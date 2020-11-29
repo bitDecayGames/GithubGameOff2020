@@ -29,6 +29,7 @@ class Shopkeep extends Entity {
 
         animation.add("walk_down", [1,2,3,4,5,6,7,8], animationSpeed);
         animation.add("walk_up", [10,11,12,13,14,15,16,17], animationSpeed);
+        animation.add("talk", [0,9], 10);
 
         animation.add("stand_down", [0], animationSpeed);
 
@@ -48,5 +49,11 @@ class Shopkeep extends Entity {
 
 	override public function update(delta:Float):Void {
         super.update(delta);
+
+        if (parentState.isShopkeepTalking()){
+            animation.play("talk");
+        } else {
+            animation.play("stand_down");
+        }
     }
 }

@@ -244,6 +244,13 @@ class OutsideTheMinesState extends BaseState
 		}
 	}
 
+	override public function isShopkeepTalking():Bool {
+		if (dialogManager != null){
+			return dialogManager.isTyping();
+		}
+		return false;
+	}
+
 	override public function update(elapsed:Float) {
 		Statics.CurrentLightRadius = Statics.MaxLightRadius;
 

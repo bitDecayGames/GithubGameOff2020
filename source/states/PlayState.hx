@@ -19,6 +19,7 @@ import flixel.group.FlxGroup;
 import haxefmod.flixel.FmodFlxUtilities;
 import shaders.Lighten;
 import openfl.filters.ShaderFilter;
+import entities.loots.GoldCoin;
 import level.Level;
 import flixel.text.FlxText;
 import entities.Loot;
@@ -250,7 +251,7 @@ class PlayState extends BaseState
 			FmodFlxUtilities.TransitionToState(new PlayState());
 		}
 		if(FlxG.keys.justPressed.T) {
-			var loot = new Loot(player.x+50, player.y);
+			var loot = new GoldCoin(player.x+50, player.y);
 			addLoot(loot);
 		}
 

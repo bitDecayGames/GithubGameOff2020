@@ -1,5 +1,8 @@
 package entities.enemies;
 
+import entities.loots.SilverCoin;
+import entities.loots.GoldCoin;
+import entities.Enemy.LootTypeChance;
 import entities.Enemy.LootChance;
 import level.EnemyCache;
 import behavior.leaf.util.Fail;
@@ -33,6 +36,11 @@ class Bat extends Enemy {
         enemyName = "Bat";
         lootChances = [
             new LootChance(1, 1),
+        ];
+
+        lootTypeChances = [
+            new LootTypeChance(.9, SilverCoin),
+            new LootTypeChance(.1, GoldCoin),
         ];
 
         baseStats.speed = 15;

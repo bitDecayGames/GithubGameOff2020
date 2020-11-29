@@ -367,16 +367,16 @@ class Player extends Entity {
 
         switch facing {
             case FlxObject.RIGHT:
-                hitboxSize = new FlxPoint(12, 30);
+                hitboxSize = new FlxPoint(20, 30);
                 attackLocation = new FlxPoint(x+size.x/2, y+(size.y/2)-(hitboxSize.y/2)-playerHitboxOffsetY);
             case FlxObject.DOWN:
                 hitboxSize = new FlxPoint(30, 20);
                 attackLocation = new FlxPoint(x+(size.x/2)-(hitboxSize.x/2)-playerHitboxOffsetX, y+size.y/8);
             case FlxObject.LEFT:
-                hitboxSize = new FlxPoint(12, 30);
+                hitboxSize = new FlxPoint(20, 30);
                 attackLocation = new FlxPoint(x-hitboxSize.x, y+(size.y/2)-(hitboxSize.y/2)-playerHitboxOffsetY);
             case FlxObject.UP:
-                hitboxSize = new FlxPoint(30, 12);
+                hitboxSize = new FlxPoint(30, 20);
                 attackLocation = new FlxPoint(x+(size.x/2)-(hitboxSize.x/2)-playerHitboxOffsetX, y-hitboxSize.y-playerHitboxOffsetY/2);
             default:
                 hitboxSize = new FlxPoint(20, 20);

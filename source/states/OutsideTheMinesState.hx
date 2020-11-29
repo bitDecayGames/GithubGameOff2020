@@ -310,9 +310,6 @@ class OutsideTheMinesState extends BaseState
 		var shovelDialogIndex = 13;
 		var bulbDialogIndex = 14;
 
-		trace("Current dialog index: " + currentDialogIndex);
-		trace("Is it done: " + dialogManager.isDone);
-
 		// Only render the shop text dialog if there is nothing else going on and the player is browsing for what to buy
 		if ((currentDialogIndex != matterConverterDialogIndex &&
 			currentDialogIndex != speedClogDialogIndex &&
@@ -360,7 +357,6 @@ class OutsideTheMinesState extends BaseState
 				if (!player.hasUpgrade("Shovel")) {
 					TextPop.pop(Std.int(200), Std.int(140), "You aren't ready", new SlowFadeUp(FlxColor.RED), 10);
 					FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchaseFail);
-					trace("Dialgomanager is done: " + dialogManager.isDone);
 					if (dialogManager.isDone){
 						dialogManager.loadDialog(1);
 					}

@@ -195,6 +195,8 @@ class OutsideTheMinesState extends BaseState
 
 			} else if (!player.hasUpgrade("Shovel")){
 				dialogManager.loadDialog(0);
+			} else if (Statics.CurrentLightRadius >= Statics.minLightRadius && Statics.CurrentLightRadius <= Statics.minLightRadius+20) {
+				dialogManager.loadDialog(15);
 			} else if (Statics.CurrentLightRadius <= Statics.minLightRadius) {
 				dialogManager.loadDialog(4);
 			}
@@ -243,6 +245,8 @@ class OutsideTheMinesState extends BaseState
 	}
 
 	override public function update(elapsed:Float) {
+		Statics.CurrentLightRadius = Statics.MaxLightRadius;
+
 		super.update(elapsed);
 		FmodManager.Update();
 

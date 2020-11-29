@@ -28,6 +28,7 @@ class FmodSFX {
     public static inline var PlayerFall:String = "event:/SFX/Player/Fall/PlayerFall";
     public static inline var FootstepRock:String = "event:/SFX/Player/Footsteps/FootstepRock";
     public static inline var LightRecharge:String = "event:/SFX/Player/Light/LightRecharge";
+    public static inline var LightRechargeNoClick:String = "event:/SFX/Player/Light/LightRechargeNoClick";
     public static inline var MatterConverterClick:String = "event:/SFX/Player/Light/MatterConverterClick";
     public static inline var MatterConverterBlend:String = "event:/SFX/Player/MatterConverter/MatterConverterBlend";
     public static inline var MatterConverterCharge1:String = "event:/SFX/Player/MatterConverter/MatterConverterCharge1";

@@ -282,17 +282,17 @@ class PlayState extends BaseState
 					Timer.delay(() -> {
 						FmodManager.PlaySoundOneShot(FmodSFX.MatterConverterGears);
 						Timer.delay(() -> {
-							FmodManager.PlaySoundOneShot(FmodSFX.LightRecharge);
+							FmodManager.PlaySoundOneShot(FmodSFX.LightRechargeNoClick);
 							Timer.delay(() -> {
 								FlxTween.num(Statics.CurrentLightRadius, Statics.MaxLightRadius, 2, {}, function(v)
 									{
 										Statics.CurrentLightRadius = v;
 									});
 							}, 1000);
-						}, 2500);
+						}, 2000);
 					}, 750);
 				}
-			}, 200);
+			}, 400);
 		}
 	}
 	

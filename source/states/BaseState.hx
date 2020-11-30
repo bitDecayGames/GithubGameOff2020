@@ -98,7 +98,7 @@ class BaseState extends FlxTransitionableState
 	}
 
 	function setupHUD() {
-		var hudBG = new FlxSprite(0, FlxG.height - 32);
+		var hudBG = new FlxSprite(0, FlxG.height - 32, AssetPaths.hudBackground__png);
 		hudBG.makeGraphic(FlxG.width, 32, FlxColor.BLUE);
 		uiGroup.add(hudBG);
 

@@ -360,6 +360,13 @@ class Player extends Entity {
 
     public function applyDamage(_damage:Int) {
         health -= _damage;
+        if (health == 1){
+            Timer.delay(() -> {
+                TextPop.pop(Std.int(x-6), Std.int(y+3), "Health", new SlowFade(FlxColor.RED), 7);     
+                TextPop.pop(Std.int(x-5), Std.int(y+12), "Low", new SlowFade(FlxColor.RED), 7);     
+                FmodManager.PlaySoundOneShot(FmodSFX.PlayerAlmostDead);
+            }, 500);
+        }
     }
 
     public function setKnockback(_knockbackDirection:FlxPoint, _knockbackSpeed:Float, _knockbackDuration:Float) {

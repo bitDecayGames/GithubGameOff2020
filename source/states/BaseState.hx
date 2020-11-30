@@ -89,6 +89,14 @@ class BaseState extends FlxTransitionableState
 		uiGroup.add(elem);
 	}
 
+	public function addToWorld(elem:FlxSprite) {
+		worldGroup.add(elem);
+	}
+
+	public function isShopkeepTalking():Bool {
+		return false;
+	}
+
 	function setupHUD() {
 		var hudBG = new FlxSprite(0, FlxG.height - 32);
 		hudBG.makeGraphic(FlxG.width, 32, FlxColor.BLUE);

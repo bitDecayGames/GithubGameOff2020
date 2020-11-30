@@ -1,5 +1,8 @@
 package entities.enemies;
 
+import entities.loots.GoldCoin;
+import entities.loots.SilverCoin;
+import entities.Enemy.LootTypeChance;
 import entities.Enemy.LootChance;
 import level.EnemyCache;
 import flixel.FlxG;
@@ -29,6 +32,11 @@ class Rat extends Enemy {
         lootChances = [
             new LootChance(.7, 1),
             new LootChance(.3, 0),
+        ];
+
+        lootTypeChances = [
+            new LootTypeChance(.7, SilverCoin),
+            new LootTypeChance(.3, GoldCoin),
         ];
 
         baseStats.speed = 30;

@@ -14,6 +14,7 @@ class Rope extends Interactable {
         super(_position);
 
         loadGraphic(AssetPaths.interactables__png, true, 16, 16);
+        ID = 998;
 
         animation.add("inventory", [5]);
         animation.play("inventory");

@@ -19,6 +19,7 @@ import flixel.group.FlxGroup;
 import haxefmod.flixel.FmodFlxUtilities;
 import shaders.Lighten;
 import openfl.filters.ShaderFilter;
+import entities.loots.GoldCoin;
 import level.Level;
 import flixel.text.FlxText;
 import entities.Loot;
@@ -44,6 +45,7 @@ class PlayState extends BaseState
 
 	var shader:Lighten;
 	var lightFilter:ShaderFilter;
+	var flickerCounter:Int;
 
 	// uiCamera to keep stuff locked to screen positions
 	var uiCamera:FlxCamera;
@@ -187,9 +189,9 @@ class PlayState extends BaseState
 		// TODO: The goal here is to have the loot stay on the map.
 		// However, collisions don't seem to behave properly.
 		// This function will make it obvious when things START working
-		loot.path.cancel();
-		loot.color = FlxColor.BLUE;
-		loot.scale.set(5,5);
+		// loot.path.cancel();
+		// loot.color = FlxColor.BLUE;
+		// loot.scale.set(5,5);
 	}
 
 	public function playerHasDied() {
@@ -210,6 +212,16 @@ class PlayState extends BaseState
 		shader.lightSourceX.value[0] = player.getMidpoint().x + player.lightOffset.x;
 		shader.lightSourceY.value[0] = player.getMidpoint().y + player.lightOffset.y;
 		shader.lightRadius.value = [Statics.CurrentLightRadius];
+		if (Statics.CurrentLightRadius < Statics.minLightRadius + 2 && !isTransitioningStates && !player.isDead){
+			if (flickerCounter == 0){
+				FmodManager.PlaySoundOneShot(FmodSFX.LightFlickering);
+			}
+			if (flickerCounter <= 8){
+				shader.lightSourceX.value[0] = 10000;
+				shader.lightSourceY.value[0] = 10000;
+			}
+			flickerCounter = (flickerCounter+1) % 10;
+		}
 
 		if(FlxG.keys.justPressed.P) {
 			shader.isShaderActive.value[0] = !shader.isShaderActive.value[0];
@@ -217,6 +229,14 @@ class PlayState extends BaseState
 
 		if(FlxG.keys.justPressed.N) {
 			FmodFlxUtilities.TransitionToState(new OutsideTheMinesState(OutsideTheMinesState.SkipIntro));
+		}
+
+		if (FlxG.keys.justPressed.MINUS) {
+			Statics.CurrentLightRadius -= 5;
+		}
+
+		if (FlxG.keys.justPressed.PLUS) {
+			Statics.CurrentLightRadius += 5;
 		}
 
 		if(FlxG.keys.justPressed.G) {
@@ -231,7 +251,7 @@ class PlayState extends BaseState
 			FmodFlxUtilities.TransitionToState(new PlayState());
 		}
 		if(FlxG.keys.justPressed.T) {
-			var loot = new Loot(player.x+50, player.y);
+			var loot = new GoldCoin(player.x+50, player.y);
 			addLoot(loot);
 		}
 
@@ -282,17 +302,17 @@ class PlayState extends BaseState
 					Timer.delay(() -> {
 						FmodManager.PlaySoundOneShot(FmodSFX.MatterConverterGears);
 						Timer.delay(() -> {
-							FmodManager.PlaySoundOneShot(FmodSFX.LightRecharge);
+							FmodManager.PlaySoundOneShot(FmodSFX.LightRechargeNoClick);
 							Timer.delay(() -> {
 								FlxTween.num(Statics.CurrentLightRadius, Statics.MaxLightRadius, 2, {}, function(v)
 									{
 										Statics.CurrentLightRadius = v;
 									});
 							}, 1000);
-						}, 2500);
+						}, 2000);
 					}, 750);
 				}
-			}, 200);
+			}, 400);
 		}
 	}
 	

@@ -1,5 +1,6 @@
 package states;
 
+import entities.GameState;
 import entities.HitboxTextInteract;
 import interactables.HeartJar;
 import interactables.MatterConverter;
@@ -191,12 +192,14 @@ class OutsideTheMinesState extends BaseState
 			if (Statics.PlayerDied){
 				Statics.PlayerDied = false;
 				dialogManager.loadDialog(3);
-				// We need to subtract money here
-
+				Player.state.money = Std.int(Player.state.money / 2);
 			} else if (!player.hasUpgrade("Shovel")){
 				dialogManager.loadDialog(0);
-			} else if (Statics.CurrentLightRadius <= Statics.minLightRadius) {
+			} else if (Statics.CurrentLightRadius > Statics.minLightRadius && Statics.CurrentLightRadius <= Statics.minLightRadius+20) {
 				dialogManager.loadDialog(4);
+			} else if (Statics.CurrentLightRadius <= Statics.minLightRadius) {
+				dialogManager.loadDialog(15);
+				Player.state.money = Std.int(Player.state.money / 2);
 			}
 		} else {
 
@@ -242,7 +245,16 @@ class OutsideTheMinesState extends BaseState
 		}
 	}
 
+	override public function isShopkeepTalking():Bool {
+		if (dialogManager != null){
+			return dialogManager.isTyping();
+		}
+		return false;
+	}
+
 	override public function update(elapsed:Float) {
+		Statics.CurrentLightRadius = Statics.MaxLightRadius;
+
 		super.update(elapsed);
 		FmodManager.Update();
 
@@ -299,9 +311,6 @@ class OutsideTheMinesState extends BaseState
 		var shovelDialogIndex = 13;
 		var bulbDialogIndex = 14;
 
-		trace("Current dialog index: " + currentDialogIndex);
-		trace("Is it done: " + dialogManager.isDone);
-
 		// Only render the shop text dialog if there is nothing else going on and the player is browsing for what to buy
 		if ((currentDialogIndex != matterConverterDialogIndex &&
 			currentDialogIndex != speedClogDialogIndex &&
@@ -349,7 +358,6 @@ class OutsideTheMinesState extends BaseState
 				if (!player.hasUpgrade("Shovel")) {
 					TextPop.pop(Std.int(200), Std.int(140), "You aren't ready", new SlowFadeUp(FlxColor.RED), 10);
 					FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchaseFail);
-					trace("Dialgomanager is done: " + dialogManager.isDone);
 					if (dialogManager.isDone){
 						dialogManager.loadDialog(1);
 					}

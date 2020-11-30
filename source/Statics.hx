@@ -1,5 +1,8 @@
 package;
 
+import metrics.Metrics;
+import com.bitdecay.analytics.Bitlytics;
+
 // A place to put all those juicy globals
 class Statics {
     // How many levels per tileset
@@ -18,8 +21,14 @@ class Statics {
 
     public static var MatterConverterCharges:Int = 0;
 
+    private static var furthestDepth = 0;
+
     public static function IncrementLevel() {
         CurrentLevel++;
+        if (CurrentLevel > furthestDepth) {
+            furthestDepth = CurrentLevel;
+            Bitlytics.Instance().Queue(Metrics.MAX_DEPTH, furthestDepth);
+        }
     }
 
     public static function DecrementLevel() {

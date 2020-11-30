@@ -1,5 +1,6 @@
 package states;
 
+import com.bitdecay.analytics.Bitlytics;
 import flixel.tweens.FlxTween;
 import entities.HitboxInteract;
 import flixel.addons.display.FlxTiledSprite;
@@ -317,7 +318,7 @@ class PlayState extends BaseState
 			}, 400);
 		}
 	}
-	
+
 	private function interactWithItem(interactable:Interactable, hitbox:Hitbox) {
 		if (!interactable.hasBeenHitByThisHitbox(hitbox)) {
 			if (interactable.name == "Rope") {

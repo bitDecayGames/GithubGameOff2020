@@ -27,6 +27,7 @@ class HeartJar extends Interactable {
         Player.state.baseStats.maxHealth += 2;
         Player.state.activeStats.maxHealth += 2;
         Player.state.activeStats.currentHealth += 2;
+        _player.health = Player.state.baseStats.maxHealth;
         _player.refresh();
     }
 }

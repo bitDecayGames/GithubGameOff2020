@@ -390,6 +390,7 @@ class OutsideTheMinesState extends BaseState
 						var heartJarIndex = 10;
 						var speedClogIndex = 11;
 						var axeIndex = 12;
+						var ledIndex = 16;
 
 						if (interactable.name == "Shovel") {
 							dialogManager.loadDialog(shovelBoughtIndex);
@@ -401,6 +402,8 @@ class OutsideTheMinesState extends BaseState
 							dialogManager.loadDialog(speedClogIndex);
 						}  else if (interactable.name == "Axe") {
 							dialogManager.loadDialog(axeIndex);
+						} else if (interactable.name == "LED Bulb") {
+							dialogManager.loadDialog(ledIndex);
 						}
 					} else {
 						TextPop.pop(Std.int(player.x), Std.int(player.y), "Not enough money", new SlowFade(FlxColor.RED), 10);

@@ -19,5 +19,6 @@ class Dialogs {
         ["Shovel. You are going to need this."],
         ["LED Bulb. Incredibly bright and efficient light bulb."],
         ["You are lucky I found you.", "Without a light, you would have been wondering those caves for a long time.", "Obviously, rescues come with a fee...", "Don't give up"],
+        ["LED Bulb. You now have increased visibility and longevity on your headlamp!"],
     ];
 }

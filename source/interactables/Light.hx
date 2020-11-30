@@ -1,5 +1,7 @@
 package interactables;
 
+import com.bitdecay.analytics.Bitlytics;
+import metrics.Metrics;
 import upgrades.Upgrade;
 import flixel.math.FlxPoint;
 import entities.Player;
@@ -24,6 +26,7 @@ class Light extends Interactable {
 
     override public function onInteract(_player:Player) {
         super.onInteract(_player);
+        Bitlytics.Instance().Queue(Metrics.BULB_BOUGHT, 1);
         Statics.MaxLightRadius += 25;
         Statics.lightDrainRate = .75;
     }

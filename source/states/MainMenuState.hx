@@ -18,7 +18,7 @@ class MainMenuState extends FlxUIState {
 
     override public function create():Void {
         super.create();
-        FmodManager.PlaySong(FmodSongs.LetsGo);
+        // FmodManager.PlaySong(FmodSongs.LetsGo);
         FlxG.log.notice("loaded scene");
         bgColor = FlxColor.TRANSPARENT;
 
@@ -27,7 +27,7 @@ class MainMenuState extends FlxUIState {
         _txtTitle.size = 40;
         _txtTitle.alignment = FlxTextAlign.CENTER;
         _txtTitle.text = "Game Title";
-        
+
         add(_txtTitle);
 
         _btnPlay = UiHelpers.CreateMenuButton("Play", clickPlay);

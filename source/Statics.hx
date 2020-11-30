@@ -23,6 +23,10 @@ class Statics {
 
     private static var furthestDepth = 0;
 
+    private static var deaths = 0;
+    private static var minionDeaths = 0;
+    private static var lightDeaths = 0;
+
     public static function IncrementLevel() {
         CurrentLevel++;
         if (CurrentLevel > furthestDepth) {
@@ -33,5 +37,19 @@ class Statics {
 
     public static function DecrementLevel() {
         CurrentLevel--;
+    }
+
+    public static function PlayerHasDiedToMinions() {
+        deaths++;
+        minionDeaths++;
+        Bitlytics.Instance().Queue(Metrics.PLAYER_DEATHS, deaths);
+        Bitlytics.Instance().Queue(Metrics.PLAYER_MINION_DEATHS, minionDeaths);
+    }
+
+    public static function PlayerDiedDueToLight() {
+        deaths++;
+        lightDeaths++;
+        Bitlytics.Instance().Queue(Metrics.PLAYER_DEATHS, deaths);
+        Bitlytics.Instance().Queue(Metrics.PLAYER_LIGHT_DEATHS, lightDeaths);
     }
 }

@@ -46,7 +46,7 @@ class Player extends Entity {
     public var upgrades:Array<Upgrade> = new Array<Upgrade>();
 
     var hitboxTextInteract:HitboxTextInteract;
-    
+
     var lastFrameLightRadius:Float;
 
 	public function new(_parentState:BaseState, _spawnPosition:FlxPoint) {
@@ -117,7 +117,7 @@ class Player extends Entity {
         setFacingFlip(FlxObject.RIGHT, false, false);
         setFacingFlip(FlxObject.DOWN, false, false);
         setFacingFlip(FlxObject.UP, false, false);
-        
+
         var textInteractionLocation:FlxPoint;
         var hitboxTextInteractSize = new FlxPoint(5, 5);
         switch facing {
@@ -181,7 +181,7 @@ class Player extends Entity {
         super.update(delta);
 
         Player.state.activeStats.currentHealth = health;
-        
+
         var interactTextLocation:FlxPoint;
         switch facing {
             case FlxObject.RIGHT:
@@ -199,18 +199,18 @@ class Player extends Entity {
 
 		var halfDrained = (Statics.MaxLightRadius-Statics.minLightRadius)/2 + Statics.minLightRadius;
 		if (Statics.CurrentLightRadius <= halfDrained && lastFrameLightRadius > halfDrained){
-            TextPop.pop(Std.int(x-6), Std.int(y), "Battery", new SlowFade(FlxColor.YELLOW), 7);        
+            TextPop.pop(Std.int(x-6), Std.int(y), "Battery", new SlowFade(FlxColor.YELLOW), 7);
             TextPop.pop(Std.int(x), Std.int(y+8), "50%", new SlowFade(FlxColor.YELLOW), 7);
             FmodManager.PlaySoundOneShot(FmodSFX.LightWarning50Percent);
         }
-        
+
 		var threeForthsDrained = (Statics.MaxLightRadius-Statics.minLightRadius)*.25 + Statics.minLightRadius;
 		if (Statics.CurrentLightRadius <= threeForthsDrained && lastFrameLightRadius > threeForthsDrained){
-            TextPop.pop(Std.int(x-6), Std.int(y), "Battery", new SlowFade(FlxColor.RED), 7);        
-            TextPop.pop(Std.int(x-7), Std.int(y+8), "Critical", new SlowFade(FlxColor.RED), 7);   
-            FmodManager.PlaySoundOneShot(FmodSFX.LightWarning25Percent);     
+            TextPop.pop(Std.int(x-6), Std.int(y), "Battery", new SlowFade(FlxColor.RED), 7);
+            TextPop.pop(Std.int(x-7), Std.int(y+8), "Critical", new SlowFade(FlxColor.RED), 7);
+            FmodManager.PlaySoundOneShot(FmodSFX.LightWarning25Percent);
         }
-        
+
         // save this frame's light radius for use next frame
 	    lastFrameLightRadius = Statics.CurrentLightRadius;
         if (!parentState.isTransitioningStates){
@@ -231,6 +231,7 @@ class Player extends Entity {
                 FmodManager.PlaySoundOneShot(FmodSFX.PlayerDeath);
                 var playState = cast(parentState, PlayState);
                 playState.playerHasDied();
+                Statics.PlayerDiedDueToLight();
             }, 1000);
         }
 
@@ -259,6 +260,7 @@ class Player extends Entity {
                     animation.play("faceplant");
                     playState.playerHasDied();
                     Statics.PlayerDied = true;
+                    Statics.PlayerHasDiedToMinions();
                     return;
                 }
             }
@@ -362,8 +364,8 @@ class Player extends Entity {
         health -= _damage;
         if (health == 1){
             Timer.delay(() -> {
-                TextPop.pop(Std.int(x-6), Std.int(y+3), "Health", new SlowFade(FlxColor.RED), 7);     
-                TextPop.pop(Std.int(x-5), Std.int(y+12), "Low", new SlowFade(FlxColor.RED), 7);     
+                TextPop.pop(Std.int(x-6), Std.int(y+3), "Health", new SlowFade(FlxColor.RED), 7);
+                TextPop.pop(Std.int(x-5), Std.int(y+12), "Low", new SlowFade(FlxColor.RED), 7);
                 FmodManager.PlaySoundOneShot(FmodSFX.PlayerAlmostDead);
             }, 500);
         }
@@ -411,7 +413,7 @@ class Player extends Entity {
         }
         var hitbox = new Hitbox(.2, attackLocation, hitboxSize);
         parentState.addHitbox(hitbox);
-        
+
         var interactLocation:FlxPoint;
         switch facing {
             case FlxObject.RIGHT:
@@ -511,7 +513,7 @@ class Player extends Entity {
                     shovel.x+=1;
                 }
             default:
-                
+
         }
 	}
 

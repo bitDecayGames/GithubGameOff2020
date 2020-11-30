@@ -1,5 +1,6 @@
 package states;
 
+import metrics.Metrics;
 import com.bitdecay.analytics.Bitlytics;
 import flixel.tweens.FlxTween;
 import entities.HitboxInteract;
@@ -67,6 +68,8 @@ class PlayState extends BaseState
 		AssetPaths.caves9__json,
 		AssetPaths.caves10__json,
 	];
+
+	private static var MAX_MONEY_ATTAINED = 0;
 
 	override public function create()
 	{
@@ -147,6 +150,11 @@ class PlayState extends BaseState
 
 	public function IncreaseMoney(_money:Int) {
 		Player.state.money += _money;
+
+		if (Player.state.money > MAX_MONEY_ATTAINED) {
+			MAX_MONEY_ATTAINED = Player.state.money;
+			Bitlytics.Instance().Queue(Metrics.MAX_MONEY, MAX_MONEY_ATTAINED);
+		}
 	}
 
 	private function enemyHitboxTouch(enemy:Enemy, hitbox:Hitbox) {

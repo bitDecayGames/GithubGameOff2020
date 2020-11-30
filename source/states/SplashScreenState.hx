@@ -29,8 +29,6 @@ class SplashScreenState extends FlxState {
 
 		timer = splashDuration;
 		fadeIn(index);
-
-		Configure.initAnalytics();
 	}
 
 	private function loadSplashImages(splashes:Array<SplashImage>) {

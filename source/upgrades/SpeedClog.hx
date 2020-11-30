@@ -13,10 +13,10 @@ class SpeedClog extends Upgrade {
     }
 
     override public function modifier(stats:Stats) {
-        stats.speed += 50;
+        stats.speed += 10;
     }
 
     override public function getDescription():String {
-        return "+50 speed";
+        return "10 speed";
     }
 }

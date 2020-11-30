@@ -1,5 +1,8 @@
 package entities.enemies;
 
+import entities.loots.GoldCoin;
+import entities.loots.SilverCoin;
+import entities.Enemy.LootTypeChance;
 import entities.Enemy.LootChance;
 import level.EnemyCache;
 import js.html.TouchList;
@@ -39,6 +42,11 @@ class Snake extends Enemy {
         enemyName = "Snake";
         lootChances = [
             new LootChance(1, 2),
+        ];
+
+        lootTypeChances = [
+            new LootTypeChance(.5, SilverCoin),
+            new LootTypeChance(.5, GoldCoin),
         ];
 
         baseStats.speed = 30;

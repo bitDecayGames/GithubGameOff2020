@@ -27,7 +27,12 @@ class FmodSFX {
     public static inline var PlayerDeath:String = "event:/SFX/Player/Death/PlayerDeath";
     public static inline var PlayerFall:String = "event:/SFX/Player/Fall/PlayerFall";
     public static inline var FootstepRock:String = "event:/SFX/Player/Footsteps/FootstepRock";
+    public static inline var LightFlickering:String = "event:/SFX/Player/Light/LightFlickering";
+    public static inline var LightGoingOut:String = "event:/SFX/Player/Light/LightGoingOut";
     public static inline var LightRecharge:String = "event:/SFX/Player/Light/LightRecharge";
+    public static inline var LightRechargeNoClick:String = "event:/SFX/Player/Light/LightRechargeNoClick";
+    public static inline var LightWarning25Percent:String = "event:/SFX/Player/Light/LightWarning25Percent";
+    public static inline var LightWarning50Percent:String = "event:/SFX/Player/Light/LightWarning50Percent";
     public static inline var MatterConverterClick:String = "event:/SFX/Player/Light/MatterConverterClick";
     public static inline var MatterConverterBlend:String = "event:/SFX/Player/MatterConverter/MatterConverterBlend";
     public static inline var MatterConverterCharge1:String = "event:/SFX/Player/MatterConverter/MatterConverterCharge1";
@@ -39,5 +44,6 @@ class FmodSFX {
     public static inline var PlayerPurchaseFail:String = "event:/SFX/Player/Purchase/PlayerPurchaseFail";
     public static inline var ShovelEnemyImpact:String = "event:/SFX/Player/Shovel/ShovelEnemyImpact";
     public static inline var ShovelSwing:String = "event:/SFX/Player/Shovel/ShovelSwing";
+    public static inline var PlayerAlmostDead:String = "event:/SFX/Player/TakeDamage/PlayerAlmostDead";
     public static inline var PlayerTakeDamage:String = "event:/SFX/Player/TakeDamage/PlayerTakeDamage";
 }

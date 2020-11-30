@@ -1,5 +1,7 @@
 package interactables;
 
+import metrics.Metrics;
+import com.bitdecay.analytics.Bitlytics;
 import upgrades.Upgrade;
 import flixel.math.FlxPoint;
 import entities.Player;
@@ -19,14 +21,16 @@ class HeartJar extends Interactable {
         animation.play("inventory");
 
         name = "Heart Jar";
-        cost = 5;
+        cost = 25;
     }
 
     override public function onInteract(_player:Player) {
         super.onInteract(_player);
+        Bitlytics.Instance().Queue(Metrics.HEART_BOUGHT, 1);
         Player.state.baseStats.maxHealth += 2;
         Player.state.activeStats.maxHealth += 2;
         Player.state.activeStats.currentHealth += 2;
+        _player.health = Player.state.baseStats.maxHealth;
         _player.refresh();
     }
 }

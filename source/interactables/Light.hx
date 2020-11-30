@@ -1,5 +1,7 @@
 package interactables;
 
+import com.bitdecay.analytics.Bitlytics;
+import metrics.Metrics;
 import upgrades.Upgrade;
 import flixel.math.FlxPoint;
 import entities.Player;
@@ -19,11 +21,13 @@ class Light extends Interactable {
         animation.play("inventory");
 
         name = "LED Bulb";
-        cost = 5;
+        cost = 50;
     }
 
     override public function onInteract(_player:Player) {
         super.onInteract(_player);
-        Statics.MaxLightRadius += 50;
+        Bitlytics.Instance().Queue(Metrics.BULB_BOUGHT, 1);
+        Statics.MaxLightRadius += 25;
+        Statics.lightDrainRate = .75;
     }
 }

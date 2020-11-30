@@ -27,6 +27,6 @@ jobs:
         with:
           dir: export/html5.zip
           itchUserName: bitdecaygames
-          itchGameName: game-off-2020
+          itchGameName: lacuna
           itchChannel: web-release
           butlerApiKey: ${{ secrets.BUTLER_API_KEY }}

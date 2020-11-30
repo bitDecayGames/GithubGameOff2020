@@ -1,10 +1,10 @@
 {
 	"analytics": {
-		"name": "<PUT SIMPLIFIED GAME NAME HERE>",
+		"name": "lacuna",
 		"influx": {
 			"api": "https://us-west-2-1.aws.cloud2.influxdata.com/api/v2/write",
 			"org": "13ecc65d2303c6d7",
-			"bucket": "<PUT BUCKET ID HERE>",
+			"bucket": "353b46aac654e17c",
 			"token": "token loaded from the '-D API_KEY=<key>' compile flag so it is not committed to source control"
 		}
 	},
@@ -13,26 +13,20 @@
 			{
 				"sectionName": "Art",
 				"names": [
-					"Erik Meredeith"
+					"Erik \"RGB Overlord\" Meredeith"
 				]
 			},
 			{
 				"sectionName": "Music composition and SFX",
 				"names": [
-					"Tanner Moore"
+					"Tanner \"The Brain\" Moore"
 				]
 			},
 			{
 				"sectionName": "Programming",
 				"names": [
-					"Logan Moore",
-					"Mike Wingfield"
-				]
-			},
-			{
-				"sectionName": "Tools",
-				"names": [
-					"Tim the Tool Man Taylor"
+					"Logan \"The System\" Moore",
+					"Tanner \"The Assembler\" Moore"
 				]
 			}
 		]

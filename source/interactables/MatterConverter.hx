@@ -1,5 +1,7 @@
 package interactables;
 
+import metrics.Metrics;
+import com.bitdecay.analytics.Bitlytics;
 import upgrades.Upgrade;
 import flixel.math.FlxPoint;
 import entities.Player;
@@ -19,11 +21,12 @@ class MatterConverter extends Interactable {
         animation.play("inventory");
 
         name = "Matter Converter";
-        cost = 5;
+        cost = 50;
     }
 
     override public function onInteract(_player:Player) {
         super.onInteract(_player);
+        Bitlytics.Instance().Queue(Metrics.MTR_CNV_BOUGHT, 1);
         _player.baseStats.maxHealth += 2;
     }
 }

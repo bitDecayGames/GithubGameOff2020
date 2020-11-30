@@ -1,5 +1,7 @@
 package interactables;
 
+import metrics.Metrics;
+import com.bitdecay.analytics.Bitlytics;
 import entities.Player;
 import flixel.math.FlxPoint;
 import upgrades.SpeedClog;
@@ -19,6 +21,11 @@ class Shoe extends Interactable {
         animation.play("inventory");
 
         name = "SpeedClog";
-        cost = 5;
+        cost = 15;
+    }
+
+    override public function onInteract(_player:Player) {
+        super.onInteract(_player);
+        Bitlytics.Instance().Queue(Metrics.BOOT_BOUGHT, 1);
     }
 }

@@ -1,5 +1,7 @@
 package entities;
 
+import textpop.SlowFade;
+import com.bitdecay.textpop.TextPop;
 import states.OutsideTheMinesState;
 import upgrades.Upgrade;
 import states.BaseState;
@@ -44,6 +46,8 @@ class Player extends Entity {
     public var upgrades:Array<Upgrade> = new Array<Upgrade>();
 
     var hitboxTextInteract:HitboxTextInteract;
+
+    var lastFrameLightRadius:Float;
 
 	public function new(_parentState:BaseState, _spawnPosition:FlxPoint) {
         super(_parentState);
@@ -113,7 +117,7 @@ class Player extends Entity {
         setFacingFlip(FlxObject.RIGHT, false, false);
         setFacingFlip(FlxObject.DOWN, false, false);
         setFacingFlip(FlxObject.UP, false, false);
-        
+
         var textInteractionLocation:FlxPoint;
         var hitboxTextInteractSize = new FlxPoint(5, 5);
         switch facing {
@@ -177,7 +181,7 @@ class Player extends Entity {
         super.update(delta);
 
         Player.state.activeStats.currentHealth = health;
-        
+
         var interactTextLocation:FlxPoint;
         switch facing {
             case FlxObject.RIGHT:
@@ -193,9 +197,43 @@ class Player extends Entity {
         }
         hitboxTextInteract.updatePostion(interactTextLocation);
 
+		var halfDrained = (Statics.MaxLightRadius-Statics.minLightRadius)/2 + Statics.minLightRadius;
+		if (Statics.CurrentLightRadius <= halfDrained && lastFrameLightRadius > halfDrained){
+            TextPop.pop(Std.int(x-6), Std.int(y), "Battery", new SlowFade(FlxColor.YELLOW), 7);
+            TextPop.pop(Std.int(x), Std.int(y+8), "50%", new SlowFade(FlxColor.YELLOW), 7);
+            FmodManager.PlaySoundOneShot(FmodSFX.LightWarning50Percent);
+        }
 
-        Statics.CurrentLightRadius -= Statics.lightDrainRate * delta;
-        Statics.CurrentLightRadius = Math.max(Statics.CurrentLightRadius, Statics.minLightRadius);
+		var threeForthsDrained = (Statics.MaxLightRadius-Statics.minLightRadius)*.25 + Statics.minLightRadius;
+		if (Statics.CurrentLightRadius <= threeForthsDrained && lastFrameLightRadius > threeForthsDrained){
+            TextPop.pop(Std.int(x-6), Std.int(y), "Battery", new SlowFade(FlxColor.RED), 7);
+            TextPop.pop(Std.int(x-7), Std.int(y+8), "Critical", new SlowFade(FlxColor.RED), 7);
+            FmodManager.PlaySoundOneShot(FmodSFX.LightWarning25Percent);
+        }
+
+        // save this frame's light radius for use next frame
+	    lastFrameLightRadius = Statics.CurrentLightRadius;
+        if (!parentState.isTransitioningStates){
+            Statics.CurrentLightRadius -= Statics.lightDrainRate * delta;
+        }
+
+        if (!isDead){
+            Statics.CurrentLightRadius = Math.max(Statics.CurrentLightRadius, Statics.minLightRadius);
+        }
+
+        if (Statics.CurrentLightRadius <= Statics.minLightRadius && !isDead){
+            isDead = true;
+            active = false;
+            alive = false;
+            Statics.CurrentLightRadius = 0;
+            FmodManager.PlaySoundOneShot(FmodSFX.LightGoingOut);
+            Timer.delay(() -> {
+                FmodManager.PlaySoundOneShot(FmodSFX.PlayerDeath);
+                var playState = cast(parentState, PlayState);
+                playState.playerHasDied();
+                Statics.PlayerDiedDueToLight();
+            }, 1000);
+        }
 
         if (invincibilityTimeLeft > 0){
             invincibilityTimeLeft -= delta;
@@ -222,6 +260,7 @@ class Player extends Entity {
                     animation.play("faceplant");
                     playState.playerHasDied();
                     Statics.PlayerDied = true;
+                    Statics.PlayerHasDiedToMinions();
                     return;
                 }
             }
@@ -237,6 +276,10 @@ class Player extends Entity {
                 }, 200);
                 facing = determineFacing(potentialDirection);
                 playAnimation(facing, null, attacking);
+            }
+
+            if (FlxG.keys.justPressed.H){
+                attacking = false;
             }
 
             var directionVector:FlxPoint = null;
@@ -319,6 +362,13 @@ class Player extends Entity {
 
     public function applyDamage(_damage:Int) {
         health -= _damage;
+        if (health == 1){
+            Timer.delay(() -> {
+                TextPop.pop(Std.int(x-6), Std.int(y+3), "Health", new SlowFade(FlxColor.RED), 7);
+                TextPop.pop(Std.int(x-5), Std.int(y+12), "Low", new SlowFade(FlxColor.RED), 7);
+                FmodManager.PlaySoundOneShot(FmodSFX.PlayerAlmostDead);
+            }, 500);
+        }
     }
 
     public function setKnockback(_knockbackDirection:FlxPoint, _knockbackSpeed:Float, _knockbackDuration:Float) {
@@ -341,24 +391,29 @@ class Player extends Entity {
         }
 
         var attackLocation:FlxPoint;
-        var hitboxSize = new FlxPoint(20, 20);
+        var hitboxSize:FlxPoint;
         var hitboxInteractSize = new FlxPoint(5, 5);
 
         switch facing {
             case FlxObject.RIGHT:
+                hitboxSize = new FlxPoint(20, 30);
                 attackLocation = new FlxPoint(x+size.x/2, y+(size.y/2)-(hitboxSize.y/2)-playerHitboxOffsetY);
             case FlxObject.DOWN:
+                hitboxSize = new FlxPoint(30, 20);
                 attackLocation = new FlxPoint(x+(size.x/2)-(hitboxSize.x/2)-playerHitboxOffsetX, y+size.y/8);
             case FlxObject.LEFT:
+                hitboxSize = new FlxPoint(20, 30);
                 attackLocation = new FlxPoint(x-hitboxSize.x, y+(size.y/2)-(hitboxSize.y/2)-playerHitboxOffsetY);
             case FlxObject.UP:
+                hitboxSize = new FlxPoint(30, 20);
                 attackLocation = new FlxPoint(x+(size.x/2)-(hitboxSize.x/2)-playerHitboxOffsetX, y-hitboxSize.y-playerHitboxOffsetY/2);
             default:
+                hitboxSize = new FlxPoint(20, 20);
                 attackLocation = new FlxPoint(x, y);
         }
         var hitbox = new Hitbox(.2, attackLocation, hitboxSize);
         parentState.addHitbox(hitbox);
-        
+
         var interactLocation:FlxPoint;
         switch facing {
             case FlxObject.RIGHT:
@@ -393,10 +448,12 @@ class Player extends Entity {
 
     function spawnShovel(position:FlxPoint, facing:Int) {
         shovel = new FlxSprite();
-        parentState.add(shovel);
+        parentState.addToWorld(shovel);
         shovel.loadGraphic(AssetPaths.shovel__png, true, 16, 32);
-        shovel.animation.add("swing", [0,1,2,3,4,5,6,7,8], 30, false);
-        shovel.animation.add("swing_left", [17,16,15,14,13,12,11,10,9], 30, false);
+        // 30 originally
+        var animationSpeed = 30;
+        shovel.animation.add("swing", [0,1,2,3,4,5,6,7,8], animationSpeed, false);
+        shovel.animation.add("swing_left", [17,16,15,14,13,12,11,10,9], animationSpeed, false);
         shovel.animation.finishCallback = (name) -> {
             shovel.destroy();
         }
@@ -415,6 +472,7 @@ class Player extends Entity {
             case FlxObject.UP:
                 shovel.angle = 270;
                 shovel.animation.play("swing");
+                shovel.ID = 998;
             default:
                 shovel.angle = 225;
                 shovel.animation.play("swing");
@@ -426,6 +484,36 @@ class Player extends Entity {
             if (frameNumber == 8) {
                 shovel.destroy();
             }
+        }
+
+        switch facing {
+            case FlxObject.RIGHT:
+                if (frameNumber == 0){
+                    shovel.y-=4;
+                } else {
+                    shovel.y+=1;
+                }
+            case FlxObject.DOWN:
+                if (frameNumber == 0){
+                    shovel.x+=4;
+                } else {
+                    shovel.x-=1;
+                }
+            case FlxObject.LEFT:
+                if (frameNumber == 0){
+                    shovel.y-=4;
+                } else {
+                    shovel.y+=1;
+                }
+            case FlxObject.UP:
+                if (frameNumber == 0){
+                    shovel.y+=4;
+                    shovel.x-=4;
+                } else {
+                    shovel.x+=1;
+                }
+            default:
+
         }
 	}
 

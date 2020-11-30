@@ -15,25 +15,15 @@ class Loot extends FlxSprite {
 
     var loopDropRadius = 25;
 
+    public function loadAnimation() {
+        animation.add("spin", [0,1,2,3,4,5], 10);
+        animation.play("spin");
+    }
+
     public function new(_x:Float, _y:Float) {
         // accounting for known half-width and half-height here
         // assume we are placing loot based on center
         super(_x + 4, _y + 4);
-
-        var random = Math.random();
-        if (random < .8){
-            coinType = "silver";
-            coinValue = 1;
-        } else {
-            coinType = "gold";
-            coinValue = 5;
-        }
-
-        loadCoinGraphic(coinType);
-        animation.add("spin", [0,1,2,3,4,5], 10);
-        animation.play("spin");
-
-
         var boundaryBuffer = 24;
         var inventoryBuffer = 36;
 
@@ -53,13 +43,5 @@ class Loot extends FlxSprite {
 
         // Start the movement and add it to the state
         path.start(points, 100, FlxPath.FORWARD);
-    }
-
-    private function loadCoinGraphic(_coinType:String){
-        if (_coinType == "silver") {
-            super.loadGraphic(AssetPaths.silver_coin__png, true, 8, 8);
-        } else {
-            super.loadGraphic(AssetPaths.gold_coin__png, true, 8, 8);
-        }
     }
 }

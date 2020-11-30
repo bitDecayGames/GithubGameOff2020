@@ -1,5 +1,7 @@
 package entities.enemies;
 
+import entities.loots.GoldCoin;
+import entities.Enemy.LootTypeChance;
 import entities.Enemy.LootChance;
 import level.EnemyCache;
 import behavior.tree.composite.Parallel;
@@ -33,9 +35,12 @@ class Blob extends Enemy {
         
         enemyName = "Blob";
         lootChances = [
-            new LootChance(.3, 0),
+            new LootChance(.5, 0),
             new LootChance(.5, 1),
-            new LootChance(.2, 2),
+        ];
+
+        lootTypeChances = [
+            new LootTypeChance(1, GoldCoin),
         ];
 
         // frames persecond * move speed

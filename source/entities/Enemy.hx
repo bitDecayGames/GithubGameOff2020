@@ -29,6 +29,15 @@ class LootChance {
     }
 }
 
+class LootTypeChance {
+    public var chance:Float;
+    public var type:Class<Loot>;
+    public function new (_chance:Float, _type:Class<Loot>) {
+        chance = _chance;
+        type = _type;
+    }
+}
+
 class Enemy extends Entity {
 
     var player:Player;
@@ -41,6 +50,7 @@ class Enemy extends Entity {
 
     var enemyName:String = "Unset";
     private var lootChances:Array<LootChance>;
+    private var lootTypeChances:Array<LootTypeChance>;
 
     //Sounds
     var deathSound:String = FmodSFX.MenuSelect;
@@ -82,6 +92,11 @@ class Enemy extends Entity {
         if (health <= 0 && dead){
             animation.play("dead");
             ID = 998;
+            if (enemyName == "Blob"){
+                kill();
+                cacheEntry.dead = true;
+                cacheEntry.consumed = true;
+            }
             return;
         }
 
@@ -147,10 +162,10 @@ class Enemy extends Entity {
         return directionNormalized;
     }
 
-    private function verifyLootChance() {
+    private function verifyLootChance():Bool {
         if (lootChances == null) {
             trace("Loot chance for " + enemyName + " not set!");
-            return;
+            return false;
         }
 
         var totalLootPercentage:Float = 0;
@@ -160,11 +175,33 @@ class Enemy extends Entity {
 
         if (totalLootPercentage != 1.0) {
             trace("Loot chance values for " + enemyName + " do not equal 100%. Total loot percentages added together should equal 1.0. Actual value: " + totalLootPercentage);
+            return false;
         }
+
+
+        
+        if (lootTypeChances == null) {
+            trace("Loot type chance for " + enemyName + " not set!");
+            return false;
+        }
+
+        var totalLootTypePercentage:Float = 0;
+        for (lootTypeChance in lootTypeChances){
+            totalLootTypePercentage += lootTypeChance.chance;
+        }
+
+        if (totalLootTypePercentage != 1.0) {
+            trace("Loot type chance values for " + enemyName + " do not equal 100%. Total loot type percentages added together should equal 1.0. Actual value: " + totalLootTypePercentage);
+            return false;
+        }
+
+        return true;
     }
 
     function dropLoot() {
-        verifyLootChance();
+        if (!verifyLootChance()) {
+            return;
+        }
 
         var finalLootCount:Int = 0;
 
@@ -178,10 +215,22 @@ class Enemy extends Entity {
         }
 
         while (finalLootCount > 0){
-            var loot = new Loot(getMidpoint().x, getMidpoint().y);
+            var loot = generateLoot(getMidpoint().x, getMidpoint().y);
             parentState.addLoot(loot);
             finalLootCount--;
         }
+    }
+
+    function generateLoot(_x:Float, _y:Float):Loot {
+        var lootTypeSeed = Math.random();
+        for (lootTypeChance in lootTypeChances) {
+            lootTypeSeed -= lootTypeChance.chance;
+            if (lootTypeSeed <= 0) {
+                return Type.createInstance(lootTypeChance.type, [_x, _y]);
+            }
+        }
+        trace("Unable to determine loot type");
+        return null;
     }
 
     function determineFacing(vector:FlxVector):Int {

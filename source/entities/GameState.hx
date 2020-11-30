@@ -11,7 +11,7 @@ class GameState {
 
     public function new() {
         baseStats = new Stats();
-        baseStats.maxHealth = 5;
+        baseStats.maxHealth = 3;
         baseStats.speed = 75;
 
         activeStats = new Stats();

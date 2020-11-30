@@ -24,6 +24,7 @@ class Light extends Interactable {
 
     override public function onInteract(_player:Player) {
         super.onInteract(_player);
-        Statics.MaxLightRadius += 50;
+        Statics.MaxLightRadius += 25;
+        Statics.lightDrainRate = .75;
     }
 }

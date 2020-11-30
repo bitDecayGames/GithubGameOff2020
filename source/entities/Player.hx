@@ -1,5 +1,7 @@
 package entities;
 
+import textpop.SlowFade;
+import com.bitdecay.textpop.TextPop;
 import states.OutsideTheMinesState;
 import upgrades.Upgrade;
 import states.BaseState;
@@ -44,6 +46,8 @@ class Player extends Entity {
     public var upgrades:Array<Upgrade> = new Array<Upgrade>();
 
     var hitboxTextInteract:HitboxTextInteract;
+    
+    var lastFrameLightRadius:Float;
 
 	public function new(_parentState:BaseState, _spawnPosition:FlxPoint) {
         super(_parentState);
@@ -193,6 +197,22 @@ class Player extends Entity {
         }
         hitboxTextInteract.updatePostion(interactTextLocation);
 
+		var halfDrained = (Statics.MaxLightRadius-Statics.minLightRadius)/2 + Statics.minLightRadius;
+		if (Statics.CurrentLightRadius <= halfDrained && lastFrameLightRadius > halfDrained){
+            TextPop.pop(Std.int(x-6), Std.int(y), "Battery", new SlowFade(FlxColor.YELLOW), 7);        
+            TextPop.pop(Std.int(x), Std.int(y+8), "50%", new SlowFade(FlxColor.YELLOW), 7);
+            FmodManager.PlaySoundOneShot(FmodSFX.LightWarning50Percent);
+        }
+        
+		var threeForthsDrained = (Statics.MaxLightRadius-Statics.minLightRadius)*.25 + Statics.minLightRadius;
+		if (Statics.CurrentLightRadius <= threeForthsDrained && lastFrameLightRadius > threeForthsDrained){
+            TextPop.pop(Std.int(x-6), Std.int(y), "Battery", new SlowFade(FlxColor.RED), 7);        
+            TextPop.pop(Std.int(x-7), Std.int(y+8), "Critical", new SlowFade(FlxColor.RED), 7);   
+            FmodManager.PlaySoundOneShot(FmodSFX.LightWarning25Percent);     
+        }
+        
+        // save this frame's light radius for use next frame
+	    lastFrameLightRadius = Statics.CurrentLightRadius;
         if (!parentState.isTransitioningStates){
             Statics.CurrentLightRadius -= Statics.lightDrainRate * delta;
         }

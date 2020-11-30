@@ -11,9 +11,9 @@ class Statics {
 
     public static var PlayerDied:Bool = false;
 
-    public static var MaxLightRadius:Float = 100;
+    public static var MaxLightRadius:Float = 75;
     public static var minLightRadius:Float = 10;
-    public static var lightDrainRate:Float = 2; // units per second
+    public static var lightDrainRate:Float = 1; // units per second
     public static var CurrentLightRadius:Float = MaxLightRadius;
 
     public static var MatterConverterCharges:Int = 0;

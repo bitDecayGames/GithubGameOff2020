@@ -31,6 +31,8 @@ class FmodSFX {
     public static inline var LightGoingOut:String = "event:/SFX/Player/Light/LightGoingOut";
     public static inline var LightRecharge:String = "event:/SFX/Player/Light/LightRecharge";
     public static inline var LightRechargeNoClick:String = "event:/SFX/Player/Light/LightRechargeNoClick";
+    public static inline var LightWarning25Percent:String = "event:/SFX/Player/Light/LightWarning25Percent";
+    public static inline var LightWarning50Percent:String = "event:/SFX/Player/Light/LightWarning50Percent";
     public static inline var MatterConverterClick:String = "event:/SFX/Player/Light/MatterConverterClick";
     public static inline var MatterConverterBlend:String = "event:/SFX/Player/MatterConverter/MatterConverterBlend";
     public static inline var MatterConverterCharge1:String = "event:/SFX/Player/MatterConverter/MatterConverterCharge1";

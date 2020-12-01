@@ -161,11 +161,21 @@ class PlayState extends BaseState
 	private function enemyHitboxTouch(enemy:Enemy, hitbox:Hitbox) {
 		if (!enemy.hasBeenHitByThisHitbox(hitbox)){
 			if (!enemy.dead){
-				FmodManager.PlaySoundOneShot(FmodSFX.ShovelEnemyImpact);
-				enemy.applyDamage(1);
-				enemy.setKnockback(determineKnockbackDirection(player.facing), 100, .25);
-				enemy.trackHitbox(hitbox);
+				if (enemy.enemyName == "Crystal") {
+					if (player.hasUpgrade("Pickaxe")) {
+						// DAMAGE THE CRUSTAL
+						enemy.applyDamage(1);
+					} else {
+						// TINK
+
+					}
+				} else {
+					FmodManager.PlaySoundOneShot(FmodSFX.ShovelEnemyImpact);
+					enemy.setKnockback(determineKnockbackDirection(player.facing), 100, .25);
+					enemy.applyDamage(1);
+				}
 			}
+			enemy.trackHitbox(hitbox);
 		}
 	}
 

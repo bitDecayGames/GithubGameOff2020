@@ -74,6 +74,10 @@ class Crystal extends Enemy {
 	override public function update(delta:Float):Void {
         super.update(delta);
 
+        if (health <= 0) {
+            dead = true;
+        }
+
         if (dead){
             return;
         }

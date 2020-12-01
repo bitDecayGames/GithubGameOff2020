@@ -449,7 +449,12 @@ class Player extends Entity {
     function spawnShovel(position:FlxPoint, facing:Int) {
         shovel = new FlxSprite();
         parentState.addToWorld(shovel);
-        shovel.loadGraphic(AssetPaths.shovel__png, true, 16, 32);
+        if (hasUpgrade("Pickaxe")) {
+            shovel.loadGraphic(AssetPaths.axe__png, true, 16, 32);
+        } else {
+            shovel.loadGraphic(AssetPaths.shovel__png, true, 16, 32);
+        }
+
         // 30 originally
         var animationSpeed = 30;
         shovel.animation.add("swing", [0,1,2,3,4,5,6,7,8], animationSpeed, false);
@@ -581,10 +586,46 @@ class Player extends Entity {
     }
 
     public function organizeUpgrades() {
+        var needsAdded = true;
+        var xPos = 0;
         for (i in 0...upgrades.length) {
+            needsAdded = true;
+
             parentState.addUIElement(upgrades[i]);
-            upgrades[i].x = i * 32;
-            upgrades[i].y = FlxG.height - upgrades[i].height;
+            upgrades[i].revive();
+
+            // check if this upgrade overrides one before it
+            for (k in 0...i) {
+                if (upgrades[i].overrides(upgrades[k].name)) {
+                    // this overrides a previous upgrade
+
+                    // use the previous one's position
+                    upgrades[i].x = upgrades[k].x;
+                    upgrades[i].y = upgrades[k].y;
+
+                    // kill the previous
+                    upgrades[k].kill();
+
+                    // add this one
+                    needsAdded = false;
+                }
+
+                if (upgrades[k].overrides(upgrades[i].name)) {
+                    // a previous upgrade overrides this one
+
+                    // kill this one and nothing else is needed
+                    upgrades[i].kill();
+                    needsAdded = false;
+                }
+            }
+
+            if (needsAdded) {
+                parentState.addUIElement(upgrades[i]);
+                upgrades[i].x = xPos * 32;
+                upgrades[i].y = FlxG.height - upgrades[i].height;
+
+                xPos++;
+            }
         }
     }
 

@@ -50,6 +50,7 @@ class OutsideTheMinesState extends BaseState
 	// some of these numbers are wacky because we are loading the tileset
 	// in Ogmo as a 16x16 tileset.
 	public static inline var shovel_index = 1;
+	public static inline var pickaxe_index = 2;
 	public static inline var shoe_index = 3;
 	public static inline var rope_index = 5;
 	public static inline var bulb_index = 8;
@@ -138,6 +139,14 @@ class OutsideTheMinesState extends BaseState
 			// offset by 16 since we are loading 16/32 tiles that in the editor are set one til
 			// above where we want the collider in-game
 			shovel = new Shovel(itemTiles[0]);
+			addInteractable(shovel);
+		}
+
+		if (!player.hasUpgrade("Pickaxe")){
+			itemTiles = currentLevel.interactableLayer.getTileCoords(pickaxe_index, false);
+			// offset by 16 since we are loading 16/32 tiles that in the editor are set one til
+			// above where we want the collider in-game
+			shovel = new Axe(itemTiles[0]);
 			addInteractable(shovel);
 		}
 

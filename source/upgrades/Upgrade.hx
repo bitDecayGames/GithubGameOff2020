@@ -14,4 +14,12 @@ class Upgrade extends FlxSprite {
     public function getDescription():String {
         return "No description";
     }
+
+    public function overrides(name:String):Bool {
+        return false;
+    }
+
+    public function overridedBy(name:String):Bool {
+        return false;
+    }
 }

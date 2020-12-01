@@ -2,22 +2,22 @@ package upgrades;
 
 import flixel.FlxSprite;
 
-class Shovel extends Upgrade {
+class Axe extends Upgrade {
     public function new() {
         super();
-        name = "Shovel";
+        name = "Pickaxe";
         loadGraphic(AssetPaths.hudStuff__png, true, 32, 32);
 
-        animation.add("inventory", [9]);
+        animation.add("inventory", [10]);
         animation.play("inventory");
     }
 
     override public function getDescription():String {
-        return "A basic shovel";
+        return "A smashing axe";
     }
 
-    override public function overridedBy(name:String):Bool {
-        if (name == "Pickaxe") {
+    override public function overrides(name:String):Bool {
+        if (name == "Shovel") {
             return true;
         }
 

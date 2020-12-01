@@ -54,6 +54,8 @@ class FmodSFX {
     public static inline var PlayerPurchase:String = "event:/SFX/Player/Purchase/PlayerPurchase";
     public static inline var PlayerPurchaseFail:String = "event:/SFX/Player/Purchase/PlayerPurchaseFail";
     public static inline var ShovelEnemyImpact:String = "event:/SFX/Player/Shovel/ShovelEnemyImpact";
+    public static inline var ShovelEnemyImpactHighBass:String = "event:/SFX/Player/Shovel/ShovelEnemyImpactHighBass";
+    public static inline var ShovelEnemyImpactHigherBass:String = "event:/SFX/Player/Shovel/ShovelEnemyImpactHigherBass";
     public static inline var ShovelSwing:String = "event:/SFX/Player/Shovel/ShovelSwing";
     public static inline var PlayerAlmostDead:String = "event:/SFX/Player/TakeDamage/PlayerAlmostDead";
     public static inline var PlayerTakeDamage:String = "event:/SFX/Player/TakeDamage/PlayerTakeDamage";

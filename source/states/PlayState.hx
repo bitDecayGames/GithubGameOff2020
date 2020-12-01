@@ -187,7 +187,11 @@ class PlayState extends BaseState
 						FmodManager.PlaySoundOneShot(FmodSFX.CrystalHitShovel);
 					}
 				} else {
-					FmodManager.PlaySoundOneShot(FmodSFX.ShovelEnemyImpact);
+					if (!player.hasUpgrade("Pickaxe")){
+						FmodManager.PlaySoundOneShot(FmodSFX.ShovelEnemyImpact);
+					} else {
+						FmodManager.PlaySoundOneShot(FmodSFX.ShovelEnemyImpactHigherBass);
+					}
 					enemy.setKnockback(determineKnockbackDirection(player.facing), 100, .25);
 
 					if (player.hasUpgrade("Pickaxe")) {

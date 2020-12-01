@@ -201,7 +201,7 @@ class OutsideTheMinesState extends BaseState
 			camera.fade(FlxColor.BLACK, 1.5, true);
 			uiCamera.fade(FlxColor.BLACK, 1.5, true);
 
-			TextPop.pop(Std.int(player.x-80), Std.int(player.y), "Headlamp regarged", new SlowFadeUp(FlxColor.WHITE, 4), 10);
+			TextPop.pop(Std.int(player.x-80), Std.int(player.y), "Headlamp recharged", new SlowFadeUp(FlxColor.WHITE, 4), 10);
 			FmodManager.PlaySoundOneShot(FmodSFX.LightRecharge);
 
 			if (Statics.PlayerDied){

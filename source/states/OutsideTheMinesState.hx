@@ -289,11 +289,11 @@ class OutsideTheMinesState extends BaseState
 		}
 
 		if (FlxG.keys.justPressed.MINUS) {
-			Player.state.money--;
+			Player.state.money-=5;
 		}
 
 		if (FlxG.keys.justPressed.PLUS) {
-			Player.state.money++;
+			Player.state.money+=5;
 		}
 
 		// var shopVolumeRadius = 100;

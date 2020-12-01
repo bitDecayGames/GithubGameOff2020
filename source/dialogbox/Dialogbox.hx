@@ -11,7 +11,7 @@ import hx.concurrent.executor.Executor;
 class Dialogbox extends FlxBasic {
     // constants
     static inline final CharactersPerTextBox = 100;
-    static inline final FontSize = 12;
+    static inline final FontSize = 10;
 
     var nextPageDelayMs = 4000;
     var nextPageTimer:Timer;
@@ -51,7 +51,7 @@ class Dialogbox extends FlxBasic {
             }
         }
 
-        flxTypeText = new FlxTypeText(20, 40, FlxG.width-20, pages[0], 1);
+        flxTypeText = new FlxTypeText(20, 30, FlxG.width-20, pages[0], 1);
         flxTypeText.setFormat(monospacedFontAssetPath, FontSize);
         parentState.add(flxTypeText);
 		flxTypeText.scrollFactor.set(0, 0);

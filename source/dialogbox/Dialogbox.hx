@@ -11,7 +11,7 @@ import hx.concurrent.executor.Executor;
 class Dialogbox extends FlxBasic {
     // constants
     static inline final CharactersPerTextBox = 100;
-    static inline final FontSize = 10;
+    static inline final FontSize = 12;
 
     var nextPageDelayMs = 4000;
     var nextPageTimer:Timer;

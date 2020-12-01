@@ -148,6 +148,7 @@ class OutsideTheMinesState extends BaseState
 			// offset by 16 since we are loading 16/32 tiles that in the editor are set one til
 			// above where we want the collider in-game
 			shovel = new Axe(itemTiles[0]);
+			add(shovel.priceText);
 			addInteractable(shovel);
 		}
 
@@ -344,7 +345,7 @@ class OutsideTheMinesState extends BaseState
 				index = speedClogDialogIndex;
 			case "SpeedClog":
 				index = heartJarDialogIndex;
-			case "Axe":
+			case "Pickaxe":
 				index = axeDialogIndex;
 			case "Shovel":
 				index = shovelDialogIndex;
@@ -414,7 +415,7 @@ class OutsideTheMinesState extends BaseState
 							dialogManager.loadDialog(heartJarIndex);
 						}  else if (interactable.name == "SpeedClog") {
 							dialogManager.loadDialog(speedClogIndex);
-						}  else if (interactable.name == "Axe") {
+						}  else if (interactable.name == "Pickaxe") {
 							dialogManager.loadDialog(axeIndex);
 						} else if (interactable.name == "LED Bulb") {
 							dialogManager.loadDialog(ledIndex);

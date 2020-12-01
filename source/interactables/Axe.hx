@@ -1,5 +1,6 @@
 package interactables;
 
+import flixel.text.FlxText;
 import flixel.math.FlxPoint;
 import entities.Player;
 
@@ -17,7 +18,10 @@ class Axe extends Interactable {
         animation.play("inventory");
 
         name = "Pickaxe";
-        cost = 1;
+        cost = 100;
+
+        priceText = new FlxText(_position.x-2, _position.y+30, 50, "$" + cost);
+        priceText.ID = 998;
     }
 
     override public function onInteract(_player:Player) {

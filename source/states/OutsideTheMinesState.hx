@@ -148,6 +148,7 @@ class OutsideTheMinesState extends BaseState
 			// offset by 16 since we are loading 16/32 tiles that in the editor are set one til
 			// above where we want the collider in-game
 			shovel = new Axe(itemTiles[0]);
+			add(shovel.priceText);
 			addInteractable(shovel);
 		}
 
@@ -200,7 +201,7 @@ class OutsideTheMinesState extends BaseState
 			camera.fade(FlxColor.BLACK, 1.5, true);
 			uiCamera.fade(FlxColor.BLACK, 1.5, true);
 
-			TextPop.pop(Std.int(player.x-80), Std.int(player.y), "Headlamp regarged", new SlowFadeUp(FlxColor.WHITE, 4), 10);
+			TextPop.pop(Std.int(player.x-80), Std.int(player.y), "Headlamp recharged", new SlowFadeUp(FlxColor.WHITE, 4), 10);
 			FmodManager.PlaySoundOneShot(FmodSFX.LightRecharge);
 
 			if (Statics.PlayerDied){
@@ -288,11 +289,11 @@ class OutsideTheMinesState extends BaseState
 		}
 
 		if (FlxG.keys.justPressed.MINUS) {
-			Player.state.money--;
+			Player.state.money-=5;
 		}
 
 		if (FlxG.keys.justPressed.PLUS) {
-			Player.state.money++;
+			Player.state.money+=5;
 		}
 
 		// var shopVolumeRadius = 100;
@@ -344,7 +345,7 @@ class OutsideTheMinesState extends BaseState
 				index = speedClogDialogIndex;
 			case "SpeedClog":
 				index = heartJarDialogIndex;
-			case "Axe":
+			case "Pickaxe":
 				index = axeDialogIndex;
 			case "Shovel":
 				index = shovelDialogIndex;
@@ -414,7 +415,7 @@ class OutsideTheMinesState extends BaseState
 							dialogManager.loadDialog(heartJarIndex);
 						}  else if (interactable.name == "SpeedClog") {
 							dialogManager.loadDialog(speedClogIndex);
-						}  else if (interactable.name == "Axe") {
+						}  else if (interactable.name == "Pickaxe") {
 							dialogManager.loadDialog(axeIndex);
 						} else if (interactable.name == "LED Bulb") {
 							dialogManager.loadDialog(ledIndex);

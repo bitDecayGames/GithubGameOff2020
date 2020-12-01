@@ -56,7 +56,7 @@ class DialogManager {
         //     var costText = "$" + cost;
         //     textLines.insert(0, costText);
         // }
-        typeText = new Dialogbox(parentState, this, textLines, FlxKey.SPACE, AssetPaths.eof_8__ttf);
+        typeText = new Dialogbox(parentState, this, textLines, FlxKey.SPACE, AssetPaths.joystix_monospace__ttf);
         typeText.cameras = [renderCamera];
         parentState.add(typeText);
         currentDialogIndex = index;

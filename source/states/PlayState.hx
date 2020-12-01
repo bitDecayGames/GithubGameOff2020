@@ -223,6 +223,14 @@ class PlayState extends BaseState
 		super.update(elapsed);
 		FmodManager.Update();
 
+		// if (level == 11) {
+		// 	var CrystalVolumeRadius = 100;
+		// 	var distanceFromCrystal = player.getPosition().distanceTo(crystal);
+		// 	var crystalVolume = Math.max(0, 1-(distanceFromShop/CrystalVolumeRadius));
+		// 	trace("Shop volume: " + crystalVolume);
+		// 	FmodManager.SetEventParameterOnSong("CrystalVolume", crystalVolume);
+		// }
+
 
 		shader.iTime.value[0] += elapsed;
 		shader.lightSourceX.value[0] = player.getMidpoint().x + player.lightOffset.x;

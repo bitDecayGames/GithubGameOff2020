@@ -7,10 +7,14 @@ package;
 
 class FmodSongs {
     public static inline var Cave:String = "event:/Music/Cave";
+    public static inline var CrystalArea:String = "event:/Music/CrystalArea";
     public static inline var OutsideTheMines:String = "event:/Music/OutsideTheMines";
 }
 
 class FmodSFX {
+    public static inline var CrystalHitPickaxe:String = "event:/SFX/Crystal/CrystalHitPickaxe";
+    public static inline var CrystalHitShovel:String = "event:/SFX/Crystal/CrystalHitShovel";
+    public static inline var CrystalNear:String = "event:/SFX/Crystal/CrystalNear";
     public static inline var BatDeath:String = "event:/SFX/Enemy/Bat/BatDeath";
     public static inline var BlobDeath:String = "event:/SFX/Enemy/Blob/BlobDeath";
     public static inline var BlobMove:String = "event:/SFX/Enemy/Blob/BlobMove";

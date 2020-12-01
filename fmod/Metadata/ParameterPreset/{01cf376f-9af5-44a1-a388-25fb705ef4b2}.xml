@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.00.00">
+	<object class="ParameterPreset" id="{01cf376f-9af5-44a1-a388-25fb705ef4b2}">
+		<property name="name">
+			<value>CrystalVolume</value>
+		</property>
+		<relationship name="folder">
+			<destination>{da9bea1d-65f6-4eb5-8299-adf0fee0fa69}</destination>
+		</relationship>
+		<relationship name="parameter">
+			<destination>{71488b47-c24d-4bea-9f2b-1dd5b914c7e9}</destination>
+		</relationship>
+	</object>
+	<object class="GameParameter" id="{71488b47-c24d-4bea-9f2b-1dd5b914c7e9}">
+		<property name="initialValue">
+			<value>0</value>
+		</property>
+	</object>
+</objects>

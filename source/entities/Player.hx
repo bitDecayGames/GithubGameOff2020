@@ -392,7 +392,6 @@ class Player extends Entity {
 
         var attackLocation:FlxPoint;
         var hitboxSize:FlxPoint;
-        var hitboxInteractSize = new FlxPoint(5, 5);
 
         switch facing {
             case FlxObject.RIGHT:
@@ -400,7 +399,7 @@ class Player extends Entity {
                 attackLocation = new FlxPoint(x+size.x/2, y+(size.y/2)-(hitboxSize.y/2)-playerHitboxOffsetY);
             case FlxObject.DOWN:
                 hitboxSize = new FlxPoint(30, 20);
-                attackLocation = new FlxPoint(x+(size.x/2)-(hitboxSize.x/2)-playerHitboxOffsetX, y+size.y/4);
+                attackLocation = new FlxPoint(x+(size.x/2)-(hitboxSize.x/2)-playerHitboxOffsetX, y+size.y/8);
             case FlxObject.LEFT:
                 hitboxSize = new FlxPoint(20, 30);
                 attackLocation = new FlxPoint(x-hitboxSize.x, y+(size.y/2)-(hitboxSize.y/2)-playerHitboxOffsetY);
@@ -414,15 +413,20 @@ class Player extends Entity {
         var hitbox = new Hitbox(.2, attackLocation, hitboxSize);
         parentState.addHitbox(hitbox);
 
+        var hitboxInteractSize = new FlxPoint(5, 5);
         var interactLocation:FlxPoint;
         switch facing {
             case FlxObject.RIGHT:
-                interactLocation = new FlxPoint(x+8, y);
+                hitboxInteractSize = new FlxPoint(13, 5);
+                interactLocation = new FlxPoint(x+4, y);
             case FlxObject.DOWN:
-                interactLocation = new FlxPoint(x+2, y+10);
+                hitboxInteractSize = new FlxPoint(5, 13);
+                interactLocation = new FlxPoint(x+2, y+6);
             case FlxObject.LEFT:
-                interactLocation = new FlxPoint(x-5, y);
+                hitboxInteractSize = new FlxPoint(13, 5);
+                interactLocation = new FlxPoint(x-9, y);
             case FlxObject.UP:
+                hitboxInteractSize = new FlxPoint(5, 13);
                 interactLocation = new FlxPoint(x, y-10);
             default:
                 interactLocation = new FlxPoint(x, y);

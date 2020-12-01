@@ -10,8 +10,6 @@ import entities.Player;
 class Shovel extends Interactable {
 
     public function new(_position:FlxPoint) {
-        // going from a position for 16x16, so we need to adjust up one tile to line up
-        _position.y -= 16;
         super(_position);
 
         containedUpgrade = () -> return new upgrades.Shovel();
@@ -24,8 +22,11 @@ class Shovel extends Interactable {
         name = "Shovel";
         cost = 5;
 
-        priceText = new FlxText(_position.x-2, _position.y+30, 50, "$" + cost);
+        priceText = new FlxText(_position.x-2, _position.y+30 - 16, 50, "$" + cost);
         priceText.ID = 998;
+
+        this.setSize(16, 16);
+        this.offset.set(0, 16);
     }
 
     override public function onInteract(_player:Player) {

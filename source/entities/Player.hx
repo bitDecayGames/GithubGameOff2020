@@ -24,7 +24,7 @@ class Player extends Entity {
 
     public static var state = new GameState();
 
-    public var isDead:Bool;
+    public var isDead:Bool = false;
 
     var controls:Actions;
     var areControlsActive = true;
@@ -399,7 +399,7 @@ class Player extends Entity {
                 attackLocation = new FlxPoint(x+size.x/2, y+(size.y/2)-(hitboxSize.y/2)-playerHitboxOffsetY);
             case FlxObject.DOWN:
                 hitboxSize = new FlxPoint(30, 20);
-                attackLocation = new FlxPoint(x+(size.x/2)-(hitboxSize.x/2)-playerHitboxOffsetX, y+size.y/8);
+                attackLocation = new FlxPoint(x+(size.x/2)-(hitboxSize.x/2)-playerHitboxOffsetX, y+size.y/4);
             case FlxObject.LEFT:
                 hitboxSize = new FlxPoint(20, 30);
                 attackLocation = new FlxPoint(x-hitboxSize.x, y+(size.y/2)-(hitboxSize.y/2)-playerHitboxOffsetY);

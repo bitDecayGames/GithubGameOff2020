@@ -54,6 +54,8 @@ class PlayState extends BaseState
 	// uiCamera to keep stuff locked to screen positions
 	var uiCamera:FlxCamera;
 
+	var crystalKnockbackGracePeriod:Bool;
+
 	var levelExitUp:Interactable;
 	var levelExitDown:Interactable;
 
@@ -196,7 +198,11 @@ class PlayState extends BaseState
 
 	private function playerEnemyTouch(player:Player, enemy:Enemy) {
 		if (!enemy.dead){
-			if (enemy.enemyName == "Crystal") {
+			if (enemy.enemyName == "Crystal" && !crystalKnockbackGracePeriod) {
+				crystalKnockbackGracePeriod = true;
+				Timer.delay(() -> {
+					crystalKnockbackGracePeriod = false;
+				}, 500);
 				FmodManager.PlaySoundOneShot(FmodSFX.PlayerTakeDamage);
 				player.setKnockback(FlxPoint.get(1, 0), 100, .5);
 			} else {

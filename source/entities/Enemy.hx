@@ -48,7 +48,7 @@ class Enemy extends Entity {
     var level:Level;
     public var cacheEntry:EnemyCache;
 
-    var enemyName:String = "Unset";
+    public var enemyName:String = "Unset";
     private var lootChances:Array<LootChance>;
     private var lootTypeChances:Array<LootTypeChance>;
 
@@ -179,7 +179,7 @@ class Enemy extends Entity {
         }
 
 
-        
+
         if (lootTypeChances == null) {
             trace("Loot type chance for " + enemyName + " not set!");
             return false;

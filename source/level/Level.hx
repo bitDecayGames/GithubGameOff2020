@@ -5,6 +5,7 @@ import entities.Rope;
 import flixel.FlxG;
 import entities.Enemy;
 import entities.enemies.Blob;
+import entities.enemies.Crystal;
 import entities.enemies.Snake;
 import entities.enemies.Bat;
 import flixel.math.FlxPoint;
@@ -140,6 +141,10 @@ class Level {
 						case "blob":
 							cacheEntry.maker = (playState, player) -> {
 								return new Blob(playState, player, FlxPoint.get(entityData.x, entityData.y), cacheEntry);
+							};
+						case "crystal":
+							cacheEntry.maker = (playState, player) -> {
+								return new Crystal(playState, player, FlxPoint.get(entityData.x, entityData.y), cacheEntry);
 							};
 						default:
 							throw "unrecognized enemy with name: " + entityData.name;

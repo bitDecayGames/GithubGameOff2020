@@ -288,8 +288,7 @@ class PlayState extends BaseState
 				FmodManager.PlaySoundOneShot(FmodSFX.LightFlickering);
 			}
 			if (flickerCounter <= 8){
-				shader.lightSourceX.value[0] = 10000;
-				shader.lightSourceY.value[0] = 10000;
+				shader.lightRadius.value[0] = 0;
 			}
 			flickerCounter = (flickerCounter+1) % 10;
 		}

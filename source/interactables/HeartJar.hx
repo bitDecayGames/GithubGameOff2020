@@ -23,7 +23,7 @@ class HeartJar extends Interactable {
 
         name = "Heart Jar";
         cost = 25;
-        
+
         priceText = new FlxText(_position.x-2, _position.y+30, 50, "$" + cost);
         priceText.ID = 998;
     }

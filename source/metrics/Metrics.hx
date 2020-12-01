@@ -14,4 +14,5 @@ class Metrics {
     public static inline var MTR_CNV_BOUGHT = "matter_converter_upgrade";
     public static inline var BULB_BOUGHT = "bulb_upgrade";
     public static inline var BOOT_BOUGHT = "boot_upgrade";
+    public static inline var AXE_BOUGHT = "axe_upgrade";
 }

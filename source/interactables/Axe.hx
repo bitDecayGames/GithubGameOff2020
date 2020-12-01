@@ -1,5 +1,7 @@
 package interactables;
 
+import com.bitdecay.analytics.Bitlytics;
+import metrics.Metrics;
 import flixel.text.FlxText;
 import flixel.math.FlxPoint;
 import entities.Player;
@@ -27,6 +29,6 @@ class Axe extends Interactable {
 
     override public function onInteract(_player:Player) {
         super.onInteract(_player);
-
+        Bitlytics.Instance().Queue(Metrics.AXE_BOUGHT, 1);
     }
 }

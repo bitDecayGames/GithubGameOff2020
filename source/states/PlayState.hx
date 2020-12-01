@@ -187,7 +187,13 @@ class PlayState extends BaseState
 				} else {
 					FmodManager.PlaySoundOneShot(FmodSFX.ShovelEnemyImpact);
 					enemy.setKnockback(determineKnockbackDirection(player.facing), 100, .25);
-					enemy.applyDamage(1);
+
+					if (player.hasUpgrade("Pickaxe")) {
+						enemy.applyDamage(3);
+						FlxG.camera.shake(0.01, 0.1);
+					} else {
+						enemy.applyDamage(1);
+					}
 				}
 			}
 			enemy.trackHitbox(hitbox);

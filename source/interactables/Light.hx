@@ -22,7 +22,7 @@ class Light extends Interactable {
         animation.play("inventory");
 
         name = "LED Bulb";
-        cost = 50;
+        cost = 30;
 
         priceText = new FlxText(_position.x-2, _position.y+30, 50, "$" + cost);
         priceText.ID = 998;

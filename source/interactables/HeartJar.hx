@@ -31,9 +31,9 @@ class HeartJar extends Interactable {
     override public function onInteract(_player:Player) {
         super.onInteract(_player);
         Bitlytics.Instance().Queue(Metrics.HEART_BOUGHT, 1);
-        Player.state.baseStats.maxHealth += 2;
-        Player.state.activeStats.maxHealth += 2;
-        Player.state.activeStats.currentHealth += 2;
+        Player.state.baseStats.maxHealth = 5;
+        Player.state.activeStats.maxHealth = 5;
+        Player.state.activeStats.currentHealth = 5;
         _player.health = Player.state.baseStats.maxHealth;
         _player.refresh();
     }

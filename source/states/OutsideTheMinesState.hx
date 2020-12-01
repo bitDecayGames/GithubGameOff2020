@@ -293,17 +293,6 @@ class OutsideTheMinesState extends BaseState
 			dialogManager.update();
 		}
 
-		if (FlxG.keys.justPressed.L) {
-			trace(Date.now().getTime());
-		}
-
-		// var shopVolumeRadius = 100;
-		// var distanceFromShop = player.getPosition().distanceTo(shovel.getPosition());
-		// Dynamic volume commented out for now
-		// var shopVolume = Math.max(0, 1-(distanceFromShop/shopVolumeRadius));
-		// var shopVolume = 1;
-		// FmodManager.SetEventParameterOnSong("ShopVolume", shopVolume);
-
 		moneyText.text = "" + Player.state.money;
 		playerHealthText.text = "" + player.health;
 		currentLevelText.text = "";

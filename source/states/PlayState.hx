@@ -287,10 +287,6 @@ class PlayState extends BaseState
 			trace(Statics.CurrentLightRadius);
 			trace("   " + (Statics.minLightRadius + 2));
 		}
-
-		trace("Current light radius: " + Statics.CurrentLightRadius);
-		trace("Flicker threshold: " + (Statics.minLightRadius + 2));
-		trace("Is player dead: " + player.isDead);
 		if (Statics.CurrentLightRadius < (Statics.minLightRadius + 2) && !player.isDead){
 			if (flickerCounter == 0){
 				FmodManager.PlaySoundOneShot(FmodSFX.LightFlickering);
@@ -299,7 +295,6 @@ class PlayState extends BaseState
 				shader.lightRadius.value[0] = 0;
 			}
 			flickerCounter = (flickerCounter+1) % 10;
-			trace("Flicker value: " + flickerCounter);
 		}
 
 		moneyText.text = "" + Player.state.money;
@@ -406,6 +401,7 @@ class PlayState extends BaseState
 				if (!isTransitioningStates){
 					isTransitioningStates = true;
 					player.stopAttack();
+					player.facing = FlxObject.RIGHT;
 					player.animation.play("climb_up");
 					player.climbRope();
 					camera.fade(FlxColor.BLACK, 2, false, null, true);

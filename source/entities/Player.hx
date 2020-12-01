@@ -243,6 +243,7 @@ class Player extends Entity {
 		potentialDirection = readDirectionInput();
 
         if (climbingRope) {
+            ID = 999;
             var climbUpSpeed = 50;
             setPosition(x, y + delta*climbUpSpeed*-1);
         } else if (inKnockback){

@@ -49,6 +49,8 @@ class PlayState extends BaseState
 	var lightFilter:ShaderFilter;
 	var flickerCounter:Int;
 
+	var matterConverterConsuming:Bool = false;
+
 	// uiCamera to keep stuff locked to screen positions
 	var uiCamera:FlxCamera;
 
@@ -302,7 +304,7 @@ class PlayState extends BaseState
 	}
 
 	private function interactWithDeadEnemy(hitboxInteract:HitboxInteract, enemy:Enemy) {
-		if (enemy.dead && player.hasUpgrade("Matter Converter")){
+		if (enemy.dead && player.hasUpgrade("Matter Converter") && !matterConverterConsuming){
 			enemy.kill();
 			player.stopAttack();
 			enemy.cacheEntry.consumed = true;
@@ -310,13 +312,23 @@ class PlayState extends BaseState
 			FmodManager.PlaySoundOneShot(FmodSFX.Pop);
 			Timer.delay(() -> {
 				if (Statics.MatterConverterCharges == 1) {
-					FmodManager.PlaySoundOneShot(FmodSFX.MatterConverterCharge1);
+					FmodManager.PlaySoundOneShot(FmodSFX.MatterConverterNewCharge1);
 				}
 				else if (Statics.MatterConverterCharges == 2) {
-					FmodManager.PlaySoundOneShot(FmodSFX.MatterConverterCharge2);
+					FmodManager.PlaySoundOneShot(FmodSFX.MatterConverterNewCharge2);
 				}
 				else if (Statics.MatterConverterCharges == 3) {
-					FmodManager.PlaySoundOneShot(FmodSFX.MatterConverterCharge3);
+					FmodManager.PlaySoundOneShot(FmodSFX.MatterConverterNewCharge3);
+				}
+				else if (Statics.MatterConverterCharges == 4) {
+					FmodManager.PlaySoundOneShot(FmodSFX.MatterConverterNewCharge4);
+				}
+				else if (Statics.MatterConverterCharges == 5) {
+					FmodManager.PlaySoundOneShot(FmodSFX.MatterConverterNewCharge5);
+				}
+				else if (Statics.MatterConverterCharges == 6) {
+					FmodManager.PlaySoundOneShot(FmodSFX.MatterConverterNewCharge6);
+					matterConverterConsuming = true;
 					Statics.MatterConverterCharges = 0;
 					Timer.delay(() -> {
 						FmodManager.PlaySoundOneShot(FmodSFX.MatterConverterGears);
@@ -327,6 +339,9 @@ class PlayState extends BaseState
 									{
 										Statics.CurrentLightRadius = v;
 									});
+								Timer.delay(() -> {
+									matterConverterConsuming = false;
+								}, 4000);
 							}, 1000);
 						}, 2000);
 					}, 750);

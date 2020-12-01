@@ -190,7 +190,7 @@ class PlayState extends BaseState
 
 					if (player.hasUpgrade("Pickaxe")) {
 						enemy.applyDamage(3);
-						FlxG.camera.shake(0.01, 0.1);
+						FlxG.camera.shake(0.01, 0.05);
 					} else {
 						enemy.applyDamage(1);
 					}

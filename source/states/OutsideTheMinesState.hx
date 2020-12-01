@@ -88,6 +88,8 @@ class OutsideTheMinesState extends BaseState
 		FlxG.debugger.drawDebug = true;
 		#end
 
+		Statics.MatterConverterCharges = 0;
+
 		FlxCamera.defaultCameras = [FlxG.camera];
 
 		uiCamera = new FlxCamera(0, 0, 320, 240);

@@ -12,7 +12,7 @@ class Dialogs {
         ["Heart Jar. +2 to your max health."],
         ["SpeedClog. Slight movement speed increase."],
         ["Axe. More damage."],
-        ["Thanks! Interact with corpses in the caves to convert them into battery power.", "Every 3 corpses will give your light more charge!"],
+        ["Thanks! Interact with corpses in the caves to convert them into battery power.", "Every 6 corpses will give your light more charge!"],
         ["Thanks! Your max health has increased by 2!"],
         ["Thanks! You now move a little bit faster!"],
         ["Thanks! You now can deal more damage!"],

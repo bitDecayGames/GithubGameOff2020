@@ -12,6 +12,7 @@ class FmodSongs {
 }
 
 class FmodSFX {
+    public static inline var CrystalBreak:String = "event:/SFX/Crystal/CrystalBreak";
     public static inline var CrystalHitPickaxe:String = "event:/SFX/Crystal/CrystalHitPickaxe";
     public static inline var CrystalHitShovel:String = "event:/SFX/Crystal/CrystalHitShovel";
     public static inline var CrystalNear:String = "event:/SFX/Crystal/CrystalNear";
@@ -43,6 +44,12 @@ class FmodSFX {
     public static inline var MatterConverterCharge2:String = "event:/SFX/Player/MatterConverter/MatterConverterCharge2";
     public static inline var MatterConverterCharge3:String = "event:/SFX/Player/MatterConverter/MatterConverterCharge3";
     public static inline var MatterConverterGears:String = "event:/SFX/Player/MatterConverter/MatterConverterGears";
+    public static inline var MatterConverterNewCharge1:String = "event:/SFX/Player/MatterConverter/MatterConverterNewCharge1";
+    public static inline var MatterConverterNewCharge2:String = "event:/SFX/Player/MatterConverter/MatterConverterNewCharge2";
+    public static inline var MatterConverterNewCharge3:String = "event:/SFX/Player/MatterConverter/MatterConverterNewCharge3";
+    public static inline var MatterConverterNewCharge4:String = "event:/SFX/Player/MatterConverter/MatterConverterNewCharge4";
+    public static inline var MatterConverterNewCharge5:String = "event:/SFX/Player/MatterConverter/MatterConverterNewCharge5";
+    public static inline var MatterConverterNewCharge6:String = "event:/SFX/Player/MatterConverter/MatterConverterNewCharge6";
     public static inline var Pop:String = "event:/SFX/Player/MatterConverter/Pop";
     public static inline var PlayerPurchase:String = "event:/SFX/Player/Purchase/PlayerPurchase";
     public static inline var PlayerPurchaseFail:String = "event:/SFX/Player/Purchase/PlayerPurchaseFail";

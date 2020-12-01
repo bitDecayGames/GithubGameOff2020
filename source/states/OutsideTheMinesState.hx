@@ -293,21 +293,8 @@ class OutsideTheMinesState extends BaseState
 			dialogManager.update();
 		}
 
-		if(FlxG.keys.justPressed.N) {
-			FmodFlxUtilities.TransitionToState(new PlayState());
-        	FmodManager.StopSoundImmediately("typewriterSoundId");
-		}
-
-		if (FlxG.keys.justPressed.U) {
-			player.setCanAttack(true);
-		}
-
-		if (FlxG.keys.justPressed.MINUS) {
-			Player.state.money-=5;
-		}
-
-		if (FlxG.keys.justPressed.PLUS) {
-			Player.state.money+=5;
+		if (FlxG.keys.justPressed.L) {
+			trace(Date.now().getTime());
 		}
 
 		// var shopVolumeRadius = 100;

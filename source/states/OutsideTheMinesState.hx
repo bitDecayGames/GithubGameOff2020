@@ -73,6 +73,8 @@ class OutsideTheMinesState extends BaseState
 
 	var dialogManager:dialogbox.DialogManager;
 
+	static var firstTime = true;
+
 	public function new(?_skipIntro:Bool = false) {
 		skipIntro = _skipIntro;
 		super();
@@ -103,8 +105,14 @@ class OutsideTheMinesState extends BaseState
 		mosaicShaderManager = new MosaicManager();
 		mosaicFilter = new ShaderFilter(mosaicShaderManager.shader);
 
-		FmodManager.StopSongImmediately();
-		FmodManager.PlaySong(FmodSongs.OutsideTheMines);
+		if (firstTime) {
+			// we don't want to stop the music that the splash screen started
+			firstTime = false;
+		} else {
+			// any other time we get here, stop the music and play our song
+			FmodManager.StopSongImmediately();
+			FmodManager.PlaySong(FmodSongs.OutsideTheMines);
+		}
 
 		// Clear any previous run
 		Level.clearCache();

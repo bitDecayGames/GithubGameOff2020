@@ -336,6 +336,9 @@ class PlayState extends BaseState
 	private function interactWithDeadEnemy(hitboxInteract:HitboxInteract, enemy:Enemy) {
 		if (enemy.dead && player.hasUpgrade("Matter Converter") && !matterConverterConsuming){
 			enemy.kill();
+			if (enemy.enemyName == "Crystal") {
+				return;
+			}
 			player.stopAttack();
 			enemy.cacheEntry.consumed = true;
 			Statics.MatterConverterCharges += 1;

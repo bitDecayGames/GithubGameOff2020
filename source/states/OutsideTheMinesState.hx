@@ -217,14 +217,18 @@ class OutsideTheMinesState extends BaseState
 			if (Statics.PlayerDied){
 				Statics.PlayerDied = false;
 				dialogManager.loadDialog(3);
-				Player.state.money = Std.int(Player.state.money / 2);
+				var lostMoney = Std.int(Player.state.money / 2);
+				Player.state.money -= lostMoney;
+				TextPop.pop(Std.int(player.x-15), Std.int(player.y+20), "-$" +lostMoney, new SlowFadeUp(FlxColor.RED, 4), 10);
 			} else if (!player.hasUpgrade("Shovel")){
 				dialogManager.loadDialog(0);
 			} else if (Statics.CurrentLightRadius > Statics.minLightRadius && Statics.CurrentLightRadius <= Statics.minLightRadius+20) {
 				dialogManager.loadDialog(4);
 			} else if (Statics.CurrentLightRadius <= Statics.minLightRadius) {
 				dialogManager.loadDialog(15);
-				Player.state.money = Std.int(Player.state.money / 2);
+				var lostMoney = Std.int(Player.state.money / 2);
+				Player.state.money -= lostMoney;
+				TextPop.pop(Std.int(player.x-15), Std.int(player.y+20), "-$" +lostMoney, new SlowFadeUp(FlxColor.RED, 4), 10);
 			}
 		} else {
 

@@ -16,15 +16,18 @@ class SplashScreenState extends FlxState {
 	var splashImages:Array<FlxSprite> = [];
 
 	var timer = 0.0;
-	var splashDuration = 3.0;
+	var splashDuration = 3.45;
 
 	override public function create():Void {
 		super.create();
 
+		FmodManager.PlaySong(FmodSongs.OutsideTheMines);
+
 		// List splash screen image paths here
 		loadSplashImages([
 			new SplashImage(AssetPaths.bitdecaygamesinverted__png),
-			new SplashImage(AssetPaths.game_off_2020__png)
+			new SplashImage(AssetPaths.game_off_2020__png),
+			new SplashImage(AssetPaths.lacuna__png)
 		]);
 
 		timer = splashDuration;

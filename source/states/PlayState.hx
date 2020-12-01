@@ -49,8 +49,6 @@ class PlayState extends BaseState
 	var lightFilter:ShaderFilter;
 	var flickerCounter:Int;
 
-	var matterConverterConsuming:Bool = false;
-
 	// uiCamera to keep stuff locked to screen positions
 	var uiCamera:FlxCamera;
 
@@ -130,6 +128,12 @@ class PlayState extends BaseState
 		} else {
 			player = new Player(this, new FlxPoint(levelExitDown.x, levelExitDown.y+16));
 		}
+
+		if (Statics.matterConverterConsuming) {
+			// in case the player left a level while their light was recharging
+			Statics.CurrentLightRadius = Statics.MaxLightRadius;
+		}
+
 		worldGroup.add(player);
 
 		for (enemyMaker in currentLevel.enemyMakers) {
@@ -350,7 +354,7 @@ class PlayState extends BaseState
 	}
 
 	private function interactWithDeadEnemy(hitboxInteract:HitboxInteract, enemy:Enemy) {
-		if (enemy.dead && player.hasUpgrade("Matter Converter") && !matterConverterConsuming){
+		if (enemy.dead && player.hasUpgrade("Matter Converter") && !Statics.matterConverterConsuming){
 			enemy.kill();
 			if (enemy.enemyName == "Crystal") {
 				return;
@@ -377,7 +381,7 @@ class PlayState extends BaseState
 				}
 				else if (Statics.MatterConverterCharges == 6) {
 					FmodManager.PlaySoundOneShot(FmodSFX.MatterConverterNewCharge6);
-					matterConverterConsuming = true;
+					Statics.matterConverterConsuming = true;
 					Statics.MatterConverterCharges = 0;
 					Timer.delay(() -> {
 						FmodManager.PlaySoundOneShot(FmodSFX.MatterConverterGears);
@@ -389,7 +393,7 @@ class PlayState extends BaseState
 										Statics.CurrentLightRadius = v;
 									});
 								Timer.delay(() -> {
-									matterConverterConsuming = false;
+									Statics.matterConverterConsuming = false;
 								}, 4000);
 							}, 1000);
 						}, 2000);

@@ -20,6 +20,7 @@ class Statics {
     public static var CurrentLightRadius:Float = MaxLightRadius;
 
     public static var MatterConverterCharges:Int = 0;
+    public static var matterConverterConsuming:Bool = false;
 
     private static var furthestDepth = 0;
 

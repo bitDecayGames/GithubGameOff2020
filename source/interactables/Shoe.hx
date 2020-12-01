@@ -1,5 +1,6 @@
 package interactables;
 
+import flixel.text.FlxText;
 import metrics.Metrics;
 import com.bitdecay.analytics.Bitlytics;
 import entities.Player;
@@ -22,6 +23,9 @@ class Shoe extends Interactable {
 
         name = "SpeedClog";
         cost = 15;
+        
+        priceText = new FlxText(_position.x+17, _position.y+18, 50, "$" + cost);
+        priceText.ID = 998;
     }
 
     override public function onInteract(_player:Player) {

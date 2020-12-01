@@ -139,6 +139,7 @@ class OutsideTheMinesState extends BaseState
 			// offset by 16 since we are loading 16/32 tiles that in the editor are set one til
 			// above where we want the collider in-game
 			shovel = new Shovel(itemTiles[0]);
+			add(shovel.priceText);
 			addInteractable(shovel);
 		}
 
@@ -154,6 +155,7 @@ class OutsideTheMinesState extends BaseState
 			itemTiles = currentLevel.interactableLayer.getTileCoords(shoe_index, false);
 			var coords = itemTiles[0];
 			var shoe = new Shoe(coords);
+			add(shoe.priceText);
 			addInteractable(shoe);
 		}
 
@@ -161,6 +163,7 @@ class OutsideTheMinesState extends BaseState
 			itemTiles = currentLevel.interactableLayer.getTileCoords(heartjar_index, false);
 			var coords = itemTiles[0];
 			var shoe = new HeartJar(coords);
+			add(shoe.priceText);
 			addInteractable(shoe);
 		}
 
@@ -168,6 +171,7 @@ class OutsideTheMinesState extends BaseState
 			itemTiles = currentLevel.interactableLayer.getTileCoords(matterconverter_index, false);
 			var coords = itemTiles[0];
 			var shoe = new MatterConverter(coords);
+			add(shoe.priceText);
 			addInteractable(shoe);
 		}
 
@@ -175,6 +179,7 @@ class OutsideTheMinesState extends BaseState
 			itemTiles = currentLevel.interactableLayer.getTileCoords(bulb_index, false);
 			var coords = itemTiles[0];
 			var shoe = new Light(coords);
+			add(shoe.priceText);
 			addInteractable(shoe);
 		}
 

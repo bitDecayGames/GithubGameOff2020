@@ -1,5 +1,6 @@
 package interactables;
 
+import flixel.text.FlxText;
 import com.bitdecay.analytics.Bitlytics;
 import metrics.Metrics;
 import upgrades.Upgrade;
@@ -22,6 +23,9 @@ class Light extends Interactable {
 
         name = "LED Bulb";
         cost = 50;
+
+        priceText = new FlxText(_position.x-2, _position.y+30, 50, "$" + cost);
+        priceText.ID = 998;
     }
 
     override public function onInteract(_player:Player) {

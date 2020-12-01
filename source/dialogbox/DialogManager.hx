@@ -52,10 +52,10 @@ class DialogManager {
         return;
         }
         var textLines = Dialogs.DialogArray[index].copy();
-        if (cost != -1) {
-            var costText = "$" + cost;
-            textLines.insert(0, costText);
-        }
+        // if (cost != -1) {
+        //     var costText = "$" + cost;
+        //     textLines.insert(0, costText);
+        // }
         typeText = new Dialogbox(parentState, this, textLines, FlxKey.SPACE, AssetPaths.joystix_monospace__ttf);
         typeText.cameras = [renderCamera];
         parentState.add(typeText);

@@ -1,5 +1,6 @@
 package interactables;
 
+import flixel.text.FlxText;
 import upgrades.Upgrade;
 import flixel.util.FlxColor;
 import entities.Hitbox;
@@ -13,6 +14,7 @@ class Interactable extends FlxSprite {
 
     public var name:String;
     public var cost:Int;
+    public var priceText:FlxText;
 
     var containedUpgrade:() -> Upgrade;
 
@@ -26,6 +28,7 @@ class Interactable extends FlxSprite {
 
     public function onInteract(_player:Player) {
         // Remove from world
+        priceText.destroy();
         destroy();
 
         // Transfer general attributes to player/state

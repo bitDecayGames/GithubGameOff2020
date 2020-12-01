@@ -283,7 +283,12 @@ class PlayState extends BaseState
 		shader.lightSourceY.value[0] = player.getMidpoint().y + player.lightOffset.y;
 		shader.lightRadius.value = [Statics.CurrentLightRadius];
 
-		if (Statics.CurrentLightRadius < Statics.minLightRadius + 2 && !player.isDead){
+		if (FlxG.keys.pressed.L) {
+			trace(Statics.CurrentLightRadius);
+			trace("   " + (Statics.minLightRadius + 2));
+		}
+
+		if (Statics.CurrentLightRadius < (Statics.minLightRadius + 2) && !player.isDead){
 			if (flickerCounter == 0){
 				FmodManager.PlaySoundOneShot(FmodSFX.LightFlickering);
 			}
@@ -291,38 +296,6 @@ class PlayState extends BaseState
 				shader.lightRadius.value[0] = 0;
 			}
 			flickerCounter = (flickerCounter+1) % 10;
-		}
-
-		if(FlxG.keys.justPressed.P) {
-			shader.isShaderActive.value[0] = !shader.isShaderActive.value[0];
-		}
-
-		if(FlxG.keys.justPressed.N) {
-			FmodFlxUtilities.TransitionToState(new OutsideTheMinesState(OutsideTheMinesState.SkipIntro));
-		}
-
-		if (FlxG.keys.justPressed.MINUS) {
-			Statics.CurrentLightRadius -= 5;
-		}
-
-		if (FlxG.keys.justPressed.PLUS) {
-			Statics.CurrentLightRadius += 5;
-		}
-
-		if(FlxG.keys.justPressed.G) {
-			if (player.alive) {
-				player.kill();
-			} else {
-				player.revive();
-			}
-		}
-
-		if(FlxG.keys.justPressed.R) {
-			FmodFlxUtilities.TransitionToState(new PlayState());
-		}
-		if(FlxG.keys.justPressed.T) {
-			var loot = new GoldCoin(player.x+50, player.y);
-			addLoot(loot);
 		}
 
 		moneyText.text = "" + Player.state.money;

@@ -452,7 +452,7 @@ class Player extends Entity {
         shovel.loadGraphic(AssetPaths.weapons__png, true, 16, 32);
 
         var swingFrames = [0,1,2,3,4,5,6,7];
-        var swingLeftFrames = [18,19,20,21,22,23,24,25];
+        var swingLeftFrames = [25,24,23,22,21,20,19,18];
 
         if (hasUpgrade("Pickaxe")) {
             for (i in 0...swingFrames.length) {

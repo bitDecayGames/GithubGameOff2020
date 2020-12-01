@@ -57,6 +57,9 @@ class PlayState extends BaseState
 	var levelExitUp:Interactable;
 	var levelExitDown:Interactable;
 
+	var crystalReference:Enemy;
+	var crystalSound:String;
+
 	private static var levelOrder = [
 		AssetPaths.outsideTheMines__json,
 		AssetPaths.caves1__json,
@@ -95,7 +98,12 @@ class PlayState extends BaseState
 
 		setupLightShader();
 
-		FmodManager.PlaySong(FmodSongs.Cave);
+		if (Statics.CurrentLevel == levelOrder.length-1) {
+			FmodManager.PlaySong(FmodSongs.CrystalArea);
+			crystalSound = FmodManager.PlaySoundAndAssignId(FmodSFX.CrystalNear, "Crystal");
+		} else {
+			FmodManager.PlaySong(FmodSongs.Cave);
+		}
 
 		camera.fade(FlxColor.BLACK, 1.5, true);
 		uiCamera.fade(FlxColor.BLACK, 1.5, true);
@@ -126,6 +134,10 @@ class PlayState extends BaseState
 			var enemy = enemyMaker(this, player);
 			enemies.add(enemy);
 			worldGroup.add(enemy);
+
+			if (enemy.enemyName == "Crystal") {
+				crystalReference = enemy;
+			}
 		}
 
 		add(worldGroup);
@@ -166,10 +178,11 @@ class PlayState extends BaseState
 				if (enemy.enemyName == "Crystal") {
 					if (player.hasUpgrade("Pickaxe")) {
 						// DAMAGE THE CRUSTAL
+						FmodManager.PlaySoundOneShot(FmodSFX.CrystalHitPickaxe);
+						FlxG.camera.shake(0.005, 0.25);
 						enemy.applyDamage(1);
 					} else {
-						// TINK
-
+						FmodManager.PlaySoundOneShot(FmodSFX.CrystalHitShovel);
 					}
 				} else {
 					FmodManager.PlaySoundOneShot(FmodSFX.ShovelEnemyImpact);
@@ -235,14 +248,15 @@ class PlayState extends BaseState
 		super.update(elapsed);
 		FmodManager.Update();
 
-		// if (level == 11) {
-		// 	var CrystalVolumeRadius = 100;
-		// 	var distanceFromCrystal = player.getPosition().distanceTo(crystal);
-		// 	var crystalVolume = Math.max(0, 1-(distanceFromShop/CrystalVolumeRadius));
-		// 	trace("Shop volume: " + crystalVolume);
-		// 	FmodManager.SetEventParameterOnSong("CrystalVolume", crystalVolume);
-		// }
-
+		if (crystalReference != null && Statics.CurrentLevel == levelOrder.length-1) {
+			var CrystalVolumeRadius = 200;
+			var distanceFromCrystal = player.getPosition().distanceTo(crystalReference.getPosition());
+			distanceFromCrystal -= 50;
+			distanceFromCrystal = Math.max(distanceFromCrystal, 0);
+			trace("distance from crystal: " + distanceFromCrystal);
+			var crystalVolume = Math.max(0, 1-(distanceFromCrystal/CrystalVolumeRadius));
+			FmodManager.SetEventParameterOnSound(crystalSound, "CrystalVolume", crystalVolume);
+		}
 
 		shader.iTime.value[0] += elapsed;
 		shader.lightSourceX.value[0] = player.getMidpoint().x + player.lightOffset.x;
@@ -381,7 +395,9 @@ class PlayState extends BaseState
 					Statics.GoingDown = true;
 					Timer.delay(() -> {
 						Statics.IncrementLevel();
-						if (Statics.CurrentLevel >= levelOrder.length) {
+						if (Statics.CurrentLevel == levelOrder.length-1) {
+							FmodFlxUtilities.TransitionToStateAndStopMusic(new PlayState());
+						} else if (Statics.CurrentLevel > levelOrder.length) {
 							FmodFlxUtilities.TransitionToState(new CreditsState());
 						} else {
 							FmodFlxUtilities.TransitionToState(new PlayState());

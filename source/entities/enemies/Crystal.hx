@@ -1,5 +1,6 @@
 package entities.enemies;
 
+import flixel.util.FlxColor;
 import entities.loots.GoldCoin;
 import entities.Enemy.LootTypeChance;
 import entities.Enemy.LootChance;
@@ -32,7 +33,7 @@ class Crystal extends Enemy {
 
 
 	public function new(_parentState:PlayState, _player:Player, position:FlxPoint, cache:EnemyCache) {
-        super(_parentState, _player, position, cache, FmodSFX.BlobDeath);
+        super(_parentState, _player, position, cache);
         path = new FlxPath();
 
         enemyName = "Crystal";
@@ -74,7 +75,11 @@ class Crystal extends Enemy {
 	override public function update(delta:Float):Void {
         super.update(delta);
 
-        if (health <= 0) {
+        if (health <= 0 && !dead) {
+            Statics.CurrentLightRadius = 10000000;
+            FlxG.camera.flash(FlxColor.WHITE, 3);
+            FmodManager.StopSoundImmediately("Crystal");
+            FmodManager.PlaySoundOneShot(FmodSFX.CrystalBreak);
             dead = true;
         }
 

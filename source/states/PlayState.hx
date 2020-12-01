@@ -279,7 +279,7 @@ class PlayState extends BaseState
 		shader.lightSourceY.value[0] = player.getMidpoint().y + player.lightOffset.y;
 		shader.lightRadius.value = [Statics.CurrentLightRadius];
 
-		if (Statics.CurrentLightRadius < Statics.minLightRadius + 2 && !isTransitioningStates && !player.isDead){
+		if (Statics.CurrentLightRadius < Statics.minLightRadius + 2 && !player.isDead){
 			if (flickerCounter == 0){
 				FmodManager.PlaySoundOneShot(FmodSFX.LightFlickering);
 			}

@@ -69,6 +69,7 @@ class PlayState extends BaseState
 		AssetPaths.caves8__json,
 		AssetPaths.caves9__json,
 		AssetPaths.caves10__json,
+		AssetPaths.caves11__json,
 	];
 
 	private static var MAX_MONEY_ATTAINED = 0;
@@ -162,20 +163,35 @@ class PlayState extends BaseState
 	private function enemyHitboxTouch(enemy:Enemy, hitbox:Hitbox) {
 		if (!enemy.hasBeenHitByThisHitbox(hitbox)){
 			if (!enemy.dead){
-				FmodManager.PlaySoundOneShot(FmodSFX.ShovelEnemyImpact);
-				enemy.applyDamage(1);
-				enemy.setKnockback(determineKnockbackDirection(player.facing), 100, .25);
-				enemy.trackHitbox(hitbox);
+				if (enemy.enemyName == "Crystal") {
+					if (player.hasUpgrade("Pickaxe")) {
+						// DAMAGE THE CRUSTAL
+						enemy.applyDamage(1);
+					} else {
+						// TINK
+
+					}
+				} else {
+					FmodManager.PlaySoundOneShot(FmodSFX.ShovelEnemyImpact);
+					enemy.setKnockback(determineKnockbackDirection(player.facing), 100, .25);
+					enemy.applyDamage(1);
+				}
 			}
+			enemy.trackHitbox(hitbox);
 		}
 	}
 
 	private function playerEnemyTouch(player:Player, enemy:Enemy) {
 		if (!enemy.dead){
-			if (player.invincibilityTimeLeft <= 0){
+			if (enemy.enemyName == "Crystal") {
 				FmodManager.PlaySoundOneShot(FmodSFX.PlayerTakeDamage);
-				player.applyDamage(1);
-				player.setKnockback(determineKnockbackDirectionForPlayer(player, enemy), 100, .25);
+				player.setKnockback(FlxPoint.get(1, 0), 100, .5);
+			} else {
+				if (player.invincibilityTimeLeft <= 0){
+					FmodManager.PlaySoundOneShot(FmodSFX.PlayerTakeDamage);
+					player.applyDamage(1);
+					player.setKnockback(determineKnockbackDirectionForPlayer(player, enemy), 100, .25);
+				}
 			}
 		}
 	}
@@ -362,7 +378,11 @@ class PlayState extends BaseState
 					Statics.GoingDown = true;
 					Timer.delay(() -> {
 						Statics.IncrementLevel();
-						FmodFlxUtilities.TransitionToState(new PlayState());
+						if (Statics.CurrentLevel >= levelOrder.length) {
+							FmodFlxUtilities.TransitionToState(new CreditsState());
+						} else {
+							FmodFlxUtilities.TransitionToState(new PlayState());
+						}
 					}, 1500);
 					player.setPosition(interactable.x+4, interactable.y+4);
 				}

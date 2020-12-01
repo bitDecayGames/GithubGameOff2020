@@ -449,16 +449,24 @@ class Player extends Entity {
     function spawnShovel(position:FlxPoint, facing:Int) {
         shovel = new FlxSprite();
         parentState.addToWorld(shovel);
+        shovel.loadGraphic(AssetPaths.weapons__png, true, 16, 32);
+
+        var swingFrames = [0,1,2,3,4,5,6,7];
+        var swingLeftFrames = [18,19,20,21,22,23,24,25];
+
         if (hasUpgrade("Pickaxe")) {
-            shovel.loadGraphic(AssetPaths.axe__png, true, 16, 32);
-        } else {
-            shovel.loadGraphic(AssetPaths.shovel__png, true, 16, 32);
+            for (i in 0...swingFrames.length) {
+                swingFrames[i] += 9;
+            }
+            for (i in 0...swingLeftFrames.length) {
+                swingLeftFrames[i] += 9;
+            }
         }
 
         // 30 originally
         var animationSpeed = 30;
-        shovel.animation.add("swing", [0,1,2,3,4,5,6,7,8], animationSpeed, false);
-        shovel.animation.add("swing_left", [17,16,15,14,13,12,11,10,9], animationSpeed, false);
+        shovel.animation.add("swing", swingFrames, animationSpeed, false);
+        shovel.animation.add("swing_left", swingLeftFrames, animationSpeed, false);
         shovel.animation.finishCallback = (name) -> {
             shovel.destroy();
         }

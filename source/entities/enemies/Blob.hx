@@ -35,8 +35,8 @@ class Blob extends Enemy {
         
         enemyName = "Blob";
         lootChances = [
-            new LootChance(.5, 0),
-            new LootChance(.5, 1),
+            new LootChance(.4, 0),
+            new LootChance(.6, 1),
         ];
 
         lootTypeChances = [

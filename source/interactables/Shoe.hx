@@ -24,7 +24,7 @@ class Shoe extends Interactable {
         name = "SpeedClog";
         cost = 15;
         
-        priceText = new FlxText(_position.x+17, _position.y+18, 50, "$" + cost);
+        priceText = new FlxText(_position.x-2, _position.y+30, 50, "$" + cost);
         priceText.ID = 998;
     }
 

@@ -392,7 +392,7 @@ class OutsideTheMinesState extends BaseState
 					player.animation.play("climb_down");
 					camera.fade(FlxColor.BLACK, 2, false, null, true);
 					uiCamera.fade(FlxColor.BLACK, 2, false, null, true);
-					Statics.CurrentLevel = 11;
+					Statics.CurrentLevel = 1;
 					Statics.CurrentSet = 1;
 					Statics.GoingDown = true;
 					Statics.CurrentLightRadius = Statics.MaxLightRadius;

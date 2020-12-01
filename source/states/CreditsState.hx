@@ -57,7 +57,7 @@ class CreditsState extends FlxUIState {
             creditsTextVerticalOffset += 25;
 
             for (creator in sec.creators) {
-                creator.setPosition(0, creditsTextVerticalOffset);
+                creator.setPosition(10, creditsTextVerticalOffset);
                 creditsTextVerticalOffset += 25;
             }
 

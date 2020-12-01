@@ -6,7 +6,7 @@ class GameState {
     public var baseStats:Stats;
     public var activeStats:Stats;
 
-    public var money:Int = 50;
+    public var money:Int = 5;
     public var upgradeMakers:Array<() -> Upgrade>;
 
     public function new() {

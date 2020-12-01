@@ -397,7 +397,7 @@ class PlayState extends BaseState
 						Statics.IncrementLevel();
 						if (Statics.CurrentLevel == levelOrder.length-1) {
 							FmodFlxUtilities.TransitionToStateAndStopMusic(new PlayState());
-						} else if (Statics.CurrentLevel > levelOrder.length) {
+						} else if (Statics.CurrentLevel >= levelOrder.length) {
 							FmodFlxUtilities.TransitionToState(new CreditsState());
 						} else {
 							FmodFlxUtilities.TransitionToState(new PlayState());

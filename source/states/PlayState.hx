@@ -350,7 +350,7 @@ class PlayState extends BaseState
 				else if (Statics.MatterConverterCharges == 5) {
 					FmodManager.PlaySoundOneShot(FmodSFX.MatterConverterNewCharge5);
 				}
-				else if (Statics.MatterConverterCharges == 6) {
+				else if (Statics.MatterConverterCharges >= 6) {
 					FmodManager.PlaySoundOneShot(FmodSFX.MatterConverterNewCharge6);
 					Statics.matterConverterConsuming = true;
 					Statics.MatterConverterCharges = 0;

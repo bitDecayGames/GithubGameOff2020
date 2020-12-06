@@ -28,6 +28,8 @@ class Statics {
     private static var minionDeaths = 0;
     private static var lightDeaths = 0;
 
+    public static var moneyCheatUsed:Bool = false;
+
     public static function IncrementLevel() {
         CurrentLevel++;
         if (CurrentLevel > furthestDepth) {

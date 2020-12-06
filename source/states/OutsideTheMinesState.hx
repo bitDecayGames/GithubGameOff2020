@@ -297,6 +297,10 @@ class OutsideTheMinesState extends BaseState
 		playerHealthText.text = "" + player.health;
 		currentLevelText.text = "";
 
+		if (FlxG.keys.pressed.O && FlxG.keys.justPressed.P && !Statics.moneyCheatUsed) {
+			Statics.moneyCheatUsed = true;
+			Player.state.money = 125;
+		}
 
 		FlxG.overlap(interactables, hitboxInteracts, interactWithItem);
 		FlxG.overlap(interactables, hitboxTextInteracts, renderDialog);

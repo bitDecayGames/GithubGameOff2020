@@ -35,7 +35,7 @@ class MatterConverter extends Upgrade {
                 animation.play("4");
             case 5:
                 animation.play("5");
-            case 6:
+            default:
                 if (!recharging){
                     recharging = true;
                     animation.play("6");
@@ -44,6 +44,7 @@ class MatterConverter extends Upgrade {
                         animation.play("0");
                     }, 4000);
                 }
+                
         }
     }
 

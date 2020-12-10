@@ -1,10 +1,10 @@
-package behavior.leaf.util;
+package behavior;
 
 import flixel.FlxG;
 import flixel.math.FlxPoint;
 import flixel.FlxSprite;
-import behavior.tree.LeafNode;
-import behavior.tree.NodeStatus;
+import com.bitdecay.behavior.tree.leaf.LeafNode;
+import com.bitdecay.behavior.tree.NodeStatus;
 
 class PickTargetInRange extends LeafNode {
     public function new() {}

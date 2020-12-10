@@ -1,9 +1,9 @@
 package behavior.leaf;
 
 import entities.Player;
-import behavior.tree.NodeStatus;
-import behavior.tree.Node;
-import behavior.tree.DecoratorNode;
+import com.bitdecay.behavior.tree.NodeStatus;
+import com.bitdecay.behavior.tree.Node;
+import com.bitdecay.behavior.tree.decorator.DecoratorNode;
 
 class TargetPlayer extends DecoratorNode {
     public function new(child:Node) {

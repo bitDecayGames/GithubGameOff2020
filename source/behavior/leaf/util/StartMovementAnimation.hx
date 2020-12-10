@@ -3,8 +3,8 @@ package behavior.leaf.util;
 import flixel.math.FlxPoint;
 import flixel.FlxObject;
 import flixel.FlxSprite;
-import behavior.tree.NodeStatus;
-import behavior.tree.LeafNode;
+import com.bitdecay.behavior.tree.NodeStatus;
+import com.bitdecay.behavior.tree.leaf.LeafNode;
 
 class StartMovementAnimation extends LeafNode {
 

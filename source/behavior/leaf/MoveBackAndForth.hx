@@ -1,14 +1,16 @@
-package behavior.leaf.movement;
+package behavior.leaf;
 
-import flixel.FlxSprite;
-import behavior.tree.NodeStatus;
-import behavior.tree.LeafNode;
-import behavior.tree.BTContext;
-import entities.Enemy;
+import flixel.FlxG;
+import flixel.math.FlxVector;
+import flixel.FlxObject;
 import flixel.tile.FlxBaseTilemap.FlxTilemapDiagonalPolicy;
+import com.bitdecay.behavior.tree.BTContext;
 import flixel.math.FlxPoint;
+import flixel.FlxSprite;
+import com.bitdecay.behavior.tree.leaf.LeafNode;
+import com.bitdecay.behavior.tree.NodeStatus;
 
-class ManhattanPath extends LeafNode {
+class MoveBackAndForth extends LeafNode {
 
 	var started:Bool = false;
 
@@ -27,29 +29,21 @@ class ManhattanPath extends LeafNode {
 	}
 
 	override public function doProcess(delta:Float):NodeStatus {
-		var self = cast(context.get("self"), FlxSprite);
+        var self = cast(context.get("self"), FlxSprite);
 		var speed = cast(context.get("speed"), Float);
 
-		if (!started) {
-			if (context.get("target") == null) {
-				return FAIL;
-			}
+		var direction = cast(context.get("direction"), FlxVector);
+        var bundle = cast(context.get("navBundle"), NavBundle);
 
-			var points = generatePath(self, context.get("target"), context.get("navBundle"));
-			if (points == null || points.length == 0) {
-				return FAIL;
-			}
+		self.velocity.set(direction.x * speed, direction.y * speed);
 
-			self.path.start(points, speed);
-			started = true;
+		// we likely want to let some master collision controller handle this to
+		// avoid having lots of calls to collide every frame
+		if (FlxG.collide(bundle.level.navigationLayer, self)) {
+			direction.scale(-1);
+			return SUCCESS;
 		} else {
-			if (self.path.finished || self.path.nodes.length == 0) {
-				context.set("target", null);
-				started = false;
-				return SUCCESS;
-			}
+			return RUNNING;
 		}
-
-		return RUNNING;
 	}
 }

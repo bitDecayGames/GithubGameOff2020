@@ -6,14 +6,14 @@ import entities.Enemy.LootTypeChance;
 import entities.Enemy.LootChance;
 import level.EnemyCache;
 import flixel.FlxG;
-import behavior.tree.BTContext;
-import behavior.tree.composite.Sequence;
-import behavior.tree.decorator.Repeater;
+import com.bitdecay.behavior.tree.BTContext;
+import com.bitdecay.behavior.tree.composite.Sequence;
+import com.bitdecay.behavior.tree.decorator.Repeater;
 import behavior.leaf.PlayerAlive;
-import behavior.leaf.util.Wait;
-import behavior.leaf.movement.ManhattanPath;
+import com.bitdecay.behavior.tree.leaf.util.Wait;
+import com.bitdecay.behavior.tree.leaf.movement.ManhattanPath;
 import behavior.leaf.TargetPlayer;
-import behavior.tree.BTree;
+import com.bitdecay.behavior.tree.BTree;
 import behavior.NavBundle;
 import flixel.util.FlxPath;
 import flixel.FlxObject;
@@ -27,7 +27,7 @@ class Rat extends Enemy {
 	public function new(_parentState:PlayState, _player:Player, position:FlxPoint, cache:EnemyCache) {
         super(_parentState, _player, position, cache, FmodSFX.RatDeath);
         path = new FlxPath();
-        
+
         enemyName = "Rat";
         lootChances = [
             new LootChance(.7, 1),

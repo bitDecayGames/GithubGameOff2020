@@ -4,21 +4,20 @@ import entities.loots.GoldCoin;
 import entities.Enemy.LootTypeChance;
 import entities.Enemy.LootChance;
 import level.EnemyCache;
-import behavior.tree.composite.Parallel;
+import com.bitdecay.behavior.tree.composite.Parallel;
 import behavior.leaf.util.StartMovementAnimation;
 import flixel.FlxG;
-import behavior.tree.BTContext;
-import behavior.tree.composite.Sequence;
-import behavior.tree.decorator.Repeater;
-import behavior.leaf.util.IfNoTarget;
-import behavior.leaf.util.Fail;
+import com.bitdecay.behavior.tree.BTContext;
+import com.bitdecay.behavior.tree.composite.Sequence;
+import com.bitdecay.behavior.tree.decorator.Repeater;
+import com.bitdecay.behavior.tree.decorator.util.IfNoTarget;
+import com.bitdecay.behavior.tree.decorator.basic.Fail;
 import behavior.leaf.PlayerAlive;
-import behavior.leaf.util.Wait;
-import behavior.leaf.util.PickTargetInRange;
-import behavior.leaf.movement.ManhattanPath;
-import behavior.leaf.movement.StraightToTarget;
+import com.bitdecay.behavior.tree.leaf.util.Wait;
+import com.bitdecay.behavior.tree.leaf.movement.ManhattanPath;
+import com.bitdecay.behavior.tree.leaf.movement.StraightToTarget;
 import behavior.leaf.TargetPlayer;
-import behavior.tree.BTree;
+import com.bitdecay.behavior.tree.BTree;
 import behavior.NavBundle;
 import flixel.util.FlxPath;
 import flixel.FlxObject;
@@ -32,7 +31,7 @@ class Blob extends Enemy {
 	public function new(_parentState:PlayState, _player:Player, position:FlxPoint, cache:EnemyCache) {
         super(_parentState, _player, position, cache, FmodSFX.BlobDeath);
         path = new FlxPath();
-        
+
         enemyName = "Blob";
         lootChances = [
             new LootChance(.4, 0),

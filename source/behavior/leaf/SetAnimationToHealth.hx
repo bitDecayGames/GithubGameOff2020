@@ -1,10 +1,10 @@
-package behavior.leaf.util;
+package behavior.leaf;
 
 import flixel.math.FlxPoint;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import com.bitdecay.behavior.tree.NodeStatus;
-import com.bitdecay.behavior.tree.LeafNode;
+import com.bitdecay.behavior.tree.leaf.LeafNode;
 
 class SetAnimationToHealth extends LeafNode {
 

@@ -1,5 +1,6 @@
 package behavior.leaf;
 
+import flixel.FlxSprite;
 import entities.Player;
 import com.bitdecay.behavior.tree.NodeStatus;
 import com.bitdecay.behavior.tree.decorator.DecoratorNode;
@@ -11,8 +12,8 @@ class PlayerAlive extends DecoratorNode {
     }
 
     override public function doProcess(delta:Float):NodeStatus {
-        if (context.get("navBundle") != null) {
-            if (cast(context.get("navBundle"), NavBundle).player.alive) {
+        if (context.get("player") != null) {
+            if (cast(context.get("player"), FlxSprite).alive) {
                 return child.process(delta);
             }
         }

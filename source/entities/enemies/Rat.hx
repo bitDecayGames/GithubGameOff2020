@@ -57,7 +57,8 @@ class Rat extends Enemy {
         var context = new BTContext();
         context.set("self", this);
         context.set("speed", baseStats.speed);
-        context.set("navBundle", new NavBundle(parentState.currentLevel, player));
+        context.set("player", player);
+        context.set("collisionLayer", parentState.currentLevel.navigationLayer);
         context.set("minWait", 1);
         context.set("maxWait", 3);
         behavior.init(context);

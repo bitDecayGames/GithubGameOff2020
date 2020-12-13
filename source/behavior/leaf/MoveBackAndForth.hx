@@ -1,5 +1,6 @@
 package behavior.leaf;
 
+import flixel.tile.FlxTilemap;
 import flixel.FlxG;
 import flixel.math.FlxVector;
 import flixel.FlxObject;
@@ -33,13 +34,13 @@ class MoveBackAndForth extends LeafNode {
 		var speed = cast(context.get("speed"), Float);
 
 		var direction = cast(context.get("direction"), FlxVector);
-        var bundle = cast(context.get("navBundle"), NavBundle);
+        var collisionLayer = cast(context.get("collisionLayer"), FlxTilemap);
 
 		self.velocity.set(direction.x * speed, direction.y * speed);
 
 		// we likely want to let some master collision controller handle this to
 		// avoid having lots of calls to collide every frame
-		if (FlxG.collide(bundle.level.navigationLayer, self)) {
+		if (FlxG.collide(collisionLayer, self)) {
 			direction.scale(-1);
 			return SUCCESS;
 		} else {

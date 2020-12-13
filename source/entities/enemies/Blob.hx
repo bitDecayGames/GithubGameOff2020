@@ -1,5 +1,6 @@
 package entities.enemies;
 
+import behavior.leaf.PickTargetInRange;
 import entities.loots.GoldCoin;
 import entities.Enemy.LootTypeChance;
 import entities.Enemy.LootChance;
@@ -65,8 +66,8 @@ class Blob extends Enemy {
         context.set("range", 16);
         context.set("cardinalLock", true);
         context.set("minWait", 1);
-        // context.set("maxWait", 1);
-        context.set("navBundle", new NavBundle(parentState.currentLevel, player));
+        context.set("player", player);
+        context.set("collisionLayer", parentState.currentLevel.navigationLayer);
         behavior.init(context);
 
         super.loadGraphic(AssetPaths.blob__png, true, 16, 16);

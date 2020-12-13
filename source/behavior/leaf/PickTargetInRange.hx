@@ -1,5 +1,6 @@
 package behavior.leaf;
 
+import flixel.tile.FlxTilemap;
 import flixel.FlxG;
 import flixel.math.FlxPoint;
 import flixel.FlxSprite;
@@ -10,8 +11,8 @@ class PickTargetInRange extends LeafNode {
     public function new() {}
 
     override public function doProcess(delta:Float):NodeStatus {
-        if (context.get("navBundle") != null) {
-            var nav = cast(context.get("navBundle"), NavBundle);
+        if (context.get("collisionLayer") != null) {
+            var collisionLayer = cast(context.get("collisionLayer"), FlxTilemap);
             var range = cast(context.get("range"), Float);
 
             var start = cast(context.get("self"), FlxSprite);
@@ -24,7 +25,7 @@ class PickTargetInRange extends LeafNode {
                 var pos = start.getMidpoint();
                 var mod = FlxPoint.get(1, 0).scale(FlxG.random.float(range/4, range)).rotate(FlxPoint.weak(), rot);
                 var dest = pos.addPoint(mod);
-                if (!nav.level.navigationLayer.overlapsPoint(dest)) {
+                if (!collisionLayer.overlapsPoint(dest)) {
                     context.set("target", dest);
                     return SUCCESS;
                 }

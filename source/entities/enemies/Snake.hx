@@ -61,7 +61,7 @@ class Snake extends Enemy {
                                 new InlineWithTarget(new Succeed()),
                                 new StopMovement(),
                                 new Wait(),
-                                new AttackTarget(FmodSFX.SnakeVenom)
+                                new AttackTarget()
                             ])
                         )
                     ),
@@ -76,7 +76,9 @@ class Snake extends Enemy {
         context.set("self", this);
         context.set("speed", baseStats.speed);
         context.set("minWait", 0.25);
-        context.set("navBundle", new NavBundle(parentState.currentLevel, player));
+        context.set("player", player);
+        context.set("collisionLayer", parentState.currentLevel.navigationLayer);
+        context.set("attackSFX", FmodSFX.SnakeVenom);
 
         var initialDirection = FlxVector.get(0, -1);
         if (!vertical) {

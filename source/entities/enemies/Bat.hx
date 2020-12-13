@@ -65,7 +65,8 @@ class Bat extends Enemy {
         context.set("range", 100);
         context.set("minWait", 1);
         context.set("maxWait", 2);
-        context.set("navBundle", new NavBundle(parentState.currentLevel, player));
+        context.set("player", player);
+        context.set("collisionLayer", parentState.currentLevel.navigationLayer);
         behavior.init(context);
 
 

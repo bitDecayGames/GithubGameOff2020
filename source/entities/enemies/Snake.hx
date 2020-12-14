@@ -5,7 +5,6 @@ import entities.loots.SilverCoin;
 import entities.Enemy.LootTypeChance;
 import entities.Enemy.LootChance;
 import level.EnemyCache;
-import js.html.TouchList;
 import flixel.FlxG;
 import flixel.math.FlxVector;
 import behavior.tree.BTContext;

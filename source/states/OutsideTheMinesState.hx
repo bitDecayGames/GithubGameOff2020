@@ -1,5 +1,6 @@
 package states;
 
+import flixel.input.keyboard.FlxKey;
 import entities.GameState;
 import entities.HitboxTextInteract;
 import interactables.HeartJar;
@@ -17,7 +18,6 @@ import com.bitdecay.textpop.TextPop;
 import haxe.Timer;
 import flixel.tweens.FlxTween;
 import shaders.MosaicManager;
-import dialogbox.DialogManager;
 import entities.Rope;
 import flixel.FlxCamera;
 import flixel.group.FlxGroup;
@@ -42,6 +42,7 @@ import flixel.FlxState;
 import flixel.math.FlxPoint;
 import flixel.FlxObject;
 import interactables.Interactable;
+import dialogmanager.DialogManager;
 
 class OutsideTheMinesState extends BaseState
 {
@@ -71,7 +72,7 @@ class OutsideTheMinesState extends BaseState
 	var shovel:Interactable;
 	var levelExit:Interactable;
 
-	var dialogManager:dialogbox.DialogManager;
+	var dialogManager:dialogmanager.DialogManager;
 
 	static var firstTime = true;
 
@@ -80,10 +81,24 @@ class OutsideTheMinesState extends BaseState
 		super();
 	}
 
+	public static inline var typewriterSoundId = "TypewriterSound";
+
+	public function playTypingSound() {
+		FmodManager.PlaySoundAndAssignId(FmodSFX.Typewriter, typewriterSoundId);
+	}
+
+	public function stopTypingSound() {
+		FmodManager.StopSoundImmediately(typewriterSoundId);
+	}
+
+	public function speedupTypingSound() {
+		FmodManager.StopSoundImmediately(typewriterSoundId);
+		FmodManager.PlaySoundAndAssignId(FmodSFX.TypewriterFast, typewriterSoundId);
+	}
+
 	override public function create()
 	{
 		super.create();
-		FlxG.autoPause = false;
 		FlxG.mouse.visible = false;
 
 		#if debug
@@ -205,7 +220,8 @@ class OutsideTheMinesState extends BaseState
 		add(worldGroup);
 		add(uiGroup);
 
-		dialogManager = new DialogManager(this, uiCamera);
+		dialogManager = new DialogManager(Dialogs.DialogMap, this, uiCamera, FlxKey.SPACE, playTypingSound, stopTypingSound, speedupTypingSound);
+		add(dialogManager);
 
 		if (skipIntro || player.hasUpgrade("Shovel")){
 			camera.fade(FlxColor.BLACK, 1.5, true);
@@ -216,16 +232,16 @@ class OutsideTheMinesState extends BaseState
 
 			if (Statics.PlayerDied){
 				Statics.PlayerDied = false;
-				dialogManager.loadDialog(3);
+				dialogManager.loadDialog(Dialogs.PlayerRanOutOfLight);
 				var lostMoney = Std.int(Player.state.money / 2);
 				Player.state.money -= lostMoney;
 				TextPop.pop(Std.int(player.x-15), Std.int(player.y+20), "-$" +lostMoney, new SlowFadeUp(FlxColor.RED, 4), 10);
 			} else if (!player.hasUpgrade("Shovel")){
-				dialogManager.loadDialog(0);
+				dialogManager.loadDialog(Dialogs.Intro);
 			} else if (Statics.CurrentLightRadius > Statics.minLightRadius && Statics.CurrentLightRadius <= Statics.minLightRadius+20) {
-				dialogManager.loadDialog(4);
+				dialogManager.loadDialog(Dialogs.PlayerAlmostRanOutOfLight);
 			} else if (Statics.CurrentLightRadius <= Statics.minLightRadius) {
-				dialogManager.loadDialog(15);
+				dialogManager.loadDialog(Dialogs.PlayerDied);
 				var lostMoney = Std.int(Player.state.money / 2);
 				Player.state.money -= lostMoney;
 				TextPop.pop(Std.int(player.x-15), Std.int(player.y+20), "-$" +lostMoney, new SlowFadeUp(FlxColor.RED, 4), 10);
@@ -266,7 +282,7 @@ class OutsideTheMinesState extends BaseState
 						uiCamera.setFilters([]);
 
 						Timer.delay(() -> {
-							dialogManager.loadDialog(0);
+							dialogManager.loadDialog(Dialogs.Intro);
 							player.animation.play("faceplant_get_up");
 						}, standUpDelay);
 					};
@@ -289,10 +305,6 @@ class OutsideTheMinesState extends BaseState
 
 		FlxG.collide(currentLevel.navigationLayer, player);
 
-		if (dialogManager != null){
-			dialogManager.update();
-		}
-
 		moneyText.text = "" + Player.state.money;
 		playerHealthText.text = "" + player.health;
 		currentLevelText.text = "";
@@ -310,52 +322,44 @@ class OutsideTheMinesState extends BaseState
 
 	private function renderDialog(interactable:Interactable, hitboxTextInteract:HitboxTextInteract) {
 
-		var currentDialogIndex = dialogManager.getCurrentDialogIndex();
-
-
-		var matterConverterDialogIndex = 5;
-		var speedClogDialogIndex = 6;
-		var heartJarDialogIndex = 7;
-		var axeDialogIndex = 8;
-		var shovelDialogIndex = 13;
-		var bulbDialogIndex = 14;
+		var currentDialogId = dialogManager.getCurrentDialogId();
 
 		// Only render the shop text dialog if there is nothing else going on and the player is browsing for what to buy
-		if ((currentDialogIndex != matterConverterDialogIndex &&
-			currentDialogIndex != speedClogDialogIndex &&
-			currentDialogIndex != heartJarDialogIndex &&
-			currentDialogIndex != axeDialogIndex &&
-			currentDialogIndex != bulbDialogIndex &&
-			currentDialogIndex != shovelDialogIndex)
-				&& !dialogManager.isDone) {
+		if ((currentDialogId != Dialogs.MatterConverterDescription &&
+			currentDialogId != Dialogs.ShovelDescription &&
+			currentDialogId != Dialogs.AxeDescription &&
+			currentDialogId != Dialogs.HeartJarDescription &&
+			currentDialogId != Dialogs.SpeedClogDescription &&
+			currentDialogId != Dialogs.LedDescription)
+				&& !dialogManager.isDone()) {
 				return;
 		}
 
-		var index = -1;
+		var dialogId = "";
 		switch(interactable.name){
 			case "Matter Converter":
-				index = matterConverterDialogIndex;
+				dialogId = Dialogs.MatterConverterDescription;
 			case "Heart Jar":
-				index = speedClogDialogIndex;
+				dialogId = Dialogs.HeartJarDescription;
 			case "SpeedClog":
-				index = heartJarDialogIndex;
+				dialogId = Dialogs.SpeedClogDescription;
 			case "Pickaxe":
-				index = axeDialogIndex;
+				dialogId = Dialogs.AxeDescription;
 			case "Shovel":
-				index = shovelDialogIndex;
+				dialogId = Dialogs.ShovelDescription;
 			case "LED Bulb":
-				index = bulbDialogIndex;
+				dialogId = Dialogs.LedDescription;
 			default:
 		}
 
-		if (index != -1) {
-			loadDialogIfPossible(interactable.cost, index);
+		if (dialogId != "") {
+			loadDialogIfPossible(dialogId);
 		}
 	}
 
-	private function loadDialogIfPossible(cost:Int, dialogIndex:Int) {
-		if (dialogManager.getCurrentDialogIndex() != dialogIndex || dialogManager.isDone) {
-			dialogManager.loadDialog(dialogIndex, cost);
+	private function loadDialogIfPossible(dialogId:String) {
+		if (dialogManager.getCurrentDialogId() != dialogId || dialogManager.isDone()) {
+			dialogManager.loadDialog(dialogId);
 		}
 	}
 
@@ -367,12 +371,12 @@ class OutsideTheMinesState extends BaseState
 				if (!player.hasUpgrade("Shovel")) {
 					TextPop.pop(Std.int(200), Std.int(140), "You aren't ready", new SlowFadeUp(FlxColor.RED), 10);
 					FmodManager.PlaySoundOneShot(FmodSFX.PlayerPurchaseFail);
-					if (dialogManager.isDone){
-						dialogManager.loadDialog(1);
+					if (dialogManager.isDone()){
+						dialogManager.loadDialog(Dialogs.ShovelRequired);
 					}
 				} else if (!isTransitioningStates){
 					isTransitioningStates = true;
-					dialogManager.stopSounds();
+					// dialogManager.stopSounds();
 					player.animation.play("climb_down");
 					camera.fade(FlxColor.BLACK, 2, false, null, true);
 					uiCamera.fade(FlxColor.BLACK, 2, false, null, true);
@@ -402,17 +406,17 @@ class OutsideTheMinesState extends BaseState
 						var ledIndex = 16;
 
 						if (interactable.name == "Shovel") {
-							dialogManager.loadDialog(shovelBoughtIndex);
+							dialogManager.loadDialog(Dialogs.ShovelPurchased);
 						} else if (interactable.name == "Matter Converter") {
-							dialogManager.loadDialog(matterConverterBoughtIndex);
+							dialogManager.loadDialog(Dialogs.MatterConverterPurchased);
 						}  else if (interactable.name == "Heart Jar") {
-							dialogManager.loadDialog(heartJarIndex);
+							dialogManager.loadDialog(Dialogs.HeartJarPurchased);
 						}  else if (interactable.name == "SpeedClog") {
-							dialogManager.loadDialog(speedClogIndex);
+							dialogManager.loadDialog(Dialogs.SpeedClogPurchased);
 						}  else if (interactable.name == "Pickaxe") {
-							dialogManager.loadDialog(axeIndex);
+							dialogManager.loadDialog(Dialogs.AxePurchased);
 						} else if (interactable.name == "LED Bulb") {
-							dialogManager.loadDialog(ledIndex);
+							dialogManager.loadDialog(Dialogs.LedPurchased);
 						}
 					} else {
 						TextPop.pop(Std.int(player.x), Std.int(player.y), "Not enough money", new SlowFade(FlxColor.RED), 10);

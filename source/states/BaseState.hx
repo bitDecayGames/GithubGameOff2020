@@ -55,6 +55,12 @@ class BaseState extends FlxTransitionableState
 	var playerHealthText:FlxText;
 	var currentLevelText:FlxText;
 
+	override public function create()
+	{
+		FlxG.autoPause = true;
+		super.create();
+	}
+
 	public function addHitbox(hitbox:Hitbox) {
 		hitboxes.add(hitbox);
 		add(hitbox);
@@ -143,17 +149,21 @@ class BaseState extends FlxTransitionableState
 		uiGroup.add(moneyText);
 	}
 
-	// override public function onFocus() {
-		// super.onFocus();
-		// FmodManager.UnpauseSong();
-		// // Hack to deal with the lack of global sound pausing
-		// FmodManager.UnpauseSound("typewriterSoundId");
-	// }
+	override public function onFocus() {
+		super.onFocus();
+		FmodManager.UnpauseAllSounds();
+	}
 
-	// override public function onFocusLost() {
-		// super.onFocusLost();
-		// FmodManager.PauseSong();
-		// // Hack to deal with the lack of global sound pausing
-		// FmodManager.PauseSound("typewriterSoundId");
-	// }
+	override public function onFocusLost() {
+		super.onFocusLost();
+		FmodManager.PauseAllSounds();
+	}
+
+	override public function switchTo(nextState:FlxState):Bool {
+		var wasTransitionSuccessful = super.switchTo(nextState);
+		if (wasTransitionSuccessful){
+			FmodManager.StopAllSounds();
+		}
+		return wasTransitionSuccessful;
+	}
 }

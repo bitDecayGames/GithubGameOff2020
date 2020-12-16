@@ -72,7 +72,7 @@ class OutsideTheMinesState extends BaseState
 	var shovel:Interactable;
 	var levelExit:Interactable;
 
-	var dialogManager:dialogmanager.DialogManager;
+	var dialogManager:DialogManager;
 
 	static var firstTime = true;
 

@@ -1,7 +1,6 @@
 package states;
 
 import entities.HitboxTextInteract;
-import entities.HitboxInteract;
 import flixel.addons.transition.FlxTransitionableState;
 import interactables.Interactable;
 import entities.Stats;
@@ -41,7 +40,7 @@ class BaseState extends FlxTransitionableState
 	public var isTransitioningStates:Bool;
 
 	var hitboxes:FlxTypedGroup<Hitbox> = new FlxTypedGroup<Hitbox>();
-	var hitboxInteracts:FlxTypedGroup<HitboxInteract> = new FlxTypedGroup<HitboxInteract>();
+	var hitboxInteracts:FlxTypedGroup<Hitbox> = new FlxTypedGroup<Hitbox>();
 	var hitboxTextInteracts:FlxTypedGroup<HitboxTextInteract> = new FlxTypedGroup<HitboxTextInteract>();
 	var loots:FlxTypedGroup<Loot> = new FlxTypedGroup<Loot>();
 	var enemies:FlxTypedGroup<Enemy> = new FlxTypedGroup<Enemy>();
@@ -66,7 +65,7 @@ class BaseState extends FlxTransitionableState
 		add(hitbox);
 	}
 
-	public function addHitboxInteract(hitboxInteract:HitboxInteract) {
+	public function addHitboxInteract(hitboxInteract:Hitbox) {
 		hitboxInteracts.add(hitboxInteract);
 		add(hitboxInteract);
 	}

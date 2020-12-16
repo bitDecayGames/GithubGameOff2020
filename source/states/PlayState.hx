@@ -3,7 +3,6 @@ package states;
 import metrics.Metrics;
 import com.bitdecay.analytics.Bitlytics;
 import flixel.tweens.FlxTween;
-import entities.HitboxInteract;
 import flixel.addons.display.FlxTiledSprite;
 import entities.RopeUp;
 import interactables.Interactable;
@@ -324,7 +323,7 @@ class PlayState extends BaseState
 		worldGroup.sort(SortingHelpers.SortByY, FlxSort.ASCENDING);
 	}
 
-	private function interactWithDeadEnemy(hitboxInteract:HitboxInteract, enemy:Enemy) {
+	private function interactWithDeadEnemy(hitboxInteract:Hitbox, enemy:Enemy) {
 		if (enemy.dead && player.hasUpgrade("Matter Converter") && !Statics.matterConverterConsuming){
 			enemy.kill();
 			if (enemy.enemyName == "Crystal") {

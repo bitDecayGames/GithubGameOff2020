@@ -432,7 +432,7 @@ class Player extends Entity {
             default:
                 interactLocation = new FlxPoint(x, y);
         }
-        var hitboxInteract = new HitboxInteract(.2, interactLocation, hitboxInteractSize);
+        var hitboxInteract = new Hitbox(.2, interactLocation, hitboxInteractSize);
         parentState.addHitboxInteract(hitboxInteract);
         if (canAttack) {
             FmodManager.PlaySoundAndAssignId(FmodSFX.ShovelSwing, "attack");

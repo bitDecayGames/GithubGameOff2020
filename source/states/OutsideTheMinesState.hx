@@ -1,5 +1,9 @@
 package states;
 
+import com.bitdecay.lucidtext.effect.EffectRegistry;
+import flixel.math.FlxRect;
+import com.bitdecay.lucidtext.TypeOptions;
+import com.bitdecay.lucidtext.dialog.DialogOptions;
 import flixel.input.keyboard.FlxKey;
 import entities.GameState;
 import entities.HitboxTextInteract;
@@ -42,7 +46,7 @@ import flixel.FlxState;
 import flixel.math.FlxPoint;
 import flixel.FlxObject;
 import interactables.Interactable;
-import dialogmanager.DialogManager;
+import com.bitdecay.lucidtext.dialog.DialogManager;
 
 class OutsideTheMinesState extends BaseState
 {
@@ -220,7 +224,17 @@ class OutsideTheMinesState extends BaseState
 		add(worldGroup);
 		add(uiGroup);
 
-		dialogManager = new DialogManager(Dialogs.DialogMap, this, uiCamera, FlxKey.SPACE, playTypingSound, stopTypingSound, speedupTypingSound);
+		EffectRegistry.registerDefault("wave", {height: 4});
+
+		var dialogOpts = new DialogOptions();
+		dialogOpts.progressionKey = FlxKey.SPACE;
+		dialogOpts.onTypingBegin = playTypingSound;
+		dialogOpts.onTypingEnd = stopTypingSound;
+		dialogOpts.onTypingSpeedUp = speedupTypingSound;
+
+		var typeOpts = new TypeOptions(new FlxRect(140, 5, 180, 90), AssetPaths.slice__png, [4,4,12,12], 10, 8);
+
+		dialogManager = new DialogManager(Dialogs.DialogMap, this, uiCamera, dialogOpts, typeOpts);
 		add(dialogManager);
 
 		if (skipIntro || player.hasUpgrade("Shovel")){
@@ -232,7 +246,7 @@ class OutsideTheMinesState extends BaseState
 
 			if (Statics.PlayerDied){
 				Statics.PlayerDied = false;
-				dialogManager.loadDialog(Dialogs.PlayerRanOutOfLight);
+				dialogManager.loadDialog(Dialogs.PlayerDied);
 				var lostMoney = Std.int(Player.state.money / 2);
 				Player.state.money -= lostMoney;
 				TextPop.pop(Std.int(player.x-15), Std.int(player.y+20), "-$" +lostMoney, new SlowFadeUp(FlxColor.RED, 4), 10);
@@ -241,7 +255,7 @@ class OutsideTheMinesState extends BaseState
 			} else if (Statics.CurrentLightRadius > Statics.minLightRadius && Statics.CurrentLightRadius <= Statics.minLightRadius+20) {
 				dialogManager.loadDialog(Dialogs.PlayerAlmostRanOutOfLight);
 			} else if (Statics.CurrentLightRadius <= Statics.minLightRadius) {
-				dialogManager.loadDialog(Dialogs.PlayerDied);
+				dialogManager.loadDialog(Dialogs.PlayerRanOutOfLight);
 				var lostMoney = Std.int(Player.state.money / 2);
 				Player.state.money -= lostMoney;
 				TextPop.pop(Std.int(player.x-15), Std.int(player.y+20), "-$" +lostMoney, new SlowFadeUp(FlxColor.RED, 4), 10);

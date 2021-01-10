@@ -23,7 +23,7 @@ class Dialogs {
 
 	public static var DialogMap:Map<String, Array<String>> = [
         FakeIntro => ["Oh look, another one came down."],
-        Intro => ["Oh look, another one came down.", "If you manage to live long enough to get some money, bring it back here for some items.", "I see you have <color rgb=0xa4b50c>$5</color> on you right now.", "How about you trade me that for the <color rgb=0x0000FF>shovel</color> to get you started?", "Use the <wave>arrow keys</wave> to move and Press <wave>Z</wave> to interact with objects like my shop and ropes"],
+        Intro => ["Oh look, another one came down.", "If you manage to live long enough to get some money, bring it back here for some items.", "I see you have <color rgb=0xa4b50c>$5</color> on you right now.", "How about you trade me that for the <color rgb=0x0000FF>shovel</color> to get you started?", "Use the <pulse>arrow keys</pulse> to move and Press <pulse>Z</pulse> to interact with objects like my shop and ropes"],
         ShovelRequired => ["Going into the caves already? You really shouldn't go there without a <color rgb=0x0000FF>shovel</color>..."],
         PlayerAlmostRanOutOfLight => ["Wow that light was just about drained.", "You certainly are brave."],
         PlayerRanOutOfLight => ["You are lucky I found you.", "Without a light, you would have been wandering those caves for a long time.", "Obviously, rescues come with a fee...", "Don't give up"],

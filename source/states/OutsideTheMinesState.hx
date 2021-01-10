@@ -226,13 +226,13 @@ class OutsideTheMinesState extends BaseState
 
 		EffectRegistry.registerDefault("wave", {height: 4});
 
-		var dialogOpts = new DialogOptions();
+		var dialogOpts = new DialogOptions(new FlxRect(140, 5, 180, 90));
 		dialogOpts.progressionKey = FlxKey.SPACE;
 		dialogOpts.onTypingBegin = playTypingSound;
 		dialogOpts.onTypingEnd = stopTypingSound;
 		dialogOpts.onTypingSpeedUp = speedupTypingSound;
 
-		var typeOpts = new TypeOptions(new FlxRect(140, 5, 180, 90), AssetPaths.slice__png, [4,4,12,12], 10, 8);
+		var typeOpts = new TypeOptions(AssetPaths.slice__png, [4,4,12,12], 10, 8);
 
 		dialogManager = new DialogManager(Dialogs.DialogMap, this, uiCamera, dialogOpts, typeOpts);
 		add(dialogManager);
